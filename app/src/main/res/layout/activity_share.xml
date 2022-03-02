@@ -11,22 +11,28 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:elevation="8dp"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-            <TextView
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="SHARE TO"
-                android:textColor="#333333"
-                android:textSize="18sp" />
+                android:elevation="8dp"
+                app:navigationIcon="?attr/homeAsUpIndicator"
+                android:background="?attr/colorPrimary">
 
-        </androidx.appcompat.widget.Toolbar>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity=""
+                    android:text="SHARE TO"
+                    android:textColor="#333333"
+                    android:textSize="18sp" />
+
+            </androidx.appcompat.widget.Toolbar>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,7 +90,7 @@
                         android:layout_height="96dp"
                         android:layout_marginRight="16dp"
                         android:background="#eeeeee"
-                        android:src="@drawable/user_image"/>
+                        android:src="@drawable/user_image" />
 
                     <EditText
                         android:id="@+id/etDescription"
@@ -107,6 +113,12 @@
                     android:text="ADD TO PHOTO MAP" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="SHARE"/>
 
         <ImageView
             android:layout_width="match_parent"
