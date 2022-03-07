@@ -1,4 +1,4 @@
-package Profile;
+package com.example.instagramclone.controller;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.instagramclone.R;
+import com.example.instagramclone.Utils.ImageApater;
 
 public class ProfileActivity extends AppCompatActivity {
     GridView gridview;

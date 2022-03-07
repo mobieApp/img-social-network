@@ -1,4 +1,4 @@
-package Profile;
+package com.example.instagramclone.Utils;
 
 import android.content.Context;
 import android.view.View;
