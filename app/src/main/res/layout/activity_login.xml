@@ -19,6 +19,7 @@
             android:src="@drawable/instagram"
             android:layout_marginBottom="25dp"/>
         <EditText
+            android:id="@+id/Email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
@@ -26,6 +27,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"/>
         <EditText
+            android:id="@+id/Password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
@@ -39,6 +41,7 @@
             android:layout_marginBottom="8dp"
             />
         <TextView
+            android:id="@+id/createAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="No account yet? Create one"

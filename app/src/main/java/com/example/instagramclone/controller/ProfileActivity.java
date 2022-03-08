@@ -16,7 +16,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.fragment_view_profile);
         setupToolBar();
         gridview = (GridView) findViewById(R.id.gridView);
         gridview.setAdapter(new ImageApater(this,thumbnail));
