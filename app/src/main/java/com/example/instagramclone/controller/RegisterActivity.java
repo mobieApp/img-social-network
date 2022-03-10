@@ -41,7 +41,6 @@ public class RegisterActivity extends AppCompatActivity {
         password = (EditText) findViewById(R.id.Password);
         regBtn = (Button) findViewById(R.id.registerBtn);
         mAuth = FirebaseAuth.getInstance();
-        Account account= new Account();
         linkLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,10 +77,6 @@ public class RegisterActivity extends AppCompatActivity {
                     password.requestFocus();
                     return;
                 }
-                account.setName(Name);
-                account.setEmail(Email);
-                account.setPassword(Pass);
-
                 mAuth.createUserWithEmailAndPassword(Email,Pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {

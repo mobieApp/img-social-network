@@ -16,7 +16,7 @@
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/grey_border_bottom.xml" value="0.29384615384615387" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/white_grey_border_bottom.xml" value="0.2851851851851852" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/white_grey_border_top.xml" value="0.1" />
-        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_home.xml" value="0.28229166666666666" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_home.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_login.xml" value="0.21428572158424247" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_profile.xml" value="0.2329192546583851" />
@@ -31,6 +31,7 @@
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/fragment_view_share.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/home_activity.xml" value="0.28229166666666666" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layoout_profile.xml" value="0.14895833333333333" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_bottom_navigation.xml" value="0.42857144316848494" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_center_viewpager.xml" value="0.18857143499413337" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_comment.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_footer.xml" value="0.27717391304347827" />
@@ -42,7 +43,9 @@
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_post_toolbar.xml" value="0.5742857338457699" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_post_toolbars.xml" value="0.28229166666666666" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_profile_info.xml" value="0.28229166666666666" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_top_bar.xml" value="0.21428572158424247" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_top_tabs.xml" value="0.2828571524912001" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_viewpager.xml" value="0.17708333333333334" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/profile.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/profileToolBar.xml" value="0.21428572158424247" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/profile_info.xml" value="0.42857144316848494" />
@@ -52,7 +55,9 @@
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/snippet_profile_toolbar.xml" value="0.14895833333333333" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/snippet_top_profilebar.xml" value="0.14895833333333333" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/test.xml" value="0.24139492753623187" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/test_activity.xml" value="0.1" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/menu/activity_menu.xml" value="0.21428572158424247" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/menu/bottom_menu_navigation.xml" value="0.1917808219178082" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/menu/bottom_nagivation_menu.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/menu/profile_menu.xml" value="0.28229166666666666" />
         <entry key="..\:/Users/Blade/Desktop/img-social-network/app/src/main/res/drawable-v24/grey_border.xml" value="0.5854166666666667" />
