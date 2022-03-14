@@ -63,12 +63,12 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 mAuth.signInWithEmailAndPassword(Email,Pass).addOnCompleteListener(task -> {
-                   if(task.isSuccessful()){
-                       startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                   }
-                   else{
-                       Toast.makeText(LoginActivity.this,"Please Check Your Login Credentials",Toast.LENGTH_SHORT).show();
-                   }
+                    if(task.isSuccessful()){
+                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    }
+                    else{
+                        Toast.makeText(LoginActivity.this,"Please Check Your Login Credentials",Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
         });
