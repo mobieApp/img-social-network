@@ -1,4 +1,4 @@
-package com.example.instagramclone.controller;
+package com.example.instagramclone.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,33 +14,37 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.instagramclone.R;
-import com.example.instagramclone.Utils.RandomString;
-import com.example.instagramclone.models.Account;
+import com.example.instagramclone.models.User;
+import com.example.instagramclone.models.UserAccountSetting;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegisterActivity extends AppCompatActivity {
+    private User user;
+    private UserAccountSetting setting;
     private TextView linkLogin;
-    private EditText fullname,email,password;
+    private EditText username,email,password;
     private Button regBtn;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore firestore;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         linkLogin = (TextView) findViewById(R.id.linkLogin);
-        fullname = (EditText) findViewById(R.id.Fullname);
+        username = (EditText) findViewById(R.id.Username);
         email = (EditText) findViewById(R.id.Email);
         password = (EditText) findViewById(R.id.Password);
         regBtn = (Button) findViewById(R.id.registerBtn);
+
         mAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
+
         linkLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,15 +52,16 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         regBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String Name = fullname.getText().toString();
+                String Username = username.getText().toString();
                 String Email = email.getText().toString().trim();
                 String Pass = password.getText().toString().trim();
-                if(Name.isEmpty()){
-                    fullname.setError("Fullname is empty");
-                    fullname.requestFocus();
+                if(Username.isEmpty()){
+                    username.setError("Fullname is empty");
+                    username.requestFocus();
                     return;
                 }
                 if(Email.isEmpty())
@@ -77,12 +82,29 @@ public class RegisterActivity extends AppCompatActivity {
                     password.requestFocus();
                     return;
                 }
+                if(Pass.length() < 6)
+                {
+                    password.setError("Your password has less than 6 characters");
+                    password.requestFocus();
+                    return;
+                }
+
+                user = new User(Email,Pass);
+                setting = new UserAccountSetting();
+                setting.setUsername(Username);
+
                 mAuth.createUserWithEmailAndPassword(Email,Pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(RegisterActivity.this,"You are successfully Registered", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                            user.setId(mAuth.getCurrentUser().getUid());
+                            DocumentReference docRefUser = firestore.collection("User").document(user.getId());
+                            docRefUser.set(user);
+
+                            DocumentReference docRefSetting = firestore.collection("UserAccountSetting").document(user.getId());
+                            docRefSetting.set(setting);
+                            startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
                         }
                         else{
                             Toast.makeText(RegisterActivity.this,"You are not successfully Registered", Toast.LENGTH_SHORT).show();

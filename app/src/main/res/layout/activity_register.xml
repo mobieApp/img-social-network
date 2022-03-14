@@ -23,12 +23,12 @@
             android:textSize="22sp" />
 
         <EditText
-            android:id="@+id/Fullname"
+            android:id="@+id/Username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:hint="Fullname" />
+            android:hint="Username" />
 
         <EditText
             android:id="@+id/Email"
@@ -58,7 +58,7 @@
             android:id="@+id/linkLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Already have account"
+            android:text="Already have userAccountSetting"
             android:textAlignment="center"
             android:textColor="@color/link_blue"/>
     </LinearLayout>
