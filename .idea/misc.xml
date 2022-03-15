@@ -6,15 +6,23 @@
         <entry key="..\:/HK2_YEAR3/Mobile/InstagramClone/app/src/main/res/drawable/white_rounded_button.xml" value="0.16510416666666666" />
         <entry key="..\:/HK2_YEAR3/Mobile/InstagramClone/app/src/main/res/layout/activity_main.xml" value="0.28229166666666666" />
         <entry key="..\:/HK2_YEAR3/Mobile/InstagramClone/app/src/main/res/layout/white_rounded_button.xml" value="0.14895833333333333" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable-anydpi/ic_backarrow.xml" value="0.1984375" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable-anydpi/ic_check.xml" value="0.1984375" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable-anydpi/ic_comment.xml" value="0.15572916666666667" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable-anydpi/ic_menuDot.xml" value="0.15572916666666667" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable-anydpi/ic_search.xml" value="0.15572916666666667" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable-v24/bg_gallery.xml" value="0.143" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable-v24/btn_oval_bg.xml" value="0.1785" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable-v24/grey_border.xml" value="0.6229166666666667" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.15572916666666667" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable-v24/take_photo_bg_active.xml" value="0.143" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable-v24/take_photo_bg_pressed.xml" value="0.143" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable-xxhdpi/grey_border.xml" value="0.1984375" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/black_border.xml" value="0.18333333333333332" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/grey_border_bottom.xml" value="0.29384615384615387" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/share_direct.xml" value="0.1984375" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/share_followers.xml" value="0.1984375" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/take_photo_bg.xml" value="0.143" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/white_grey_border_bottom.xml" value="0.2851851851851852" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/white_grey_border_top.xml" value="0.1" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_home.xml" value="0.25" />
@@ -23,6 +31,9 @@
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_profile.xml" value="0.42857144316848494" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_register.xml" value="0.21428572158424247" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_share.xml" value="0.2828571524912001" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/fragment_effects.xml" value="0.2828571524912001" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/fragment_gallery.xml" value="0.1" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/fragment_photo.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/fragment_user_post.xml" value="0.18229166666666666" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/fragment_view_comments.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/fragment_view_login.xml" value="0.2828571524912001" />
@@ -31,6 +42,7 @@
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/fragment_view_profile.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/fragment_view_register.xml" value="0.28229166666666666" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/fragment_view_share.xml" value="0.2828571524912001" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/gallery_item.xml" value="0.16979166666666667" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/home_activity.xml" value="0.28229166666666666" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layoout_profile.xml" value="0.14895833333333333" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_bottom_navigation.xml" value="0.42857144316848494" />
@@ -38,6 +50,8 @@
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_comment.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_footer.xml" value="0.27717391304347827" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_header_notification.xml" value="0.18229166666666666" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_newpost.xml" value="0.18857143499413337" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_newpost_confirm.xml" value="0.42857144316848494" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_notification.xml" value="0.42857144316848494" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_post.xml" value="0.21428572158424247" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_post_activity.xml" value="0.42857144316848494" />
@@ -53,7 +67,12 @@
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/profile_info.xml" value="0.42857144316848494" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/profile_toolbar.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/profilebar.xml" value="0.27717391304347827" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/single_effect_item.xml" value="0.2828571524912001" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/single_grid_item.xml" value="0.21428572158424247" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/snippet_comments_toolbars.xml" value="0.2828571524912001" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/snippet_newpost_confirm_toolbars.xml" value="0.2828571524912001" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/snippet_newpost_select_picture.xml" value="0.2828571524912001" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/snippet_newpost_toolbars.xml" value="0.18229166666666666" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/snippet_profile_toolbar.xml" value="0.14895833333333333" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/snippet_top_profilebar.xml" value="0.14895833333333333" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/test.xml" value="0.24139492753623187" />

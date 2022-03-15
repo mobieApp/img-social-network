@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import com.example.instagramclone.R;
 import com.example.instagramclone.view.HomeActivity;
+import com.example.instagramclone.view.NewPostActivity;
 import com.example.instagramclone.view.ProfileActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -25,6 +26,10 @@ public class BottomNavigationViewHolder {
                     case R.id.ic_home:
                         Intent intent1 = new Intent(context, HomeActivity.class);
                         context.startActivity(intent1);
+                        break;
+                    case R.id.ic_newpost:
+                        Intent intent2 = new Intent(context, NewPostActivity.class);
+                        context.startActivity(intent2);
                         break;
                 }
                 return true;

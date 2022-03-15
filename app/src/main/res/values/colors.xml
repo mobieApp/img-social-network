@@ -10,4 +10,7 @@
     <color name="link_blue">#0645AD</color>
     <color name="grey">#808080</color>
     <color name="blueInsta">#3fd9d6</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#c4c4c4</color>
+    <color name="colorAccent">#FF4081</color>
 </resources>

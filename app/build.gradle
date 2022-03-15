@@ -43,4 +43,10 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:29.1.0')
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.github.nirhart:parallaxscroll:1.0'
+    implementation 'com.bm.photoview:library:1.4.1'
+    implementation 'com.github.zomato:androidphotofilters:1.0.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.wonderkiln:camerakit:0.10.1'
 }
