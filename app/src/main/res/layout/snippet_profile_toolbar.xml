@@ -16,7 +16,7 @@
                     andoird:textColor="@color/black"
                     andoird:textSize="20sp"
                     andoird:layout_marginStart="15dp"
-                    andoird:id="@+id/profileName"/>
+                    andoird:id="@+id/toolbarUserName"/>
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>

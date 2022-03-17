@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <include layout="@layout/profile_toolbar" />
+        <include layout="@layout/snippet_profile_toolbar" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -26,11 +26,12 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:layout_marginStart="25dp"
+                android:layout_marginTop="15dp"
                 android:layout_weight="25">
 
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/userAvatar"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:src="@drawable/user_image" />
@@ -41,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="75">
 
-                <include layout="@layout/profile_info" />
+                <include layout="@layout/layout_profile_info" />
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
@@ -58,7 +59,7 @@
             android:id="@+id/display_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Night in Jungle"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"/>
@@ -68,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="What's up!!!"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="16sp"/>
 
@@ -77,28 +78,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="https://github.com/tvqphuoc01"
+            android:text=""
             android:textColor="@color/link_blue"
             android:textSize="16sp" />
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/layout4"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/layout3"
-        android:layout_marginBottom="50dp">
+        android:layout_below="@id/layout3"
+        android:layout_marginTop="2dp">
 
-        <GridView
-            android:id="@+id/gridView"
-            android:layout_width="match_parent"
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:horizontalSpacing="10dp"
-            android:numColumns="3"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="1dp"></GridView>
+            android:icon="@drawable/ic_grid" />
 
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_tag" />
+    </com.google.android.material.tabs.TabLayout>
 
-    </RelativeLayout>
+    <androidx.viewpager2.widget.ViewPager2
+        android:layout_below="@id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <include layout="@layout/layout_bottom_navigation"/>
 </RelativeLayout>

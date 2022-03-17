@@ -1,7 +1,5 @@
 package com.example.instagramclone;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.os.Bundle;
 
@@ -9,6 +7,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_post);
+        setContentView(R.layout.activity_search);
     }
 }

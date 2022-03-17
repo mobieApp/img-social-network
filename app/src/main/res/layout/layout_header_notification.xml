@@ -1,0 +1,21 @@
+<merge xmlns:andoird="http://schemas.android.com/apk/res/android">
+    <com.google.android.material.appbar.AppBarLayout
+        andoird:layout_height="50dp"
+        andoird:layout_width="match_parent">
+        <androidx.appcompat.widget.Toolbar
+            andoird:layout_width="match_parent"
+            andoird:layout_height="wrap_content">
+            <RelativeLayout
+                andoird:layout_width="match_parent"
+                andoird:layout_height="wrap_content">
+                <TextView
+                    andoird:layout_width="wrap_content"
+                    andoird:layout_height="wrap_content"
+                    andoird:layout_marginStart="15dp"
+                    andoird:text="Notification"
+                    andoird:textColor="@color/black"
+                    andoird:textSize="20sp" />
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+</merge>
