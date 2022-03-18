@@ -10,6 +10,7 @@ import com.example.instagramclone.R;
 import com.example.instagramclone.view.HomeActivity;
 import com.example.instagramclone.view.NewPostActivity;
 import com.example.instagramclone.view.ProfileActivity;
+import com.example.instagramclone.view.SearchActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -30,6 +31,10 @@ public class BottomNavigationViewHolder {
                     case R.id.ic_newpost:
                         Intent intent2 = new Intent(context, NewPostActivity.class);
                         context.startActivity(intent2);
+                        break;
+                    case R.id.ic_search:
+                        Intent intent3 = new Intent(context, SearchActivity.class);
+                        context.startActivity(intent3);
                         break;
                 }
                 return true;

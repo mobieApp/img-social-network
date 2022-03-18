@@ -26,8 +26,8 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:layout_marginStart="25dp"
+                android:layout_marginTop="15dp"
                 android:layout_weight="25">
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -87,7 +87,8 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/layout3">
+        android:layout_below="@id/layout3"
+        android:layout_marginTop="2dp">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
@@ -99,6 +100,7 @@
             android:layout_height="wrap_content"
             android:icon="@drawable/ic_tag" />
     </com.google.android.material.tabs.TabLayout>
+
     <androidx.viewpager2.widget.ViewPager2
         android:layout_below="@id/tabLayout"
         android:layout_width="match_parent"
