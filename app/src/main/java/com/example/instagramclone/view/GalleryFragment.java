@@ -109,8 +109,8 @@ public class GalleryFragment extends Fragment {
             final String orderBy = MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC";
             Cursor cursor = newPostActivity.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,columns,null,null,orderBy);
 
-            int count = cursor.getCount();
-
+            //int count = cursor.getCount();
+            int count = 30;
             for(int i = 0; i < count; i++){
                 cursor.moveToPosition(i);
                 int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);

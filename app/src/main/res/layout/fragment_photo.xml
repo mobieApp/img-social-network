@@ -23,7 +23,7 @@
             android:layout_height="0dp"
             android:background="#2e3032"
             android:layout_weight="0.7">
-            <com.wonderkiln.camerakit.CameraView
+            <TextureView
                 android:id="@+id/camera"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
