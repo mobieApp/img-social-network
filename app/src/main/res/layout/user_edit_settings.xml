@@ -32,7 +32,8 @@
             android:id="@+id/textView12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chỉnh sửa trang cá nhân"
+            android:gravity="center"
+            android:text="Edit Profile"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -42,10 +43,10 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constaintLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/constaintLayout1"
-        android:id="@+id/constaintLayout2"
         android:paddingVertical="20dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -60,52 +61,62 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Đổi ảnh đại diện"
+            android:layout_margin="10dp"
+            android:text="Change profile photo"
             android:textColor="@color/blueInsta"
-            android:textSize="20sp"
+            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/circleImageView"/>
+            app:layout_constraintTop_toBottomOf="@+id/circleImageView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/constaintLayout2"
         android:orientation="vertical"
-        android:id="@+id/linearLayout1"
         android:paddingHorizontal="15dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fullname"/>
+            android:text="Fullname" />
+
         <EditText
             android:id="@+id/fullname"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Username"/>
+            android:text="Username" />
+
         <EditText
             android:id="@+id/username"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Website"/>
+            android:text="Website" />
+
         <EditText
             android:id="@+id/website"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Description"/>
+            android:text="Description" />
+
         <EditText
             android:id="@+id/description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <RelativeLayout
