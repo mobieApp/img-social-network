@@ -28,6 +28,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InstagramClone">
         <activity
+            android:name=".view.EditPersonalProfile"
+            android:exported="false" />
+        <activity
             android:name=".view.EditPhotoActivity"
             android:exported="true" />
         <activity
