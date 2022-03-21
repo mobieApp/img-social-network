@@ -7,14 +7,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.instagramclone.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -24,9 +29,11 @@ public class EditProfileActivity extends Activity {
     private static final String TAG = "Edit_Profile_ACTIVITY";
     private EditText fullnameField, usernameField, websiteField, descriptionField;
     private ImageView btnSaveEdit, btnCancelEdit;
+    private TextView textView;
     FirebaseUser user;
     FirebaseFirestore firestore;
     FirebaseAuth firebaseAuth;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +43,7 @@ public class EditProfileActivity extends Activity {
         usernameField = (EditText) findViewById(R.id.username);
         websiteField = (EditText) findViewById(R.id.website);
         descriptionField = (EditText) findViewById(R.id.description);
+        textView = (TextView) findViewById(R.id.personalInfo);
 
         btnSaveEdit = (ImageView) findViewById(R.id.btnSaveEdit);
         btnCancelEdit = (ImageView) findViewById(R.id.btnCancelEdit);
@@ -55,24 +63,35 @@ public class EditProfileActivity extends Activity {
         firestore = FirebaseFirestore.getInstance();
         user = firebaseAuth.getCurrentUser();
 
+        DocumentReference documentReference = firestore.collection("User").document(user.getUid());
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot documentSnapshot = task.getResult();
+                fullnameField.setText(documentSnapshot.getString("name"));
+                usernameField.setText(documentSnapshot.getString("username"));
+                websiteField.setText(documentSnapshot.getString("website"));
+                descriptionField.setText(documentSnapshot.getString("story"));
+            }
+        });
+
         btnSaveEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (usernameField.getText().toString().isEmpty()){
+                if (usernameField.getText().toString().isEmpty()) {
                     usernameField.setError("Username is empty");
                     return;
                 }
-                DocumentReference documentReference = firestore.collection("UserAccountSetting").document(user.getUid());
-                Map<String,Object> edited = new HashMap<>();
-                edited.put("username",usernameField.getText().toString());
-                edited.put("name",fullnameField.getText().toString());
-                edited.put("website",websiteField.getText().toString());
-                edited.put("story",descriptionField.getText().toString());
+                Map<String, Object> edited = new HashMap<>();
+                edited.put("username", usernameField.getText().toString());
+                edited.put("name", fullnameField.getText().toString());
+                edited.put("website", websiteField.getText().toString());
+                edited.put("story", descriptionField.getText().toString());
                 documentReference.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
                         Log.d(TAG, "Profile update success");
-                        startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                         finish();
                     }
                 });
@@ -84,5 +103,12 @@ public class EditProfileActivity extends Activity {
                 finish();
             }
         });
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), EditPersonalProfile.class));
+            }
+        });
+
     }
 }
