@@ -2,6 +2,7 @@ package com.example.instagramclone.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -38,7 +39,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         if (UserAuthentication.UserExists()){
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            Intent intent1 = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent1);
             finish();
         }
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                 mAuth.signInWithEmailAndPassword(Email,Pass).addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
                         startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                        finish();
                     }
                     else{
                         Toast.makeText(LoginActivity.this,"Please Check Your Login Credentials",Toast.LENGTH_SHORT).show();

@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.instagramclone.R;
 import com.example.instagramclone.models.User;
-import com.example.instagramclone.models.UserAccountSetting;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,7 +24,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegisterActivity extends AppCompatActivity {
     private User user;
-    private UserAccountSetting setting;
     private TextView linkLogin;
     private EditText username,email,password;
     private Button regBtn;
@@ -89,21 +87,20 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                user = new User(Email,Pass);
-                setting = new UserAccountSetting();
-                setting.setUsername(Username);
+                user = new User();
+                user.setUsername(Username);
+                user.setEmail(Email);
+                user.setPassword(Pass);
 
                 mAuth.createUserWithEmailAndPassword(Email,Pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(RegisterActivity.this,"You are successfully Registered", Toast.LENGTH_SHORT).show();
-                            user.setId(mAuth.getCurrentUser().getUid());
-                            DocumentReference docRefUser = firestore.collection("User").document(user.getId());
+                            String id = mAuth.getCurrentUser().getUid();
+                            DocumentReference docRefUser = firestore.collection("User").document(id);
                             docRefUser.set(user);
 
-                            DocumentReference docRefSetting = firestore.collection("UserAccountSetting").document(user.getId());
-                            docRefSetting.set(setting);
                             startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
                         }
                         else{

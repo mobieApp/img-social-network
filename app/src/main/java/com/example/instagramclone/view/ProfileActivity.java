@@ -2,31 +2,37 @@ package com.example.instagramclone.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.instagramclone.R;
 import com.example.instagramclone.Utils.BottomNavigationViewHolder;
 import com.example.instagramclone.Utils.UserAuthentication;
-import com.example.instagramclone.models.UserAccountSetting;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.instagramclone.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class ProfileActivity extends AppCompatActivity {
+    private static final String TAG = "ProfileActivity";
     private static final int ACTIVITY_NUM = 4;
-    private static final String PATH = "UserAccountSetting";
+    private static final String PATH = "User";
     private FirebaseFirestore firestore;
     private TextView usernameToolbar, display_name, description, website, btnEditProfile, numberPost, numberFollower, numberFollowing;
+    private LinearLayout layout, layoutFollower, layoutFollowing;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +45,20 @@ public class ProfileActivity extends AppCompatActivity {
         numberPost = (TextView) findViewById(R.id.numberPost);
         numberFollower = (TextView) findViewById(R.id.numberFollower);
         numberFollowing = (TextView) findViewById(R.id.numberFollowing);
-        setNavView();
+        layout = (LinearLayout) findViewById(R.id.layoutProfile);
+        layoutFollower = (LinearLayout) findViewById(R.id.btnFollowers);
+        layoutFollowing = (LinearLayout) findViewById(R.id.btnFollowing);
 
+        layout.setVisibility(View.INVISIBLE);
+
+        setNavView();
+        //------Set up toolbar---------
+        Toolbar toolbar = (Toolbar) findViewById(R.id.profileToolBar);
+        setSupportActionBar(toolbar);
+        //------Get user from firebase------
+        setUserInfo();
+
+        //Set listener
         btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,28 +71,52 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        //------Set up toolbar---------
-        Toolbar toolbar = (Toolbar) findViewById(R.id.profileToolBar);
-        setSupportActionBar(toolbar);
-        //------Get user from firebase------
-        setUserInfo();
+        layoutFollower.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Integer.parseInt(numberFollower.getText().toString()) != 0) {
+                    Intent intent = new Intent(ProfileActivity.this, FollowActivity.class);
+                    intent.putExtra("nameActivity", "Follower");
+                    startActivity(intent);
+                }
+            }
+        });
+
+        layoutFollowing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Integer.parseInt(numberFollowing.getText().toString()) != 0) {
+                    Intent intent = new Intent(ProfileActivity.this, FollowActivity.class);
+                    intent.putExtra("nameActivity", "Following");
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private void setUserInfo(){
         firestore = FirebaseFirestore.getInstance();
-        DocumentReference documentReference = firestore.collection(PATH).document(UserAuthentication.userId);
-        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        Log.d("AAA", "setUserInfo: " + UserAuthentication.userId);
+        DocumentReference documentReference = firestore.collection("User").document(UserAuthentication.userId);
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
-                    UserAccountSetting userAccountSetting = documentSnapshot.toObject(UserAccountSetting.class);
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null){
+                    Log.e(TAG, "onEvent: Listen failed - " + error);
+                    return;
+                }
+                if (value != null && value.exists()){
+                    User userAccountSetting = value.toObject(User.class);
                     usernameToolbar.setText(userAccountSetting.getUsername());
                     display_name.setText(userAccountSetting.getName());
                     description.setText(userAccountSetting.getStory());
                     website.setText(userAccountSetting.getWebsite());
-                    numberPost.setText(userAccountSetting.getNumberPosts().toString());
-                    numberFollower.setText(userAccountSetting.getNumberFollower().toString());
-                    numberFollowing.setText(userAccountSetting.getNumberFollowing().toString());
+                    numberPost.setText(userAccountSetting.getPosts().toString());
+                    numberFollower.setText(userAccountSetting.NumberFollower().toString());
+                    numberFollowing.setText(userAccountSetting.NumberFollowing().toString());
+                    layout.setVisibility(View.VISIBLE);
+                }else{
+                    Log.d(TAG, "onEvent: Data null");
                 }
             }
         });
@@ -106,4 +148,9 @@ public class ProfileActivity extends AppCompatActivity {
         menuItem.setChecked(true);
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setNavView();
+    }
 }

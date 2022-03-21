@@ -25,18 +25,17 @@
                 android:layout_height="wrap_content">
 
                 <ImageButton
-                    android:layout_width="32dp"
-                    android:src="@drawable/ic_backarrow"
-                    android:background="@android:color/transparent"
-                    android:layout_marginRight="14dp"
                     android:id="@+id/toolbar_back"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     android:layout_centerVertical="true"
-                    android:textSize="14dp"
-
-                    android:textColor="#0186e7"
-                    android:layout_height="32dp"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginRight="14dp"
+                    android:background="@android:color/transparent"
                     android:scaleType="centerCrop"
-                    android:layout_marginEnd="14dp" />
+                    android:src="@drawable/close_icon"
+                    android:textColor="#0186e7"
+                    android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/toolbar_title"
@@ -51,19 +50,19 @@
                     android:textStyle="bold" />
 
                 <ImageButton
-                    android:layout_width="32dp"
-                    android:src="@drawable/ic_check_black"
-                    android:background="@android:color/transparent"
-                    android:layout_marginRight="14dp"
                     android:id="@+id/toolbar_continue"
-                    android:layout_centerVertical="true"
-                    android:textSize="14dp"
-                    android:textColor="#0186e7"
+                    android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:scaleType="centerCrop"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="14dp" />
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginRight="14dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_check_black"
+                    android:textColor="#0186e7"
+                    android:textSize="14dp" />
             </RelativeLayout>
 
         </androidx.appcompat.widget.Toolbar>
@@ -91,5 +90,5 @@
         android:layout_below="@+id/appBarLayout"
         android:background="#fff"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
+    <include layout="@layout/layout_bottom_navigation"/>
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package com.example.instagramclone.view;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
@@ -50,19 +51,22 @@ import java.util.Arrays;
 public class PhotoFragment extends Fragment {
 
     private NewPostActivity newPostActivity;
-    private static final String TAG= "PhotoFragment";
-    private ImageButton btn_take_photo;
+    private static final String TAG = "PhotoFragment";
+    private ImageButton btn_take_photo, btn_continue, btn_switch_camera, btn_toggle_flash;
     private TextureView textureView;
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
         ORIENTATIONS.append(Surface.ROTATION_90, 0);
         ORIENTATIONS.append(Surface.ROTATION_180, 270);
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
-
-    private String cameraId;
+    private Integer mFlashMode = 0;
+    public static final String CAMERA_FRONT = "1";
+    public static final String CAMERA_BACK = "0";
+    private String cameraId = CAMERA_BACK;
     protected CameraDevice cameraDevice;
     protected CameraCaptureSession cameraCaptureSessions;
     protected CaptureRequest captureRequest;
@@ -84,9 +88,9 @@ public class PhotoFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try{
+        try {
             newPostActivity = (NewPostActivity) getActivity();
-        }catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             throw new IllegalStateException("NewPostActivity must implement callbacks");
         }
     }
@@ -94,15 +98,34 @@ public class PhotoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_photo,null);
+        Log.d(TAG, "onCreateView: ");
+        View view = inflater.inflate(R.layout.fragment_photo, null);
         textureView = (TextureView) view.findViewById(R.id.camera);
+        btn_switch_camera = (ImageButton) view.findViewById(R.id.btn_switch_camera);
+        btn_toggle_flash = (ImageButton) view.findViewById(R.id.btn_toggle_flash);
         btn_take_photo = (ImageButton) view.findViewById(R.id.btn_take_photo);
-        Log.d(TAG, "onCreateView");
+        btn_continue = (ImageButton) newPostActivity.findViewById(R.id.toolbar_continue);
+        btn_continue.setVisibility(View.INVISIBLE);
         textureView.setSurfaceTextureListener(textureListener);
+
         btn_take_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 takePic();
+            }
+        });
+
+        btn_switch_camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchCamera();
+            }
+        });
+        btn_toggle_flash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: Switch flash");
+                switchFlashMode();
             }
         });
         return view;
@@ -115,19 +138,21 @@ public class PhotoFragment extends Fragment {
             // Open camera khi ready
             openCamera();
         }
+
         @Override
         public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-            Log.d(TAG, "onSurfaceTextureSizeChanged");
             // Transform you image captured size according to the surface width and height, và thay đổi kích thước ảnh
         }
+
         @Override
         public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-            Log.d(TAG, "onSurfaceTextureDestroyed");
+
             return false;
         }
+
         @Override
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-            Log.d(TAG, "onSurfaceTextureUpdated");
+            
         }
     };
 
@@ -160,11 +185,13 @@ public class PhotoFragment extends Fragment {
             createCameraPreview();
         }
     };
+
     protected void startBackgroundThread() {
         mBackgroundThread = new HandlerThread("Camera Background");
         mBackgroundThread.start();
         mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
     }
+
     protected void stopBackgroundThread() {
         mBackgroundThread.quitSafely();
         try {
@@ -175,13 +202,14 @@ public class PhotoFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
     protected void takePic() {
-        if(null == cameraDevice) {
+        if (null == cameraDevice) {
             Log.e(TAG, "cameraDevice is null");
             return;
         }
+        Log.d(TAG, "takePic");
         CameraManager manager = (CameraManager) newPostActivity.getSystemService(newPostActivity.getApplicationContext().CAMERA_SERVICE);
-        Log.d(TAG, manager.toString());
         try {
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraDevice.getId());
             Size[] jpegSizes = null;
@@ -202,7 +230,8 @@ public class PhotoFragment extends Fragment {
             outputSurfaces.add(new Surface(textureView.getSurfaceTexture()));
             final CaptureRequest.Builder captureBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
             captureBuilder.addTarget(reader.getSurface());
-            captureBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
+            setFlash(captureBuilder);
+            Log.d(TAG, "setFlash");
 
             // kiểm tra orientation tuỳ thuộc vào mỗi device khác nhau như có nói bên trên
             int rotation = newPostActivity.getWindowManager().getDefaultDisplay().getRotation();
@@ -248,7 +277,7 @@ public class PhotoFragment extends Fragment {
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
-                    Toast.makeText(newPostActivity, "Saved:" + file, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(newPostActivity, "Saved: " + file, Toast.LENGTH_SHORT).show();
                     createCameraPreview();
                 }
             };
@@ -256,11 +285,13 @@ public class PhotoFragment extends Fragment {
                 @Override
                 public void onConfigured(CameraCaptureSession session) {
                     try {
+                        Log.d(TAG, "cameraDevice.createCaptureSession");
                         session.capture(captureBuilder.build(), captureListener, mBackgroundHandler);
                     } catch (CameraAccessException e) {
                         e.printStackTrace();
                     }
                 }
+
                 @Override
                 public void onConfigureFailed(CameraCaptureSession session) {
                 }
@@ -278,7 +309,7 @@ public class PhotoFragment extends Fragment {
             Surface surface = new Surface(texture);
             captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             captureRequestBuilder.addTarget(surface);
-            cameraDevice.createCaptureSession(Arrays.asList(surface), new CameraCaptureSession.StateCallback(){
+            cameraDevice.createCaptureSession(Arrays.asList(surface), new CameraCaptureSession.StateCallback() {
                 @Override
                 public void onConfigured(@NonNull CameraCaptureSession cameraCapture) {
                     //The camera is already closed
@@ -287,7 +318,23 @@ public class PhotoFragment extends Fragment {
                     }
                     // When the session is ready, we start displaying the preview.
                     cameraCaptureSessions = cameraCapture;
-                    updatePreview();
+                    //updatePreview();
+                    captureRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
+                            CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
+
+                    captureRequest = captureRequestBuilder.build();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                cameraCaptureSessions.setRepeatingRequest(captureRequest, null, mBackgroundHandler);
+                            } catch (CameraAccessException e) {
+                                Log.e(TAG, "Failed to start camera preview because it couldn't access camera", e);
+                            } catch (IllegalStateException e) {
+                                Log.e(TAG, "Failed to start camera preview.", e);
+                            }
+                        }
+                    }, 500);
                 }
                 @Override
                 public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
@@ -298,16 +345,20 @@ public class PhotoFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
     private void openCamera() {
         CameraManager manager = (CameraManager) newPostActivity.getSystemService(newPostActivity.getApplicationContext().CAMERA_SERVICE);
         Log.e(TAG, "is camera open");
         try {
-            cameraId = manager.getCameraIdList()[0];
+            if (cameraId.equals(CAMERA_FRONT)) {
+                btn_switch_camera.setImageDrawable(newPostActivity.getResources().getDrawable(R.drawable.ic_camera_front_white,null));
+            } else if (cameraId.equals(CAMERA_BACK)) {
+                btn_switch_camera.setImageDrawable(newPostActivity.getResources().getDrawable(R.drawable.ic_camera_rear_white,null));
+            }
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             imageDimension = map.getOutputSizes(SurfaceTexture.class)[0];
-            //Integer deviceLevel = characteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL); // 0 - limited, 1 - full, 2 - legacy, 3 - uber full
-            //Log.d(TAG, "Device level: " + deviceLevel.toString());
+
             // Add permission for camera and let user grant the permission
             if (ActivityCompat.checkSelfPermission(newPostActivity.getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(newPostActivity.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 Log.d(TAG, "openCamera: Permission denided");
@@ -321,8 +372,9 @@ public class PhotoFragment extends Fragment {
         }
         Log.e(TAG, "openCamera X");
     }
+
     protected void updatePreview() {
-        if(null == cameraDevice) {
+        if (null == cameraDevice) {
             Log.e(TAG, "updatePreview error, return");
         }
         captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
@@ -339,6 +391,7 @@ public class PhotoFragment extends Fragment {
             }
         }, 500);
     }
+
     private void closeCamera() {
         if (null != cameraDevice) {
             cameraDevice.close();
@@ -349,6 +402,7 @@ public class PhotoFragment extends Fragment {
             imageReader = null;
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
@@ -358,6 +412,7 @@ public class PhotoFragment extends Fragment {
             }
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -371,11 +426,91 @@ public class PhotoFragment extends Fragment {
             textureView.setSurfaceTextureListener(textureListener);
         }
     }
+
     @Override
     public void onPause() {
         Log.e(TAG, "onPause");
         closeCamera();
         stopBackgroundThread();
         super.onPause();
+    }
+
+    public void switchCamera() {
+        if (cameraId.equals(CAMERA_FRONT)) {
+            cameraId = CAMERA_BACK;
+            closeCamera();
+            reopenCamera();
+        } else if (cameraId.equals(CAMERA_BACK)) {
+            cameraId = CAMERA_FRONT;
+            closeCamera();
+            reopenCamera();
+        }
+    }
+    public void reopenCamera() {
+        if (textureView.isAvailable()) {
+            openCamera();
+        } else {
+            textureView.setSurfaceTextureListener(textureListener);
+        }
+    }
+
+    private void setFlash(CaptureRequest.Builder mPreviewRequestBuilder) {
+        switch (mFlashMode) {
+            case 0:
+                mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON);
+                mPreviewRequestBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
+                break;
+            case 1:
+                mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+                break;
+            case 2:
+                mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_ALWAYS_FLASH);
+                break;
+        }
+    }
+    private void switchFlashMode() {
+        switch (mFlashMode) {
+            case 0:
+                mFlashMode = 1;
+                btn_toggle_flash.setImageDrawable(newPostActivity.getResources().getDrawable(R.drawable.ic_flash_auto_white,null));
+                captureRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+                try {
+                    cameraCaptureSessions.setRepeatingRequest(
+                            captureRequestBuilder.build(),
+                            null, mBackgroundHandler);
+                } catch (CameraAccessException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                break;
+            case 1:
+                mFlashMode = 2;
+                btn_toggle_flash.setImageDrawable(newPostActivity.getResources().getDrawable(R.drawable.ic_flash_on_white,null));
+                captureRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CameraMetadata.CONTROL_AE_MODE_ON_ALWAYS_FLASH);
+                try {
+                    cameraCaptureSessions.setRepeatingRequest(
+                            captureRequestBuilder.build(),
+                            null, mBackgroundHandler);
+                } catch (CameraAccessException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                break;
+            case 2:
+                mFlashMode = 0;
+                btn_toggle_flash.setImageDrawable(newPostActivity.getResources().getDrawable(R.drawable.ic_flash_off_white,null));
+                captureRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON);
+                captureRequestBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
+                try {
+                    cameraCaptureSessions.setRepeatingRequest(
+                            captureRequestBuilder.build(),
+                            null, mBackgroundHandler);
+                } catch (CameraAccessException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                break;
+        }
+        Log.d(TAG, "Mode: " + mFlashMode);
     }
 }

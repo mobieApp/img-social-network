@@ -28,6 +28,12 @@ public class HomeActivity extends AppCompatActivity{
         UserAuthentication.UserExists();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setNavView();
+    }
+
     private void setNavView(){
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHolder.activateNavigationView(this,bottomNavigationView);

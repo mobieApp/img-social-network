@@ -2,8 +2,10 @@ package com.example.instagramclone.view;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,8 +14,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -38,11 +45,21 @@ public class GalleryFragment extends Fragment {
     private GalleryAdapter imageRVAdapter;
     private Uri pathImageSelected = null;
     private PhotoView mImageParallaxHeader;
+    private ImageButton btn_continue;
 
     public GalleryFragment(){
 
     }
-
+    private ActivityResultLauncher<String> mPermissionResult = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+        @Override
+        public void onActivityResult(Boolean result) {
+            if(result){
+                //Toast.makeText(newPostActivity.getApplicationContext(), "Permissions Granted..", Toast.LENGTH_SHORT).show();
+                getImagePath();
+            }//else
+                //Toast.makeText(newPostActivity.getApplicationContext(), "Permissions denined, Permissions are required to use the app..", Toast.LENGTH_SHORT).show();
+        }
+    });
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +74,8 @@ public class GalleryFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = (View) inflater.inflate(R.layout.fragment_gallery,null);
-
+        btn_continue = (ImageButton) newPostActivity.findViewById(R.id.toolbar_continue);
+        btn_continue.setVisibility(View.VISIBLE);
         mImageParallaxHeader = (PhotoView) view.findViewById(R.id.parallax_header_imageview);
         imagePaths = new ArrayList<>();
 
@@ -76,7 +94,7 @@ public class GalleryFragment extends Fragment {
     }
     private void requestPermissions(){
         if(checkPermission()){
-            Toast.makeText(newPostActivity.getApplicationContext(),"Permissions granted",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(newPostActivity.getApplicationContext(),"Permissions granted",Toast.LENGTH_SHORT).show();
             getImagePath();
         }else{
             requestPermission();
@@ -84,7 +102,7 @@ public class GalleryFragment extends Fragment {
     }
 
     private void requestPermission(){
-        ActivityCompat.requestPermissions(newPostActivity,new String[]{READ_EXTERNAL_STORAGE},PERMISSION_REQUEST_CODE);
+        mPermissionResult.launch(READ_EXTERNAL_STORAGE);
     }
 
     private void prepareRecyclerView(){
@@ -109,8 +127,10 @@ public class GalleryFragment extends Fragment {
             final String orderBy = MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC";
             Cursor cursor = newPostActivity.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,columns,null,null,orderBy);
 
-            //int count = cursor.getCount();
-            int count = 30;
+            int count = cursor.getCount();
+            //int count = 30;
+            if (count > 100)
+                count = 100;
             for(int i = 0; i < count; i++){
                 cursor.moveToPosition(i);
                 int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
@@ -118,22 +138,6 @@ public class GalleryFragment extends Fragment {
             }
             imageRVAdapter.notifyDataSetChanged();
             cursor.close();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case PERMISSION_REQUEST_CODE:
-                if (grantResults.length > 0){
-                    boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (storageAccepted) {
-                        Toast.makeText(newPostActivity.getApplicationContext(), "Permissions Granted..", Toast.LENGTH_SHORT).show();
-                        getImagePath();
-                    }else{
-                        Toast.makeText(newPostActivity.getApplicationContext(), "Permissions denined, Permissions are required to use the app..", Toast.LENGTH_SHORT).show();
-                    }
-                }
         }
     }
 

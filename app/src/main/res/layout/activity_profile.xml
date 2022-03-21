@@ -11,99 +11,102 @@
         <include layout="@layout/snippet_profile_toolbar" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/layout2"
+    <LinearLayout
+        android:id="@+id/layoutProfile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/layout1">
+        android:layout_height="match_parent"
+        android:layout_below="@id/layout1"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="25">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/userAvatar"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@drawable/user_image" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="75">
+
+                    <include layout="@layout/layout_profile_info" />
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="100">
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <RelativeLayout
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/display_name"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="15dp"
-                android:layout_weight="25">
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/userAvatar"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/user_image" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="75">
+                android:layout_marginTop="5dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
-                <include layout="@layout/layout_profile_info" />
-            </RelativeLayout>
+            <TextView
+                android:id="@+id/website"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text=""
+                android:textColor="@color/link_blue"
+                android:textSize="16sp" />
         </LinearLayout>
-    </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/layout3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/layout2"
-        android:orientation="vertical"
-        android:padding="20dp">
-
-        <TextView
-            android:id="@+id/display_name"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=""
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:layout_marginTop="2dp">
 
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text=""
-            android:textColor="@color/black"
-            android:textSize="16sp"/>
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_grid" />
 
-        <TextView
-            android:id="@+id/website"
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_tag" />
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text=""
-            android:textColor="@color/link_blue"
-            android:textSize="16sp" />
+            android:layout_height="match_parent"
+            android:layout_below="@id/tabLayout" />
     </LinearLayout>
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/layout3"
-        android:layout_marginTop="2dp">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/ic_grid" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/ic_tag" />
-    </com.google.android.material.tabs.TabLayout>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:layout_below="@id/tabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <include layout="@layout/layout_bottom_navigation"/>
+    <include layout="@layout/layout_bottom_navigation" />
 </RelativeLayout>
