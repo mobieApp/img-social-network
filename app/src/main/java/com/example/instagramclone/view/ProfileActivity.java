@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,7 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
     private static final String PATH = "User";
     private FirebaseFirestore firestore;
     private TextView usernameToolbar, display_name, description, website, btnEditProfile, numberPost, numberFollower, numberFollowing;
-    private LinearLayout layout, layoutFollower, layoutFollowing;
+    private LinearLayout layoutFollower, layoutFollowing;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,11 +46,8 @@ public class ProfileActivity extends AppCompatActivity {
         numberPost = (TextView) findViewById(R.id.numberPost);
         numberFollower = (TextView) findViewById(R.id.numberFollower);
         numberFollowing = (TextView) findViewById(R.id.numberFollowing);
-        layout = (LinearLayout) findViewById(R.id.layoutProfile);
         layoutFollower = (LinearLayout) findViewById(R.id.btnFollowers);
         layoutFollowing = (LinearLayout) findViewById(R.id.btnFollowing);
-
-        layout.setVisibility(View.INVISIBLE);
 
         setNavView();
         //------Set up toolbar---------
@@ -106,6 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
                     return;
                 }
                 if (value != null && value.exists()){
+
                     User userAccountSetting = value.toObject(User.class);
                     usernameToolbar.setText(userAccountSetting.getUsername());
                     display_name.setText(userAccountSetting.getName());
@@ -114,7 +113,6 @@ public class ProfileActivity extends AppCompatActivity {
                     numberPost.setText(userAccountSetting.getPosts().toString());
                     numberFollower.setText(userAccountSetting.NumberFollower().toString());
                     numberFollowing.setText(userAccountSetting.NumberFollowing().toString());
-                    layout.setVisibility(View.VISIBLE);
                 }else{
                     Log.d(TAG, "onEvent: Data null");
                 }

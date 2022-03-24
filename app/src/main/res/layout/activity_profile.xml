@@ -39,7 +39,7 @@
                         android:id="@+id/userAvatar"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:src="@drawable/user_image" />
+                        android:src="@drawable/avatar_default" />
                 </RelativeLayout>
 
                 <RelativeLayout
