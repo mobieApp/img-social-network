@@ -75,7 +75,6 @@ public class GalleryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = (View) inflater.inflate(R.layout.fragment_gallery,null);
         btn_continue = (ImageButton) newPostActivity.findViewById(R.id.toolbar_continue);
-        btn_continue.setVisibility(View.VISIBLE);
         mImageParallaxHeader = (PhotoView) view.findViewById(R.id.parallax_header_imageview);
         imagePaths = new ArrayList<>();
 
@@ -86,6 +85,12 @@ public class GalleryFragment extends Fragment {
         requestPermissions();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        btn_continue.setVisibility(View.VISIBLE);
     }
 
     private boolean checkPermission(){
