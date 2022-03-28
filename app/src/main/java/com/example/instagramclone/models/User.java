@@ -7,7 +7,7 @@ public class User {
     private String email;
     private String phone;
     private String gender;
-    private String Dob;
+    private String dob;
     private String username;
     private String name;
     private String story;
@@ -16,13 +16,22 @@ public class User {
     private ArrayList<String> follower;
     private ArrayList<String> following;
     private String avatar;
+//    private Integer react;
+//
+//    public Integer getReact() {
+//        return react;
+//    }
+//
+//    public void setReact(Integer react) {
+//        this.react = react;
+//    }
 
     public User(){
         password = "";
         email = "";
         phone = "";
         gender = "";
-        Dob = "";
+        dob = "";
         username = "";
         name = "";
         story = "";
@@ -66,11 +75,11 @@ public class User {
     }
 
     public String getDob() {
-        return Dob;
+        return dob;
     }
 
     public void setDob(String dob) {
-        Dob = dob;
+        dob = dob;
     }
 
     public String getUsername() {
@@ -85,8 +94,8 @@ public class User {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String fullName) {
+        this.name = fullName;
     }
 
     public String getStory() {

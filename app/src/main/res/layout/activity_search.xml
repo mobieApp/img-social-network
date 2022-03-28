@@ -3,38 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.SearchActivity"
     android:orientation="vertical">
-    <LinearLayout
-        android:id="@+id/layout_searchBar"
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <EditText
-            android:id="@+id/search_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="8dp"
-            android:background="@drawable/rounded_edittext"
-            android:drawableLeft="@android:drawable/ic_menu_search"
-            android:layout_weight="1"
-            android:forceHasOverlappingRendering="true"
-            android:hint="Searching..." />
-        <TextView
-            android:id="@+id/cancel_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:visibility="gone"
-            android:layout_gravity="center_vertical"
-            app:drawableLeftCompat="@android:drawable/ic_delete" />
-    </LinearLayout>
+        android:layout_margin="8dp"
+
+        android:background="@drawable/rounded_searchview" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabSearching"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/layout_searchBar">
+        android:layout_below="@id/search_bar">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
@@ -62,9 +47,13 @@
             android:text="Địa điểm" />
     </com.google.android.material.tabs.TabLayout>
 
-    <androidx.viewpager2.widget.ViewPager2
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcv_search"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tabSearching" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/tabSearching"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="50dp"></androidx.recyclerview.widget.RecyclerView>
     <include layout="@layout/layout_bottom_navigation"/>
 </RelativeLayout>

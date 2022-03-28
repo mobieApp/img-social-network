@@ -91,6 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
                 user.setUsername(Username);
                 user.setEmail(Email);
                 user.setPassword(Pass);
+//                user.setAvatar(getDrawable().to);
 
                 mAuth.createUserWithEmailAndPassword(Email,Pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
