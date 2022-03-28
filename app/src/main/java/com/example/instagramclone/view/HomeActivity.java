@@ -15,21 +15,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.instagramclone.R;
 import com.example.instagramclone.Utils.BottomNavigationViewHolder;
-import com.example.instagramclone.Utils.InstagramFeedRVAdapter;
+import com.example.instagramclone.Utils.PostAdapter;
 import com.example.instagramclone.Utils.UserAuthentication;
 import com.example.instagramclone.models.Post;
-import com.example.instagramclone.models.React;
 import com.example.instagramclone.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.database.util.GAuthToken;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -39,7 +36,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.concurrent.BlockingDeque;
 
 public class HomeActivity extends AppCompatActivity{
     private static final int ACTIVITY_NUM = 0;
@@ -57,6 +53,7 @@ public class HomeActivity extends AppCompatActivity{
         firestore = FirebaseFirestore.getInstance();
         progressBar = findViewById(R.id.LoadingFeed);
         postArrayList = new ArrayList<>();
+
         /*mStorageReference = FirebaseStorage.getInstance().getReference().child("Post");
         Log.d("AAA", mStorageReference.toString());
         mStorageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -125,6 +122,7 @@ public class HomeActivity extends AppCompatActivity{
                             Map<Integer,Post> unsortPost = new HashMap<>();
                             for (QueryDocumentSnapshot document: task.getResult()) {
                                 Post post = document.toObject(Post.class);
+                                post.setId(document.getId());
                                 unsortPost.put(userId.indexOf(post.getUserId()),post);
                                 //postArrayList.add(post);
                             }
@@ -142,7 +140,7 @@ public class HomeActivity extends AppCompatActivity{
                                 postArrayList.add(post);
                             }
 
-                            InstagramFeedRVAdapter adapter = new InstagramFeedRVAdapter(postArrayList,HomeActivity.this);
+                            PostAdapter adapter = new PostAdapter(postArrayList,HomeActivity.this);
                             RecyclerView view = findViewById(R.id.RVInstaFeed);
 
                             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(HomeActivity.this, RecyclerView.VERTICAL, false);

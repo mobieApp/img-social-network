@@ -48,7 +48,8 @@
         <activity android:name=".view.SearchActivity" />
         <activity
             android:name=".view.FollowActivity"
-            android:parentActivityName=".view.ProfileActivity" />
+            android:parentActivityName=".view.ProfileActivity"/>
+        <activity android:name=".view.NotificationActivity"/>
     </application>
 
 </manifest>
