@@ -105,7 +105,6 @@ public class PhotoFragment extends Fragment {
         btn_toggle_flash = (ImageButton) view.findViewById(R.id.btn_toggle_flash);
         btn_take_photo = (ImageButton) view.findViewById(R.id.btn_take_photo);
         btn_continue = (ImageButton) newPostActivity.findViewById(R.id.toolbar_continue);
-        btn_continue.setVisibility(View.INVISIBLE);
         textureView.setSurfaceTextureListener(textureListener);
 
         btn_take_photo.setOnClickListener(new View.OnClickListener() {
@@ -417,6 +416,7 @@ public class PhotoFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.e(TAG, "onResume");
+        btn_continue.setVisibility(View.INVISIBLE);
         startBackgroundThread();
         if (textureView.isAvailable()) {
             Log.d(TAG, "onResume: is Available");
