@@ -23,6 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InstagramClone">
         <activity
+            android:name=".view.PhotoEffectActivity"
+            android:exported="true" />
+        <activity
             android:name=".view.EditPersonalProfile"
             android:exported="false" />
         <activity
@@ -42,9 +45,10 @@
         <activity android:name=".view.ProfileActivity" />
         <activity android:name=".view.EditProfileActivity" />
         <activity android:name=".view.NewPostActivity" />
-        <activity android:name=".view.SearchActivity"/>
+        <activity android:name=".view.SearchActivity" />
         <activity
             android:name=".view.FollowActivity"
-            android:parentActivityName=".view.ProfileActivity"/>
+            android:parentActivityName=".view.ProfileActivity" />
     </application>
+
 </manifest>

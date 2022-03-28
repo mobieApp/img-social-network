@@ -1,6 +1,8 @@
 package com.example.instagramclone.Utils;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.AssetManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.instagramclone.R;
 import com.example.instagramclone.RecyclerViewClickListener;
 
-public class EditPhotoAdapter extends RecyclerView.Adapter<EditPhotoAdapter.ViewHolder> {
+public class PhotoFilterAdapter extends RecyclerView.Adapter<PhotoFilterAdapter.ViewHolder> {
     private static RecyclerViewClickListener itemListener;
 
-    String[] items = {"Brush", "Text", "Eraser", "Emoji"};
-    Integer[] image = {R.drawable.ic_brush, R.drawable.ic_text, R.drawable.ic_eraser, R.drawable.ic_insert_emoticon};
+    String[] items = {"None", "Auto Fix", "Brightness", "Contrast", "Cross Process", "Fill Light", "Gray Scale",
+            "Lomish", "Posterize", "Sepia", "Temperature", "Tint", "Vignette"};
 
-    public EditPhotoAdapter(RecyclerViewClickListener itemListenerRef){
+    Integer[] picture = {R.drawable.none, R.drawable.auto_fix, R.drawable.brightness, R.drawable.contrast, R.drawable.cross_process, R.drawable.fill_light,
+            R.drawable.gray_scale, R.drawable.lomish, R.drawable.posterize, R.drawable.sepia, R.drawable.temprature, R.drawable.tint, R.drawable.vignette};
+
+    public PhotoFilterAdapter(RecyclerViewClickListener itemListenerRef) {
         itemListener = itemListenerRef;
     }
 
@@ -30,7 +35,7 @@ public class EditPhotoAdapter extends RecyclerView.Adapter<EditPhotoAdapter.View
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Nạp layout cho View
-        View editView = inflater.inflate(R.layout.single_edit_photo_item, parent, false);
+        View editView = inflater.inflate(R.layout.single_effect_item, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(editView);
         return viewHolder;
@@ -39,7 +44,7 @@ public class EditPhotoAdapter extends RecyclerView.Adapter<EditPhotoAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.textView.setText(items[position]);
-        holder.imageView.setImageResource(image[position]);
+        holder.imageView.setImageResource(picture[position]);
     }
 
     @Override
@@ -47,7 +52,7 @@ public class EditPhotoAdapter extends RecyclerView.Adapter<EditPhotoAdapter.View
         return items.length;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private View itemview;
         TextView textView;
         ImageView imageView;
@@ -55,9 +60,9 @@ public class EditPhotoAdapter extends RecyclerView.Adapter<EditPhotoAdapter.View
         public ViewHolder(View itemView) {
             super(itemView);
             itemview = itemView;
-            textView = (TextView) itemView.findViewById(R.id.edit_name);
-            imageView = (ImageView) itemView.findViewById(R.id.editImageView);
-            itemview.setOnClickListener(this);
+            textView = (TextView) itemView.findViewById(R.id.filter_name);
+            imageView = (ImageView) itemView.findViewById(R.id.effectImageView);
+            itemView.setOnClickListener(this);
         }
 
         @Override
