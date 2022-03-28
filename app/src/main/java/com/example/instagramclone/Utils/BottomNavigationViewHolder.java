@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import com.example.instagramclone.R;
 import com.example.instagramclone.view.HomeActivity;
 import com.example.instagramclone.view.NewPostActivity;
+import com.example.instagramclone.view.NotificationActivity;
 import com.example.instagramclone.view.ProfileActivity;
 import com.example.instagramclone.view.SearchActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -35,6 +36,10 @@ public class BottomNavigationViewHolder {
                     case R.id.ic_search:
                         Intent intent3 = new Intent(context, SearchActivity.class);
                         context.startActivity(intent3);
+                        break;
+                    case R.id.ic_alert:
+                        Intent intent4 = new Intent(context, NotificationActivity.class);
+                        context.startActivity(intent4);
                         break;
                 }
                 return true;

@@ -45,7 +45,7 @@
                     android:layout_centerInParent="true"
                     android:gravity="center"
                     android:text="New Post"
-                    android:textColor="#000"
+                    android:textColor="#FFF"
                     android:textSize="18dp"
                     android:textStyle="bold" />
 

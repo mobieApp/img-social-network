@@ -1,6 +1,7 @@
 package com.example.instagramclone.models;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class User {
     private String password;
@@ -16,15 +17,8 @@ public class User {
     private ArrayList<String> follower;
     private ArrayList<String> following;
     private String avatar;
-//    private Integer react;
-//
-//    public Integer getReact() {
-//        return react;
-//    }
-//
-//    public void setReact(Integer react) {
-//        this.react = react;
-//    }
+    private ArrayList<React> react;
+
 
     public User(){
         password = "";
@@ -152,5 +146,13 @@ public class User {
 
     public Integer NumberFollowing(){
         return following.size();
+    }
+
+    public ArrayList<React> getReact() {
+        return react;
+    }
+
+    public void setReact(ArrayList<React> react) {
+        this.react = react;
     }
 }
