@@ -1,18 +1,23 @@
 package com.example.instagramclone.Utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.instagramclone.R;
 import com.example.instagramclone.models.Post;
+import com.example.instagramclone.view.CommentActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -65,18 +70,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 String avatar = documentSnapshot.getString("avatar");
                 if (!avatar.equals("") && avatar != null)
                     Picasso.get().load(avatar).into(holder.authorIV);
-                else{
+                else {
                     holder.authorIV.setImageDrawable(context.getDrawable(R.drawable.avatar_default));
                 }
             }
         });
 
-        setTimestamp(holder.timetv,modal.getTimestamp());
+        setTimestamp(holder.timetv, modal.getTimestamp());
         Picasso.get().load(modal.getMedia_url()).into(holder.postIV);
         holder.likeTV.setText("" + modal.getListLike().size() + " likes");
         holder.desctv.setText(modal.getCaption());
 
-        if (modal.getListLike().contains(UserAuthentication.userId)){
+        if (modal.getListLike().contains(UserAuthentication.userId)) {
             holder.icLike.setImageDrawable(context.getDrawable(R.drawable.ic_heart_red));
             holder.icLike.setTag("red");
         }
@@ -85,14 +90,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             @Override
             public void onClick(View view) {
                 ArrayList<String> list = modal.getListLike();
-                String statusHeart = (String)holder.icLike.getTag();
-                if (statusHeart != null){
-                    switch (statusHeart){
+                String statusHeart = (String) holder.icLike.getTag();
+                if (statusHeart != null) {
+                    switch (statusHeart) {
                         case "black":
                             list.add(UserAuthentication.userId);
                             holder.icLike.setImageDrawable(context.getDrawable(R.drawable.ic_heart_red));
                             holder.icLike.setTag("red");
-                            addNotification(UserAuthentication.userId,modal.getId());
+                            addNotification(UserAuthentication.userId, modal.getId());
                             break;
                         case "red":
                             list.remove(UserAuthentication.userId);
@@ -100,7 +105,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                             holder.icLike.setTag("black");
                             break;
                     }
-                    updateRef.update("listLike",list);
+                    updateRef.update("listLike", list);
                     holder.likeTV.setText("" + modal.getListLike().size() + " likes");
                 }
             }
@@ -109,10 +114,26 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.cmtBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(context, CommentActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("FOCUS", "TRUE");
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
+        });
 
+        holder.commentTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, CommentActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("FOCUS", "FALSE");
+                intent.putExtras(bundle);
+                context.startActivity(intent);
             }
         });
     }
+
     @Override
     public int getItemCount() {
         return instaModalArrayList.size();
@@ -123,7 +144,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         CircleImageView authorIV;
         private TextView authorTV;
         private ImageView postIV, icLike, cmtBtn;
-        private TextView likeTV, desctv, timetv;
+        private TextView likeTV, desctv, timetv, commentTV;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -135,30 +156,30 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             timetv = itemView.findViewById(R.id.timestampPost);
             icLike = itemView.findViewById(R.id.icLike);
             cmtBtn = itemView.findViewById(R.id.commentBtn);
+            commentTV = itemView.findViewById(R.id.textViewComment);
         }
     }
 
-    private void setTimestamp(TextView textView, Date createdAt){
+    private void setTimestamp(TextView textView, Date createdAt) {
         duration = new TimestampDuration(createdAt);
-        if(duration.DiffDay() != 0){
+        if (duration.DiffDay() != 0) {
             if (duration.DiffDay() <= 7)
                 textView.setText(duration.DiffDay() + " ngày trước");
             else textView.setText(LocalDate.parse(createdAt.toString()).toString());
-        }
-        else if(duration.DiffHour() != 0)
+        } else if (duration.DiffHour() != 0)
             textView.setText(duration.DiffHour() + " giờ trước");
-        else if(duration.DiffMinute() != 0)
+        else if (duration.DiffMinute() != 0)
             textView.setText(duration.DiffMinute() + " phút trước");
-        else if(duration.DiffSecond() != 0)
+        else if (duration.DiffSecond() != 0)
             textView.setText(duration.DiffSecond() + " giây trước");
     }
 
-    private void addNotification(String userId, String postId){
+    private void addNotification(String userId, String postId) {
         Map<String, Object> data = new HashMap<>();
         data.put("userId", userId);
         data.put("postId", postId);
-        data.put("text","like your post");
-        data.put("isPost",true);
+        data.put("text", "like your post");
+        data.put("isPost", true);
         data.put("timestamp", new Date());
         Task<DocumentReference> collectionReference = FirebaseFirestore.getInstance().collection("Notification").add(data);
     }
