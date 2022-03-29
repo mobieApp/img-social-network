@@ -105,6 +105,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 }
             }
         });
+
+        holder.cmtBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
     @Override
     public int getItemCount() {
@@ -115,7 +122,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         CircleImageView authorIV;
         private TextView authorTV;
-        private ImageView postIV, icLike;
+        private ImageView postIV, icLike, cmtBtn;
         private TextView likeTV, desctv, timetv;
 
         public ViewHolder(@NonNull View itemView) {
@@ -127,6 +134,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             desctv = itemView.findViewById(R.id.TVPostDescription);
             timetv = itemView.findViewById(R.id.timestampPost);
             icLike = itemView.findViewById(R.id.icLike);
+            cmtBtn = itemView.findViewById(R.id.commentBtn);
         }
     }
 

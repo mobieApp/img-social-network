@@ -84,7 +84,7 @@ public class InstagramFeedRVAdapter extends RecyclerView.Adapter<InstagramFeedRV
             holder.timetv.setText(duration.DiffSecond() + " giây trước");
         Picasso.get().load(modal.getMedia_url()).into(holder.postIV);
         holder.desctv.setText(modal.getCaption());
-        holder.likeTV.setText("" + modal.getLikesCount() + " likes");
+//        holder.likeTV.setText("" + modal.getLikesCount() + " likes");
     }
 
     @Override
@@ -115,7 +115,6 @@ public class InstagramFeedRVAdapter extends RecyclerView.Adapter<InstagramFeedRV
                 public void onClick(View view) {
                     Toast.makeText(context.getApplicationContext(), "Comment button hit at position: ", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context.getApplicationContext(), CommentActivity.class);
-                    intent.
                 }
             });
             itemview.setOnClickListener(this);
