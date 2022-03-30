@@ -23,16 +23,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InstagramClone">
         <activity
+            android:name=".view.PostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.NPImageProcessingActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.CommentActivity"
             android:exported="false" />
         <activity
-            android:name=".view.PhotoEffectActivity"
+            android:name=".view.PhotoEffectFragment"
             android:exported="true" />
         <activity
             android:name=".view.EditPersonalProfile"
             android:exported="false" />
         <activity
-            android:name=".view.EditPhotoActivity"
+            android:name=".view.EditPhotoFragment"
             android:exported="true" />
         <activity
             android:name=".view.LoginActivity"
@@ -51,8 +57,8 @@
         <activity android:name=".view.SearchActivity" />
         <activity
             android:name=".view.FollowActivity"
-            android:parentActivityName=".view.ProfileActivity"/>
-        <activity android:name=".view.NotificationActivity"/>
+            android:parentActivityName=".view.ProfileActivity" />
+        <activity android:name=".view.NotificationActivity" />
     </application>
 
 </manifest>

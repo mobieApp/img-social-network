@@ -15,7 +15,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/close_post_btn"
+                    android:id="@+id/backBtn"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_centerVertical="true"
@@ -28,7 +28,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:layout_toRightOf="@+id/close_post_btn"
+                    android:layout_toRightOf="@+id/backBtn"
                     android:text="New Post"
                     android:textStyle="bold"
                     android:textColor="@color/black"

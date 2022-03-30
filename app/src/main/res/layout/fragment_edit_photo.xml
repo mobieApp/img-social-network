@@ -21,20 +21,44 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="#2e3032"
-            android:layout_weight="0.7">
+            android:layout_weight="0.7"
+            android:background="#2e3032">
 
             <ja.burhanrashid52.photoeditor.PhotoEditorView
                 android:id="@+id/photoEditorView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/doneBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/rounded_searchview"
+                    android:enabled="false"
+                    android:text="Done"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:visibility="invisible"
+                    android:layout_margin="10dp"/>
+
+                <EditText
+                    android:id="@+id/addText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/doneBtn"
+                    android:enabled="false"
+                    android:textColor="@color/white"
+                    android:textSize="30dp"
+                    android:visibility="invisible" />
+            </ja.burhanrashid52.photoeditor.PhotoEditorView>
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="#F8F8F8"
-            android:layout_weight="0.3">
+            android:layout_weight="0.3"
+            android:background="#F8F8F8">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewEdit"
