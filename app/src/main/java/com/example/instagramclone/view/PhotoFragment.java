@@ -11,6 +11,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -68,7 +70,6 @@ public class PhotoFragment extends Fragment {
     private static final String TAG = "PhotoFragment";
     private ImageButton btn_take_photo, btn_continue, btn_switch_camera, btn_toggle_flash;
     private TextureView textureView;
-    private Uri pathImage = null;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private String mImageFileLocation;
 
@@ -249,12 +250,8 @@ public class PhotoFragment extends Fragment {
             int deviceRotation = newPostActivity.getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(deviceRotation));
 
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.TAIWAN);
-            Date now = new Date();
-            String fileName = "IMG_" + formatter.format(now) + ".jpg";
-            final File file = new File(newPostActivity.getGalleryPath(), fileName);
+            final File file = new File(newPostActivity.getGalleryPath(), "pic.jpg");
             mImageFileLocation = file.getAbsolutePath();
-            Log.d("AAA", "takePic: " + mImageFileLocation);
 
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
                 @Override
@@ -273,20 +270,12 @@ public class PhotoFragment extends Fragment {
                         bytes = stream.toByteArray();
                         bitmap.recycle();
 
-                        save(bytes);
-                        pathImage = Uri.fromFile(file);
+                        Intent intent = new Intent(getContext(), NPImageProcessingActivity.class);
+                        intent.putExtra("IMG", bytes);
+                        startActivity(intent);
 
-                        //ContentValues to show image in gallery
-                        /*ContentValues values = new ContentValues();
-                        values.put(MediaStore.Images.Media.TITLE, "ImageName");
-                        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
-                        values.put(MediaStore.Images.Media.ORIENTATION, ORIENTATIONS.get(deviceRotation));
-                        values.put(MediaStore.Images.Media.CONTENT_TYPE,"image/jpeg");
-                        values.put("_data", file.getAbsolutePath());
-                        ContentResolver cr = getActivity().getContentResolver();
-                        cr.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);*/
-
-                        newPostActivity.getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
+                        //save(bytes);
+                        //newPostActivity.getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
 
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -318,7 +307,7 @@ public class PhotoFragment extends Fragment {
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
                     //Toast.makeText(newPostActivity, "Saved: " + file, Toast.LENGTH_SHORT).show();
-                    createCameraPreview();
+                    //createCameraPreview();
                 }
             };
             cameraDevice.createCaptureSession(outputSurfaces, new CameraCaptureSession.StateCallback() {
@@ -555,8 +544,5 @@ public class PhotoFragment extends Fragment {
                 break;
         }
         Log.d(TAG, "Mode: " + mFlashMode);
-    }
-    public Uri getPathImage() {
-        return pathImage;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.instagramclone.view;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,9 +20,11 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 public class NewPostActivity extends AppCompatActivity {
-    ImageButton btnBack, btnContinue;
-    ViewPager2 viewPager;
-    TabLayout tabLayout;
+    private ImageButton btnBack, btnContinue;
+    private ViewPager2 viewPager;
+    private TabLayout tabLayout;
+
+    private final String galleryPath = Environment.getExternalStorageDirectory() + "/" + android.os.Environment.DIRECTORY_DCIM + "/";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,4 +58,6 @@ public class NewPostActivity extends AppCompatActivity {
             }
         }).attach();
     }
+
+    public String getGalleryPath(){ return galleryPath;}
 }
