@@ -25,11 +25,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class EditProfileActivity extends Activity {
     private static final String TAG = "Edit_Profile_ACTIVITY";
     private EditText fullnameField, usernameField, websiteField, descriptionField;
     private ImageView btnSaveEdit, btnCancelEdit;
-    private TextView textView;
+    private TextView textView, btnChangeAvatar;
+    private CircleImageView circleImageView;
     FirebaseUser user;
     FirebaseFirestore firestore;
     FirebaseAuth firebaseAuth;
@@ -47,6 +50,8 @@ public class EditProfileActivity extends Activity {
 
         btnSaveEdit = (ImageView) findViewById(R.id.btnSaveEdit);
         btnCancelEdit = (ImageView) findViewById(R.id.btnCancelEdit);
+        circleImageView = (CircleImageView) findViewById(R.id.circleImageView);
+        btnChangeAvatar = (TextView) findViewById(R.id.btnChangeAvatar);
 
         Intent intent = getIntent();
         String username = intent.getStringExtra("username");
@@ -110,5 +115,11 @@ public class EditProfileActivity extends Activity {
             }
         });
 
+        btnChangeAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), NewPostActivity.class));
+            }
+        });
     }
 }

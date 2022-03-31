@@ -54,7 +54,8 @@
         <activity android:name=".view.ProfileActivity" />
         <activity android:name=".view.EditProfileActivity" />
         <activity android:name=".view.NewPostActivity" />
-        <activity android:name=".view.SearchActivity" />
+        <activity android:name=".view.SearchActivity"
+                  android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".view.FollowActivity"
             android:parentActivityName=".view.ProfileActivity" />

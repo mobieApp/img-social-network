@@ -92,11 +92,6 @@ public class EditPhotoFragment extends Fragment implements RecyclerViewClickList
             }
 
             @Override
-            public void onRemoveViewListener(int numberOfAddedViews) {
-
-            }
-
-            @Override
             public void onRemoveViewListener(ViewType viewType, int numberOfAddedViews) {
 
             }
@@ -127,7 +122,7 @@ public class EditPhotoFragment extends Fragment implements RecyclerViewClickList
                     }
 
                     @Override
-                    public void onFailure(Throwable e) {
+                    public void onFailure(Exception e) {
 
                     }
                 });

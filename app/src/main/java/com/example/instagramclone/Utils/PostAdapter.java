@@ -1,6 +1,5 @@
 package com.example.instagramclone.Utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +18,6 @@ import com.example.instagramclone.models.Post;
 import com.example.instagramclone.view.CommentActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,10 +25,11 @@ import com.squareup.picasso.Picasso;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -161,11 +159,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     private void setTimestamp(TextView textView, Date createdAt) {
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+        cal.setTime(createdAt);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
         duration = new TimestampDuration(createdAt);
         if (duration.DiffDay() != 0) {
             if (duration.DiffDay() <= 7)
                 textView.setText(duration.DiffDay() + " ngày trước");
-            else textView.setText(LocalDate.parse(createdAt.toString()).toString());
+            else if (year != LocalDate.now().getYear())
+                textView.setText(day + " tháng " + month + ", " + year);
+            else textView.setText(day + " tháng " + month);
         } else if (duration.DiffHour() != 0)
             textView.setText(duration.DiffHour() + " giờ trước");
         else if (duration.DiffMinute() != 0)

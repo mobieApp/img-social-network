@@ -1,9 +1,15 @@
 package com.example.instagramclone.view;
 
 import android.Manifest;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -14,12 +20,16 @@ import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.ExifInterface;
 import android.media.Image;
 import android.media.ImageReader;
+import android.net.MacAddress;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -39,14 +49,18 @@ import androidx.fragment.app.Fragment;
 
 import com.example.instagramclone.R;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 
 public class PhotoFragment extends Fragment {
 
@@ -54,8 +68,9 @@ public class PhotoFragment extends Fragment {
     private static final String TAG = "PhotoFragment";
     private ImageButton btn_take_photo, btn_continue, btn_switch_camera, btn_toggle_flash;
     private TextureView textureView;
-
+    private Uri pathImage = null;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+    private String mImageFileLocation;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -207,7 +222,6 @@ public class PhotoFragment extends Fragment {
             Log.e(TAG, "cameraDevice is null");
             return;
         }
-        Log.d(TAG, "takePic");
         CameraManager manager = (CameraManager) newPostActivity.getSystemService(newPostActivity.getApplicationContext().CAMERA_SERVICE);
         try {
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraDevice.getId());
@@ -230,13 +244,18 @@ public class PhotoFragment extends Fragment {
             final CaptureRequest.Builder captureBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
             captureBuilder.addTarget(reader.getSurface());
             setFlash(captureBuilder);
-            Log.d(TAG, "setFlash");
 
             // kiểm tra orientation tuỳ thuộc vào mỗi device khác nhau như có nói bên trên
-            int rotation = newPostActivity.getWindowManager().getDefaultDisplay().getRotation();
-            captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
+            int deviceRotation = newPostActivity.getWindowManager().getDefaultDisplay().getRotation();
+            captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(deviceRotation));
 
-            final File file = new File(Environment.getExternalStorageDirectory() + "/pic.jpg");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.TAIWAN);
+            Date now = new Date();
+            String fileName = "IMG_" + formatter.format(now) + ".jpg";
+            final File file = new File(newPostActivity.getGalleryPath(), fileName);
+            mImageFileLocation = file.getAbsolutePath();
+            Log.d("AAA", "takePic: " + mImageFileLocation);
+
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader reader) {
@@ -247,6 +266,28 @@ public class PhotoFragment extends Fragment {
                         byte[] bytes = new byte[buffer.capacity()];
                         buffer.get(bytes);
                         save(bytes);
+
+                        Bitmap bitmap = rotateImage(BitmapFactory.decodeByteArray(bytes,0,bytes.length));
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+                        bytes = stream.toByteArray();
+                        bitmap.recycle();
+
+                        save(bytes);
+                        pathImage = Uri.fromFile(file);
+
+                        //ContentValues to show image in gallery
+                        /*ContentValues values = new ContentValues();
+                        values.put(MediaStore.Images.Media.TITLE, "ImageName");
+                        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+                        values.put(MediaStore.Images.Media.ORIENTATION, ORIENTATIONS.get(deviceRotation));
+                        values.put(MediaStore.Images.Media.CONTENT_TYPE,"image/jpeg");
+                        values.put("_data", file.getAbsolutePath());
+                        ContentResolver cr = getActivity().getContentResolver();
+                        cr.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);*/
+
+                        newPostActivity.getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
+
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
@@ -276,7 +317,7 @@ public class PhotoFragment extends Fragment {
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
-                    Toast.makeText(newPostActivity, "Saved: " + file, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(newPostActivity, "Saved: " + file, Toast.LENGTH_SHORT).show();
                     createCameraPreview();
                 }
             };
@@ -299,6 +340,28 @@ public class PhotoFragment extends Fragment {
             e.printStackTrace();
         }
     }
+    private Bitmap rotateImage(Bitmap bitmap){
+        Log.d("AAA", "rotateImage");
+        ExifInterface exifInterface = null;
+        try {
+            exifInterface = new ExifInterface(mImageFileLocation);
+            Log.d("AAA", "rotateImage: " + exifInterface);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        Matrix matrix = new Matrix();
+        switch (orientation){
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                break;
+            default:
+        }
+        return Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
+    }
 
     // Khởi tạo camera để preview trong textureview
     protected void createCameraPreview() {
@@ -317,7 +380,6 @@ public class PhotoFragment extends Fragment {
                     }
                     // When the session is ready, we start displaying the preview.
                     cameraCaptureSessions = cameraCapture;
-                    //updatePreview();
                     captureRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                             CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
 
@@ -370,25 +432,6 @@ public class PhotoFragment extends Fragment {
             e.printStackTrace();
         }
         Log.e(TAG, "openCamera X");
-    }
-
-    protected void updatePreview() {
-        if (null == cameraDevice) {
-            Log.e(TAG, "updatePreview error, return");
-        }
-        captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    cameraCaptureSessions.setRepeatingRequest(captureRequestBuilder.build(), null, mBackgroundHandler);
-                } catch (CameraAccessException e) {
-                    Log.e(TAG, "Failed to start camera preview because it couldn't access camera", e);
-                } catch (IllegalStateException e) {
-                    Log.e(TAG, "Failed to start camera preview.", e);
-                }
-            }
-        }, 500);
     }
 
     private void closeCamera() {
@@ -512,5 +555,8 @@ public class PhotoFragment extends Fragment {
                 break;
         }
         Log.d(TAG, "Mode: " + mFlashMode);
+    }
+    public Uri getPathImage() {
+        return pathImage;
     }
 }

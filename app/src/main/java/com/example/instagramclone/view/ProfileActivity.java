@@ -49,6 +49,8 @@ public class ProfileActivity extends AppCompatActivity {
         layoutFollower = (LinearLayout) findViewById(R.id.btnFollowers);
         layoutFollowing = (LinearLayout) findViewById(R.id.btnFollowing);
 
+
+
         setNavView();
         //------Set up toolbar---------
         Toolbar toolbar = (Toolbar) findViewById(R.id.profileToolBar);

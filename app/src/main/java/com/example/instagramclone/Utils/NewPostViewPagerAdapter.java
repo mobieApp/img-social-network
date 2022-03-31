@@ -3,16 +3,18 @@ package com.example.instagramclone.Utils;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.instagramclone.view.GalleryFragment;
 import com.example.instagramclone.view.PhotoFragment;
 
 public class NewPostViewPagerAdapter extends FragmentStateAdapter {
+    public GalleryFragment mGalleryFragment;
+    public PhotoFragment mPhotoFragment;
     public NewPostViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
+        mGalleryFragment = new GalleryFragment();
+        mPhotoFragment = new PhotoFragment();
     }
 
     @NonNull
@@ -20,11 +22,11 @@ public class NewPostViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new GalleryFragment();
+                return mGalleryFragment;
             case 1:
-                return new PhotoFragment();
+                return mPhotoFragment;
         }
-        return new GalleryFragment();
+        return mGalleryFragment;
     }
 
     @Override

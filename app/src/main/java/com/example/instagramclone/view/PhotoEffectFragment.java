@@ -120,11 +120,6 @@ public class PhotoEffectFragment extends Fragment implements RecyclerViewClickLi
             }
 
             @Override
-            public void onRemoveViewListener(int numberOfAddedViews) {
-
-            }
-
-            @Override
             public void onRemoveViewListener(ViewType viewType, int numberOfAddedViews) {
 
             }
@@ -153,9 +148,8 @@ public class PhotoEffectFragment extends Fragment implements RecyclerViewClickLi
                         intent.putExtra("IMG", imgData);
                         startActivity(intent);
                     }
-
                     @Override
-                    public void onFailure(Throwable e) {
+                    public void onFailure(Exception e) {
 
                     }
                 });

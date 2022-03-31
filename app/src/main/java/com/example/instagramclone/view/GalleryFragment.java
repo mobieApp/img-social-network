@@ -155,6 +155,7 @@ public class GalleryFragment extends Fragment {
             Cursor cursor = newPostActivity.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
 
             int count = cursor.getCount();
+            Log.d("AAA", "getImagePath: " + count);
             //int count = 30;
             if (count > 100)
                 count = 100;
@@ -169,6 +170,10 @@ public class GalleryFragment extends Fragment {
     }
 
     public void setImageSelected(File file) {
+        this.pathImageSelected = Uri.fromFile(file);
         Picasso.get().load(file).fit().centerCrop().into(mImageParallaxHeader);
+    }
+    public Uri getPathImageSelected() {
+        return pathImageSelected;
     }
 }

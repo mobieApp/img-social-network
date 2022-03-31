@@ -56,6 +56,8 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.rcv_search);
         searchView = (SearchView) findViewById(R.id.search_bar);
 
+        searchView.setIconifiedByDefault(false);
+
         ref  = FirebaseFirestore.getInstance();
         UserList = new ArrayList<User>();
         adapter = new UserAdapter(UserList);

@@ -34,6 +34,7 @@ public class User {
         follower = new ArrayList<>();
         following = new ArrayList<>();
         avatar = "";
+        react = new ArrayList<>();
     }
 
     public String getPassword() {
