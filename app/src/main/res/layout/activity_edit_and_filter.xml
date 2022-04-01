@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    tools:context=".view.NPImageProcessingActivity"
+    android:id="@+id/coordinator_layout">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:id="@+id/appBarLayout">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@android:color/white"
             app:popupTheme="@style/AppTheme.PopupOverlay">
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -44,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:gravity="center"
-                    android:text="Filter and Edit"
+                    android:text="New Post"
                     android:textColor="#FFF"
                     android:textSize="18dp"
                     android:textStyle="bold" />
@@ -64,30 +62,10 @@
                     android:textColor="#0186e7"
                     android:textSize="14dp" />
             </RelativeLayout>
-
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#ffffff"
-        android:elevation="10dp"
-        app:tabIndicatorColor="#ffffff"
-        app:tabSelectedTextColor="#000"
-        app:tabTextAppearance="@style/TabLayoutTextStyle"
-        app:tabTextColor="#bebebe" />
+    <include layout="@layout/content_main_newpost" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/tabs"
-        android:layout_below="@+id/appBarLayout"
-        android:background="#fff"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-    <include layout="@layout/layout_bottom_navigation"/>
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,72 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-    </com.google.android.material.appbar.AppBarLayout>
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/margin_horizontal"
+    android:paddingRight="@dimen/margin_horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/appBarLayout"
-        android:orientation="vertical"
-        android:weightSum="1">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/padding_10"
+        android:paddingTop="@dimen/padding_10">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.7"
-            android:background="#2e3032">
 
-            <ja.burhanrashid52.photoeditor.PhotoEditorView
-                android:id="@+id/photoEditorView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        <TextView
+            android:layout_width="@dimen/lbl_edit_image_control"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_brightness" />
 
-                <Button
-                    android:id="@+id/doneBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:background="@drawable/rounded_searchview"
-                    android:enabled="false"
-                    android:text="Done"
-                    android:textColor="@color/white"
-                    android:textSize="15dp"
-                    android:visibility="invisible"
-                    android:layout_margin="10dp"/>
-
-                <EditText
-                    android:id="@+id/addText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/doneBtn"
-                    android:enabled="false"
-                    android:textColor="@color/white"
-                    android:textSize="30dp"
-                    android:visibility="invisible" />
-            </ja.burhanrashid52.photoeditor.PhotoEditorView>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.3"
-            android:background="#F8F8F8">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewEdit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp" />
-        </RelativeLayout>
-
+        <SeekBar
+            android:id="@+id/seekbar_brightness"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
     </LinearLayout>
-</RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/padding_10"
+        android:paddingTop="@dimen/padding_10">
+
+
+        <TextView
+            android:layout_width="@dimen/lbl_edit_image_control"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_contrast" />
+
+        <SeekBar
+            android:id="@+id/seekbar_contrast"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/padding_10"
+        android:paddingTop="@dimen/padding_10">
+
+        <TextView
+            android:layout_width="@dimen/lbl_edit_image_control"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_saturation" />
+
+        <SeekBar
+            android:id="@+id/seekbar_saturation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+</LinearLayout>

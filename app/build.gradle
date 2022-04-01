@@ -47,7 +47,10 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.nirhart:parallaxscroll:1.0'
     implementation 'com.bm.photoview:library:1.4.1'
-    implementation 'com.github.zomato:androidphotofilters:1.0.2'
-    implementation 'ja.burhanrashid52:photoeditor:1.1.1'
 
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'info.androidhive:imagefilters:1.0.7'
+
+    implementation 'com.jakewharton:butterknife:10.2.3'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
 }

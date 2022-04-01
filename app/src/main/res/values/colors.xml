@@ -13,4 +13,6 @@
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#c4c4c4</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="filter_label_normal">#8A8889</color>
+    <color name="filter_label_selected">#221F20</color>
 </resources>
