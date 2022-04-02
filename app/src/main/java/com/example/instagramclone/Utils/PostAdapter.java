@@ -115,6 +115,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 Intent intent = new Intent(context, CommentActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("FOCUS", "TRUE");
+                bundle.putString("postID", modal.getId());
                 intent.putExtras(bundle);
                 context.startActivity(intent);
             }
@@ -126,6 +127,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 Intent intent = new Intent(context, CommentActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("FOCUS", "FALSE");
+                bundle.putString("postID", modal.getId());
                 intent.putExtras(bundle);
                 context.startActivity(intent);
             }

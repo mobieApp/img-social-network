@@ -7,6 +7,7 @@ public class Comment {
     private String listReply;
     private Date timestamp;
     private String userId;
+    private String postID;
 
     public String getContent() {
         return content;
@@ -38,5 +39,13 @@ public class Comment {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getPostID() {
+        return postID;
+    }
+
+    public void setPostID(String postID) {
+        this.postID = postID;
     }
 }

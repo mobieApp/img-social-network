@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -41,6 +42,7 @@ public class CommentActivity extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseFirestore firestore;
     private FirebaseAuth firebaseAuth;
+    private String postID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +53,12 @@ public class CommentActivity extends AppCompatActivity {
         cmtEditTxt = findViewById(R.id.comment);
         listViewComment = (ListView) findViewById(R.id.listViewComment);
 
-        String tmp = getIntent().getExtras().getString("FOCUS");
-        if (tmp.equals("TRUE"))
+        String isFocus = getIntent().getExtras().getString("FOCUS");
+        ArrayList<String> tmpArr = new ArrayList<>();
+        postID = getIntent().getExtras().getString("postID");
+        tmpArr.add(postID);
+
+        if (isFocus.equals("TRUE"))
             cmtEditTxt.requestFocus();
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -60,53 +66,7 @@ public class CommentActivity extends AppCompatActivity {
 
         user = firebaseAuth.getCurrentUser();
         DocumentReference documentReference = firestore.collection("Comment").document();
-        Task<QuerySnapshot> retrieveComment = firestore.collection("Comment")
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            ArrayList<String> commentsArr = new ArrayList<>();
-                            ArrayList<String> commentsUserArr = new ArrayList<>();
-                            ArrayList<String> userCmtID = new ArrayList<>();
-
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("DOCUMENT: ", document.getId() + " => " + document.getData());
-                                HashMap<String, Object> map = (HashMap) document.getData();
-                                String commentContent = map.get("content").toString();
-                                userCmtID.add(map.get("userId").toString());
-                                Log.d("DATA ", commentContent);
-                                commentsArr.add(commentContent);
-                            }
-
-                            for (String id : userCmtID) {
-                                DocumentReference docRef = firestore.collection("User").document(id);
-                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            DocumentSnapshot document = task.getResult();
-                                            commentsUserArr.add(document.getString("username"));
-                                            listViewComment.setAdapter(new CommentAdapter(CommentActivity.this, R.layout.layout_comment, commentsArr, userCmtID));
-                                            if (document.exists()) {
-                                                Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                                            } else {
-                                                Log.d("TAG", "No such document");
-                                            }
-                                        } else {
-                                            Log.d("TAG", "get failed with ", task.getException());
-                                        }
-                                    }
-                                });
-                            }
-
-                            Log.d("DATA OF commentsArr", commentsArr.toString());
-                            Log.d("DATA OF commentsUserArr", commentsUserArr.toString());
-//                            listViewComment.setAdapter(new CommentAdapter(CommentActivity.this, R.layout.layout_comment, commentsArr, userCmtID));
-                        } else {
-                            Log.d("TAG", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+        loadComment();
 
         listViewComment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -132,6 +92,7 @@ public class CommentActivity extends AppCompatActivity {
                 comment.setListReply("");
                 comment.setTimestamp(Calendar.getInstance().getTime());
                 comment.setUserId(firebaseAuth.getCurrentUser().getUid());
+                comment.setPostID(postID);
                 documentReference.set(comment).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
@@ -139,54 +100,69 @@ public class CommentActivity extends AppCompatActivity {
                     }
                 });
                 cmtEditTxt.setText("");
-                Task<QuerySnapshot> retrieveComment = firestore.collection("Comment")
-                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    ArrayList<String> commentsArr = new ArrayList<>();
-                                    ArrayList<String> commentsUserArr = new ArrayList<>();
-                                    ArrayList<String> userCmtID = new ArrayList<>();
-
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        Log.d("DOCUMENT: ", document.getId() + " => " + document.getData());
-                                        HashMap<String, Object> map = (HashMap) document.getData();
-                                        String commentContent = map.get("content").toString();
-                                        userCmtID.add(map.get("userId").toString());
-                                        Log.d("DATA ", commentContent);
-                                        commentsArr.add(commentContent);
-                                    }
-
-                                    for (String id : userCmtID) {
-                                        DocumentReference docRef = firestore.collection("User").document(id);
-                                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    DocumentSnapshot document = task.getResult();
-                                                    commentsUserArr.add(document.getString("username"));
-                                                    listViewComment.setAdapter(new CommentAdapter(CommentActivity.this, R.layout.layout_comment, commentsArr, commentsUserArr));
-                                                    if (document.exists()) {
-                                                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                                                    } else {
-                                                        Log.d("TAG", "No such document");
-                                                    }
-                                                } else {
-                                                    Log.d("TAG", "get failed with ", task.getException());
-                                                }
-                                            }
-                                        });
-                                    }
-
-                                    Log.d("DATA OF commentsArr", commentsArr.toString());
-                                    Log.d("DATA OF commentsUserArr", commentsUserArr.toString());
-//                                    listViewComment.setAdapter(new CommentAdapter(CommentActivity.this, R.layout.layout_comment, commentsArr, userCmtID));
-                                } else {
-                                    Log.d("TAG", "Error getting documents: ", task.getException());
-                                }
-                            }
-                        });
+                tmpArr.add(postID);
+                loadComment();
             }
         });
+    }
+
+    public void loadComment() {
+        ArrayList<String> tmpArr = new ArrayList<>();
+        tmpArr.add(postID);
+        Task<QuerySnapshot> retrieveComment = firestore.collection("Comment").whereIn("postID", tmpArr)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList<String> commentsArr = new ArrayList<>();
+                            ArrayList<String> userCmtID = new ArrayList<>();
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("DOCUMENT: ", document.getId() + " => " + document.getData());
+                                HashMap<String, Object> map = (HashMap) document.getData();
+                                String username = map.get("content").toString();
+                                userCmtID.add(map.get("userId").toString());
+                                Log.d("DATA ", username);
+                                commentsArr.add(username);
+                            }
+                            getCommentUsers(userCmtID, commentsArr);
+//                            Log.d("DATA OF commentsArr", commentsArr.toString());
+//                            Log.d("DATA OF commentsUserArr", commentsUserArr.toString());
+//                            listViewComment.setAdapter(new CommentAdapter(CommentActivity.this, R.layout.layout_comment, commentsArr, commentsUserArr));
+                        } else {
+                            Log.d("TAG", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    public void getCommentUsers(ArrayList<String> userCmtID, ArrayList<String> commentsArr) {
+        Task<QuerySnapshot> retrieveComment = firestore.collection("User").whereIn(FieldPath.documentId(), userCmtID)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList<String> commentsUserArr = new ArrayList<>();
+                            ArrayList<String> idArr = new ArrayList<>();
+                            ArrayList<String> usernameArr = new ArrayList<>();
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("DOCUMENT in getCommentUsers()", document.getId() + " => " + document.getData());
+                                HashMap<String, Object> map = (HashMap) document.getData();
+                                usernameArr.add(map.get("username").toString());
+                                idArr.add(document.getId());
+                            }
+
+                            for(String id : userCmtID){
+                                commentsUserArr.add(usernameArr.get(idArr.indexOf(id)));
+                            }
+
+                            Log.d("DATA OF commentsUserArr", commentsUserArr.toString());
+                            listViewComment.setAdapter(new CommentAdapter(CommentActivity.this, R.layout.layout_comment, commentsArr, commentsUserArr));
+                        } else {
+                            Log.d("TAG", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 }

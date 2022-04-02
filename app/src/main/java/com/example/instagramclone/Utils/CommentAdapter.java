@@ -38,8 +38,8 @@ public class CommentAdapter extends ArrayAdapter<String> {
         TextView comment_username = (TextView) row.findViewById(R.id.comment_username);
         comment.setText(items.get(position));
 //        comment_username.setText(username.get(position));
-        comment_username.setText("username");
-        Log.d("DATA IN ADAPTER", items.get(position).toString());
+        comment_username.setText(username.get(position));
+        Log.d("DATA IN ADAPTER", items.get(position) + " <-> " + username.get(position));
         return (row);
     }
 }
