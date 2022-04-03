@@ -1,7 +1,6 @@
 package com.example.instagramclone.models;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class User {
     private String password;
@@ -17,10 +16,29 @@ public class User {
     private ArrayList<String> follower;
     private ArrayList<String> following;
     private String avatar;
+    private ArrayList<SearchRecent> recent;
     private ArrayList<React> react;
+    private String userid;
 
+
+    public ArrayList<SearchRecent> getRecent() {
+        return recent;
+    }
+
+    public void setRecent(ArrayList<SearchRecent> recent) {
+        this.recent = recent;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
 
     public User(){
+//        userid = "";
         password = "";
         email = "";
         phone = "";
@@ -33,8 +51,9 @@ public class User {
         posts = 0;
         follower = new ArrayList<>();
         following = new ArrayList<>();
-        avatar = "";
         react = new ArrayList<>();
+        recent = new ArrayList<SearchRecent>();
+        avatar = "";
     }
 
     public String getPassword() {

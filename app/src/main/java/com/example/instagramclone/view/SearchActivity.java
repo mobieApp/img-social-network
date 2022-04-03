@@ -1,111 +1,112 @@
 package com.example.instagramclone.view;
 
-import androidx.annotation.NonNull;
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.example.instagramclone.R;
 import com.example.instagramclone.Utils.BottomNavigationViewHolder;
 import com.example.instagramclone.Utils.UserAdapter;
+import com.example.instagramclone.models.SearchRecent;
 import com.example.instagramclone.models.User;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 
 public class SearchActivity extends AppCompatActivity {
     private static final int ACTIVITY_NUM = 1;
-    FirebaseFirestore ref;
+    FirebaseFirestore ref ;
     ArrayList<User> UserList;
     RecyclerView recyclerView;
     SearchView searchView;
-    UserAdapter adapter;
-    ProgressDialog progressDialog;
+    UserAdapter RecentAdapter;
+    UserAdapter SearchAdapter;
+    ArrayList<User> RecentUserList;
+    ArrayList<User> SearchList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("Searching ....");
-        progressDialog.show();
-
+        ref = FirebaseFirestore.getInstance();
         recyclerView = (RecyclerView) findViewById(R.id.rcv_search);
         searchView = (SearchView) findViewById(R.id.search_bar);
-
-        searchView.setIconifiedByDefault(false);
-
-        ref  = FirebaseFirestore.getInstance();
+//        searchView.setIconifiedByDefault(false);
         UserList = new ArrayList<User>();
-        adapter = new UserAdapter(UserList);
+        RecentUserList = new ArrayList<User>();
+        SearchList = new ArrayList<User>();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-        EventChangeListener();
 
+        RecentAdapter = new UserAdapter(RecentUserList,this,true);
+        SearchAdapter = new UserAdapter(SearchList,this,false);
+        EventChangeListener();
+        ref.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null){
+                    Log.e(TAG, "onEvent: Listen failed - " + error);
+                    return;
+                }
+                if (value != null && value.exists()){
+                    User user = value.toObject(User.class);
+                    if(user.getRecent().toString().equals(RecentUserList.toString())) return;
+                    RecentUserList.clear();
+                    Collections.sort(user.getRecent());
+                    for(SearchRecent RecentUser : user.getRecent()){
+                        for (User mUser : UserList){
+                            if(mUser.getUserid().equals(RecentUser.getUserid())){
+                                RecentUserList.add(mUser);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        recyclerView.setAdapter(RecentAdapter);
         setNavView();
 
     }
     @Override
     protected void onStart(){
         super.onStart();
-//        recyclerView.setAdapter(adapter);
-//        if(ref != null){
-//           ref.addOnSuccessListener {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                    if(snapshot.exists()){
-//                        for(DataSnapshot ds : snapshot.getChildren()){
-//                            UserList.add(ds.getValue(User.class));
-//                        }
-//                        UserAdapter adapter = new UserAdapter(UserList);
-//                        recyclerView.setAdapter(adapter);
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError error) {
-//                    Toast.makeText(SearchActivity.this, error.getMessage(),Toast.LENGTH_SHORT).show();
-//                }
-//            });
-            if(searchView != null){
-                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        return false;
-                    }
 
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        search(newText);
-                        return true;
-                    }
-                });
-            }
+        if(searchView != null){
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    search(newText,SearchList);
+                    return true;
+                }
+            });
         }
+    }
 
     private void EventChangeListener() {
         ref.collection("User")
@@ -113,38 +114,38 @@ public class SearchActivity extends AppCompatActivity {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         if(error != null){
-                            if(progressDialog.isShowing())
-                                progressDialog.dismiss();
-                            Log.e("fireStore error", "onEvent: "+ error.getMessage() );
                             return;
                         }
-                        for (DocumentChange dc : value.getDocumentChanges()){
-                            if (dc.getType() == DocumentChange.Type.ADDED){
-                                UserList.add(dc.getDocument().toObject(User.class));
+                        for (DocumentChange dc : value.getDocumentChanges()) {
+                            if (dc.getType() == DocumentChange.Type.ADDED) {
+                                User user = dc.getDocument().toObject(User.class);
+                                user.setUserid(dc.getDocument().getId());
+                                UserList.add(user);
                             }
-                            adapter.notifyDataSetChanged();
-                            if(progressDialog.isShowing())
-                                progressDialog.dismiss();
+                            RecentAdapter.notifyDataSetChanged();
                         }
-                        Log.d("FIRESTORE", ref.collection("User").get().toString());
                     }
                 });
     }
 
 
-    private void search(String str) {
-        ArrayList<User> list = new ArrayList<>();
+    private void search(String str,ArrayList<User> Searchlist) {
+
         if(UserList.isEmpty()){
             Log.d("ERROR", "search: empty");
             return;
         }
+        Searchlist.clear();
         for(User obj : UserList){
+            if(str.isEmpty()){
+                recyclerView.setAdapter(RecentAdapter);
+                return;
+            }
             if(obj.getUsername().toLowerCase(Locale.ROOT).contains(str.toLowerCase(Locale.ROOT)) || obj.getName().toLowerCase(Locale.ROOT).contains(str.toLowerCase(Locale.ROOT))){
-                list.add(obj);
+                Searchlist.add(obj);
             }
         }
-        UserAdapter adapter = new UserAdapter(list);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(SearchAdapter);
     }
 
     private void setNavView() {
