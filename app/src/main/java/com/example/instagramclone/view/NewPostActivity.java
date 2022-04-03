@@ -31,7 +31,6 @@ public class NewPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_newpost);
 
         btnBack = (ImageButton) findViewById(R.id.toolbar_back);
-        btnContinue = (ImageButton) findViewById(R.id.toolbar_continue);
         viewPager = (ViewPager2) findViewById(R.id.container);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
 
@@ -42,8 +41,8 @@ public class NewPostActivity extends AppCompatActivity {
                 finish();
             }
         });
+        viewPager.setUserInputEnabled(false);
         viewPager.setAdapter(adapter);
-
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {

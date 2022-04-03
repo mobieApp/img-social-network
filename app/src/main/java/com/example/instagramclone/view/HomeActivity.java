@@ -34,6 +34,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -53,20 +56,6 @@ public class HomeActivity extends AppCompatActivity{
         firestore = FirebaseFirestore.getInstance();
         progressBar = findViewById(R.id.LoadingFeed);
         postArrayList = new ArrayList<>();
-
-        /*mStorageReference = FirebaseStorage.getInstance().getReference().child("Post");
-        Log.d("AAA", mStorageReference.toString());
-        mStorageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Log.d("AAA", "onSuccess: " + uri.toString());
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("AAA", "onFailure");
-            }
-        });*/
 
         getPostData();
         setNavView();
@@ -92,7 +81,21 @@ public class HomeActivity extends AppCompatActivity{
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
+    public Map<Post, Integer> sort(Map<Post, Integer> map) {
+        List<Map.Entry<Post, Integer>> list = new LinkedList(map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<Post, Integer>>() {
+            @Override
+            public int compare(Map.Entry<Post, Integer> o1, Map.Entry<Post, Integer> o2) {
+                return o1.getValue().compareTo(o2.getValue());
+            }
+        });
 
+        Map<Post, Integer> result = new LinkedHashMap<>();
+        for (Map.Entry<Post, Integer> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
+    }
     private void getPostData(){
         userCollection.document(UserAuthentication.userId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -119,24 +122,17 @@ public class HomeActivity extends AppCompatActivity{
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         progressBar.setVisibility(View.GONE);
                         if (task.isComplete()){
-                            Map<Integer,Post> unsortPost = new HashMap<>();
+                            Map<Post,Integer> unsortPost = new HashMap<>();
                             for (QueryDocumentSnapshot document: task.getResult()) {
                                 Post post = document.toObject(Post.class);
                                 post.setId(document.getId());
-                                unsortPost.put(userId.indexOf(post.getUserId()),post);
+                                unsortPost.put(post,userId.indexOf(post.getUserId()));
                                 //postArrayList.add(post);
                             }
 
                             //Sort Map by priority
-                            Map<Integer,Post> treeMap = new TreeMap<>(new Comparator<Integer>() {
-                                @Override
-                                public int compare(Integer t1, Integer t2) {
-                                    return t1.compareTo(t2);
-                                }
-                            });
-
-                            treeMap.putAll(unsortPost);
-                            for(Post post: treeMap.values()){
+                            Map<Post,Integer> sortedPost = sort(unsortPost);
+                            for(Post post: sortedPost.keySet()){
                                 postArrayList.add(post);
                             }
 

@@ -68,7 +68,7 @@ public class Post {
     }
 
     public Post(){
-
+        this.listLike = new ArrayList<>();
     }
 
     public Post(String id, String media_url, String userId, String caption, Date timestamp, ArrayList<String> listLike) {

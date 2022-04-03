@@ -96,11 +96,7 @@ public class PhotoEffectFragment extends Fragment implements PhotoFilterAdapter.
             public void run() {
                 Bitmap thumbImage;
 
-                if (bitmap == null) {
-                    thumbImage = BitmapUtils.getBitmapFromAssets(getActivity(), NPImageProcessingActivity.IMAGE_NAME, 100, 100);
-                } else {
-                    thumbImage = Bitmap.createScaledBitmap(bitmap, 100, 100, false);
-                }
+                thumbImage = Bitmap.createScaledBitmap(bitmap, 100, 100, false);
 
                 if (thumbImage == null)
                     return;

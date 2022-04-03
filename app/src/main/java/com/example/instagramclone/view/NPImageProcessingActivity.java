@@ -11,7 +11,12 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.instagramclone.R;
@@ -21,6 +26,7 @@ import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +34,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class NPImageProcessingActivity extends AppCompatActivity implements PhotoEffectFragment.FiltersListFragmentListener, EditPhotoFragment.EditImageFragmentListener{
-
-    //private static final String TAG = MainActivity.class.getSimpleName();
-
-    public static final String IMAGE_NAME = "dog.jpg";
 
     @BindView(R.id.image_preview)
     ImageView imagePreview;
@@ -52,6 +54,8 @@ public class NPImageProcessingActivity extends AppCompatActivity implements Phot
     // the final image after applying
     // brightness, saturation, contrast
     Bitmap finalImage;
+
+    ImageButton btnContinue,btnBack;
 
     PhotoEffectFragment filtersListFragment;
     EditPhotoFragment editImageFragment;
@@ -74,8 +78,25 @@ public class NPImageProcessingActivity extends AppCompatActivity implements Phot
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getString(R.string.activity_title_main));
+        btnBack = findViewById(R.id.edit_toolbar_back);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        btnContinue = findViewById(R.id.edit_toolbar_continue);
+        btnContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                finalImage.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+                byte[] imgData = stream.toByteArray();
+                Intent intent1 = new Intent(NPImageProcessingActivity.this, PostActivity.class);
+                intent1.putExtra("IMG", imgData);
+                startActivity(intent1);
+            }
+        });
 
         loadImage();
 

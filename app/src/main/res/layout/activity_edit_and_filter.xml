@@ -10,7 +10,9 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@android:color/white"
+        android:id="@+id/appBarLayout">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -18,12 +20,13 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@android:color/white"
             app:popupTheme="@style/AppTheme.PopupOverlay">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <ImageButton
-                    android:id="@+id/toolbar_back"
+                    android:id="@+id/edit_toolbar_back"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_centerVertical="true"
@@ -42,13 +45,13 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:gravity="center"
-                    android:text="New Post"
-                    android:textColor="#FFF"
+                    android:text="Filter"
+                    android:textColor="#000"
                     android:textSize="18dp"
                     android:textStyle="bold" />
 
                 <ImageButton
-                    android:id="@+id/toolbar_continue"
+                    android:id="@+id/edit_toolbar_continue"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_alignParentEnd="true"
@@ -62,6 +65,7 @@
                     android:textColor="#0186e7"
                     android:textSize="14dp" />
             </RelativeLayout>
+
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
