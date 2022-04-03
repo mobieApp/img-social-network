@@ -17,6 +17,25 @@ public class Post {
     private String caption;
     private Date timestamp;
 
+    public ArrayList<String> getReports() {
+        return reports;
+    }
+
+    public void setReports(ArrayList<String> reports) {
+        this.reports = reports;
+    }
+
+    public ArrayList<String> getIsHide() {
+        return isHide;
+    }
+
+    public void setIsHide(ArrayList<String> isHide) {
+        this.isHide = isHide;
+    }
+
+    private ArrayList<String> reports;
+    private ArrayList<String> isHide;
+
     public String getId() {
         return id;
     }
@@ -78,5 +97,7 @@ public class Post {
         this.caption = caption;
         this.timestamp = timestamp;
         this.listLike = listLike;
+        this.reports = new ArrayList<String>();
+        this.isHide = new ArrayList<String>();
     }
 }

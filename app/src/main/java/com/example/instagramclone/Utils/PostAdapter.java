@@ -1,5 +1,7 @@
 package com.example.instagramclone.Utils;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -64,7 +66,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PostAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PostAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Post modal = instaModalArrayList.get(position);
 
         documentReference = firestore.collection("User").document(modal.getUserId());
@@ -151,7 +153,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        return menuItemClicked(menuItem);
+                        return menuItemClicked(menuItem, position);
                     }
                 });
                 pop.show();
@@ -217,13 +219,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         Task<DocumentReference> collectionReference = FirebaseFirestore.getInstance().collection("Notification").add(data);
     }
 
-    private boolean menuItemClicked(MenuItem item) {
+    private boolean menuItemClicked(MenuItem item, int pos) {
         switch (item.getItemId()) {
             case R.id.hide_post:
+                CreateDialogHide(pos);
                 Toast.makeText(context, "Hide", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.report_post:
-                CreateDialogPost();
+                CreateDialogReport(pos);
                 Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show();
             default:
                 Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
@@ -232,14 +235,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         return true;
     }
 
-    private void CreateDialogPost() {
-        final View view = View.inflate(context,R.layout.dialog_report, null);
+    private void CreateDialogReport(int pos) {
+        final View view = View.inflate(context, R.layout.dialog_report, null);
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle("The Report");
 //        alertDialog.setIcon("Icon id here");
         alertDialog.setCancelable(false);
 //        alertDialog.setMessage("Enter the content of the report ");
-
 
         final EditText reportContents = (EditText) view.findViewById(R.id.etComments);
 
@@ -247,7 +249,29 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String EditValue = reportContents.getText().toString();
-//                if(EditValue.equals("")) Toast.makeText(alertDialog.getContext(), "Please fill to editText", Toast.LENGTH_SHORT).show();
+                if (EditValue.equals("")) {
+                    AlertDialog alertDialog1 = new AlertDialog.Builder(context).create();
+                    alertDialog1.setTitle("Warnings");
+                    alertDialog1.setMessage("Content report can not empty !");
+                    alertDialog1.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog1.show();
+                    return;
+                }
+                Log.d("TAG", "report userid: " + instaModalArrayList.get(pos).getId());
+                DocumentReference db = FirebaseFirestore.getInstance().collection("Post").document(instaModalArrayList.get(pos).getId());
+                db.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        ArrayList<String> theReports = documentSnapshot.toObject(Post.class).getReports();
+                        theReports.add(EditValue);
+                        db.update("reports", theReports);
+                    }
+                });
             }
         });
 
@@ -259,6 +283,41 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             }
         });
         alertDialog.setView(view);
+        alertDialog.show();
+    }
+
+    private void CreateDialogHide(int pos) {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("Are your sure hide this post?");
+//        alertDialog.setIcon("Icon id here");
+        alertDialog.setCancelable(false);
+//        alertDialog.setMessage("Enter the content of the report ");
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DocumentReference db = FirebaseFirestore.getInstance().collection("Post").document(instaModalArrayList.get(pos).getId());
+                db.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        ArrayList<String> hideLists = documentSnapshot.toObject(Post.class).getIsHide();
+                        if(hideLists.contains(UserAuthentication.userId))return;
+                        hideLists.add(UserAuthentication.userId);
+                        db.update("isHide", hideLists);
+                        Activity activity = (Activity) context;
+                        activity.recreate();
+                    }
+                });
+            }
+        });
+
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+            }
+        });
         alertDialog.show();
     }
 }

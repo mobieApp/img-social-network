@@ -23,6 +23,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -133,6 +135,8 @@ public class HomeActivity extends AppCompatActivity{
                             //Sort Map by priority
                             Map<Post,Integer> sortedPost = sort(unsortPost);
                             for(Post post: sortedPost.keySet()){
+//                                Log.d("TAG", "Current user "+UserAuthentication.userId);
+                                if(post.getIsHide().contains(UserAuthentication.userId) || post.getReports().size() >5) continue;
                                 postArrayList.add(post);
                             }
 
