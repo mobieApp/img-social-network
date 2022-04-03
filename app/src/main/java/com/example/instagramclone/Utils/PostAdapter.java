@@ -1,16 +1,23 @@
 package com.example.instagramclone.Utils;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.instagramclone.R;
@@ -132,6 +139,24 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 context.startActivity(intent);
             }
         });
+
+        holder.popupMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu pop = new PopupMenu(context, holder.popupMenu);
+                pop.inflate(R.menu.post_menu);
+
+                Menu popMenu = pop.getMenu();
+                Log.i("Pop", "Menu class: " + popMenu.getClass().getName());
+                pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        return menuItemClicked(menuItem);
+                    }
+                });
+                pop.show();
+            }
+        });
     }
 
     @Override
@@ -143,7 +168,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         CircleImageView authorIV;
         private TextView authorTV;
-        private ImageView postIV, icLike, cmtBtn;
+        private ImageView postIV, icLike, cmtBtn, popupMenu;
         private TextView likeTV, desctv, timetv, commentTV;
 
         public ViewHolder(@NonNull View itemView) {
@@ -157,6 +182,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             icLike = itemView.findViewById(R.id.icLike);
             cmtBtn = itemView.findViewById(R.id.commentBtn);
             commentTV = itemView.findViewById(R.id.textViewComment);
+            popupMenu = itemView.findViewById(R.id.popup_post);
         }
     }
 
@@ -189,5 +215,50 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         data.put("isPost", true);
         data.put("timestamp", new Date());
         Task<DocumentReference> collectionReference = FirebaseFirestore.getInstance().collection("Notification").add(data);
+    }
+
+    private boolean menuItemClicked(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.hide_post:
+                Toast.makeText(context, "Hide", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.report_post:
+                CreateDialogPost();
+                Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show();
+            default:
+                Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return true;
+    }
+
+    private void CreateDialogPost() {
+        final View view = View.inflate(context,R.layout.dialog_report, null);
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("The Report");
+//        alertDialog.setIcon("Icon id here");
+        alertDialog.setCancelable(false);
+//        alertDialog.setMessage("Enter the content of the report ");
+
+
+        final EditText reportContents = (EditText) view.findViewById(R.id.etComments);
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String EditValue = reportContents.getText().toString();
+//                if(EditValue.equals("")) Toast.makeText(alertDialog.getContext(), "Please fill to editText", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.setView(view);
+        alertDialog.show();
     }
 }

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="report" />
-    <item android:title="hide" />
+    <item android:title="report"
+        android:id="@+id/report_post"/>
+    <item android:title="hide"
+        android:id="@+id/hide_post"/>
 </menu>

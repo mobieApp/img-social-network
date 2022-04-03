@@ -27,6 +27,7 @@
             android:paddingStart="5dp"/>
 
         <ImageView
+            android:id="@+id/popup_post"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_menudot"
