@@ -2,6 +2,8 @@ package com.example.instagramclone.view;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.instagramclone.R;
+import com.example.instagramclone.Utils.UserAuthentication;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -33,7 +36,6 @@ public class EditProfileActivity extends Activity {
     private ImageView btnSaveEdit, btnCancelEdit;
     private TextView textView, btnChangeAvatar;
     private CircleImageView circleImageView;
-    FirebaseUser user;
     FirebaseFirestore firestore;
     FirebaseAuth firebaseAuth;
 
@@ -58,27 +60,19 @@ public class EditProfileActivity extends Activity {
         String fullname = intent.getStringExtra("name");
         String website = intent.getStringExtra("website");
         String description = intent.getStringExtra("description");
+        byte[] imgData = intent.getByteArrayExtra("avatar");
+        Bitmap bitmap = BitmapFactory.decodeByteArray(imgData,0, imgData.length);
 
         fullnameField.setText(fullname);
         usernameField.setText(username);
         websiteField.setText(website);
         descriptionField.setText(description);
+        circleImageView.setImageBitmap(bitmap);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
-        user = firebaseAuth.getCurrentUser();
 
-        DocumentReference documentReference = firestore.collection("User").document(user.getUid());
-        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot documentSnapshot = task.getResult();
-                fullnameField.setText(documentSnapshot.getString("name"));
-                usernameField.setText(documentSnapshot.getString("username"));
-                websiteField.setText(documentSnapshot.getString("website"));
-                descriptionField.setText(documentSnapshot.getString("story"));
-            }
-        });
+        DocumentReference documentReference = firestore.collection("User").document(UserAuthentication.userId);
 
         btnSaveEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +112,9 @@ public class EditProfileActivity extends Activity {
         btnChangeAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), NewPostActivity.class));
+                Intent intent = new Intent(getApplicationContext(),NewPostActivity.class);
+                intent.putExtra("Action","Change Avatar");
+                startActivity(intent);
             }
         });
     }

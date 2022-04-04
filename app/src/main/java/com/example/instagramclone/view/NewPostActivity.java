@@ -1,7 +1,9 @@
 package com.example.instagramclone.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,12 +26,22 @@ public class NewPostActivity extends AppCompatActivity {
     private ViewPager2 viewPager;
     private TabLayout tabLayout;
 
+    private String action;
+
     private final String galleryPath = Environment.getExternalStorageDirectory() + "/" + android.os.Environment.DIRECTORY_DCIM + "/";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newpost);
 
+        Intent intent = getIntent();
+        if (intent.hasExtra("Action")) {
+            action = intent.getStringExtra("Action");
+        }
+        else {
+            action = "New Post";
+        }
+        Log.d("AAA", "onCreate: " + action);
         btnBack = (ImageButton) findViewById(R.id.toolbar_back);
         viewPager = (ViewPager2) findViewById(R.id.container);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -59,4 +71,6 @@ public class NewPostActivity extends AppCompatActivity {
     }
 
     public String getGalleryPath(){ return galleryPath;}
+
+    public String getAction(){return action;}
 }

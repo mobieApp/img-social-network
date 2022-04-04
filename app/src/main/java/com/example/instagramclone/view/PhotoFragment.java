@@ -272,6 +272,7 @@ public class PhotoFragment extends Fragment {
 
                         Intent intent = new Intent(getContext(), NPImageProcessingActivity.class);
                         intent.putExtra("IMG", bytes);
+                        intent.putExtra("Action",newPostActivity.getAction());
                         startActivity(intent);
 
                         //save(bytes);

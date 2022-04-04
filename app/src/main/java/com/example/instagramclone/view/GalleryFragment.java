@@ -101,6 +101,7 @@ public class GalleryFragment extends Fragment {
                 byte[] imgData = stream.toByteArray();
                 Intent intent = new Intent(getContext(), NPImageProcessingActivity.class);
                 intent.putExtra("IMG", imgData);
+                intent.putExtra("Action",newPostActivity.getAction());
                 startActivity(intent);
             }
         });

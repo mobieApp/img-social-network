@@ -1,6 +1,9 @@
 package com.example.instagramclone.view;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +29,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.squareup.picasso.Picasso;
+
+import java.io.ByteArrayOutputStream;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "ProfileActivity";
@@ -34,6 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private TextView usernameToolbar, display_name, description, website, btnEditProfile, numberPost, numberFollower, numberFollowing;
     private LinearLayout layoutFollower, layoutFollowing;
+    private CircleImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +57,7 @@ public class ProfileActivity extends AppCompatActivity {
         numberFollowing = (TextView) findViewById(R.id.numberFollowing);
         layoutFollower = (LinearLayout) findViewById(R.id.btnFollowers);
         layoutFollowing = (LinearLayout) findViewById(R.id.btnFollowing);
-
+        imageView = (CircleImageView) findViewById(R.id.userAvatar);
 
 
         setNavView();
@@ -62,11 +71,18 @@ public class ProfileActivity extends AppCompatActivity {
         btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Drawable img = imageView.getDrawable();
+                Bitmap bitmap = ((BitmapDrawable) img).getBitmap();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] imgData = stream.toByteArray();
+
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
                 intent.putExtra("username",usernameToolbar.getText().toString());
                 intent.putExtra("name",display_name.getText().toString());
                 intent.putExtra("description",description.getText().toString());
                 intent.putExtra("website",website.getText().toString());
+                intent.putExtra("avatar",imgData);
                 startActivity(intent);
             }
         });
@@ -115,6 +131,7 @@ public class ProfileActivity extends AppCompatActivity {
                     numberPost.setText(userAccountSetting.getPosts().toString());
                     numberFollower.setText(userAccountSetting.NumberFollower().toString());
                     numberFollowing.setText(userAccountSetting.NumberFollowing().toString());
+                    Picasso.get().load(userAccountSetting.getAvatar()).into(imageView);
                 }else{
                     Log.d(TAG, "onEvent: Data null");
                 }

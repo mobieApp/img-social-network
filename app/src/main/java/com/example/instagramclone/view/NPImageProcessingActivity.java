@@ -1,7 +1,9 @@
 package com.example.instagramclone.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -11,16 +13,22 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.instagramclone.R;
+import com.example.instagramclone.Utils.UserAuthentication;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.zomato.photofilters.imageprocessors.Filter;
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter;
@@ -46,6 +54,7 @@ public class NPImageProcessingActivity extends AppCompatActivity implements Phot
 
     @BindView(R.id.coordinator_layout)
     CoordinatorLayout coordinatorLayout;
+    ConstraintLayout loadingLayout;
 
     Bitmap originalImage;
     // to backup image with filter applied
@@ -78,6 +87,7 @@ public class NPImageProcessingActivity extends AppCompatActivity implements Phot
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        loadingLayout = (ConstraintLayout) findViewById(R.id.LoadingLayout);
         btnBack = findViewById(R.id.edit_toolbar_back);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,9 +102,40 @@ public class NPImageProcessingActivity extends AppCompatActivity implements Phot
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 finalImage.compress(Bitmap.CompressFormat.JPEG, 90, stream);
                 byte[] imgData = stream.toByteArray();
-                Intent intent1 = new Intent(NPImageProcessingActivity.this, PostActivity.class);
-                intent1.putExtra("IMG", imgData);
-                startActivity(intent1);
+                String activity = getIntent().getExtras().getString("Action");
+                if (activity.equals("New Post")) {
+                    Intent intent1 = new Intent(NPImageProcessingActivity.this, PostActivity.class);
+                    intent1.putExtra("IMG", imgData);
+                    startActivity(intent1);
+                }
+                else if (activity.equals("Change Avatar")){
+                    StorageReference ref = FirebaseStorage.getInstance().getReference().child("Avatar/" + UserAuthentication.userId + ".jpg");
+                    ref.putBytes(imgData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    DocumentReference doc = FirebaseFirestore.getInstance().collection("User").document(UserAuthentication.userId);
+                                    doc.update("avatar",uri.toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            loadingLayout.setVisibility(View.GONE);
+                                            Intent intent2 = new Intent(NPImageProcessingActivity.this, ProfileActivity.class);
+                                            intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            startActivity(intent2);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                            loadingLayout.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
             }
         });
 
