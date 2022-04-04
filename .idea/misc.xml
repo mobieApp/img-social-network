@@ -13,23 +13,19 @@
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/drawable/take_photo_bg.xml" value="0.258" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/activity_home.xml" value="0.18541666666666667" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/activity_login.xml" value="0.18541666666666667" />
-        <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/activity_newpost.xml" value="0.2056159420289855" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/activity_profile.xml" value="0.18802083333333333" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/activity_register.xml" value="0.18802083333333333" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/activity_search.xml" value="0.36666666666666664" />
-        <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/dialog_report.xml" value="0.17760416666666667" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/fragment_effects.xml" value="0.18802083333333333" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/fragment_photo.xml" value="0.18802083333333333" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/fragment_user_post.xml" value="0.18802083333333333" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/fragment_view_comments.xml" value="0.36666666666666664" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/fragment_view_notification.xml" value="0.36666666666666664" />
-        <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/fragment_view_post.xml" value="0.2056159420289855" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/fragment_view_share.xml" value="0.22" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/gallery_item.xml" value="0.18802083333333333" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/layout_bottom_navigation.xml" value="0.3605072463768116" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/layout_comment.xml" value="0.36666666666666664" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/layout_header_notification.xml" value="0.36666666666666664" />
-        <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/layout_newpost_confirm.xml" value="0.3625" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/layout_notification.xml" value="0.18802083333333333" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/layout_post.xml" value="0.1398148148148148" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/layout_post_header.xml" value="0.33" />
@@ -42,13 +38,9 @@
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/single_grid_item.xml" value="0.3605072463768116" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/snippet_comments_toolbars.xml" value="0.18541666666666667" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/snippet_newpost_confirm_toolbars.xml" value="0.18541666666666667" />
-        <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/snippet_newpost_select_picture.xml" value="0.3625" />
-        <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/snippet_newpost_toolbars.xml" value="0.3625" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/snippet_profile_toolbar.xml" value="0.36666666666666664" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/layout/user_edit_settings.xml" value="0.25" />
         <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/menu/bottom_menu_navigation.xml" value="0.36666666666666664" />
-        <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/menu/post_menu.xml" value="0.3625" />
-        <entry key="..\:/Coding/Mobile/csc1009/img-social-network/app/src/main/res/menu/profile_menu.xml" value="0.3625" />
         <entry key="..\:/HK2_YEAR3/Mobile/InstagramClone/app/src/main/res/drawable/white_rounded_button.xml" value="0.16510416666666666" />
         <entry key="..\:/HK2_YEAR3/Mobile/InstagramClone/app/src/main/res/layout/activity_main.xml" value="0.28229166666666666" />
         <entry key="..\:/HK2_YEAR3/Mobile/InstagramClone/app/src/main/res/layout/white_rounded_button.xml" value="0.14895833333333333" />
@@ -72,7 +64,7 @@
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/share_followers.xml" value="0.1445" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/white_grey_border_bottom.xml" value="0.2851851851851852" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/white_grey_border_top.xml" value="0.1" />
-        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_edit_and_filter.xml" value="0.3359683794466403" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_edit_and_filter.xml" value="0.24896265560165975" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_follower.xml" value="0.13728470111448834" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_following.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_home.xml" value="0.2828571524912001" />
@@ -162,7 +154,7 @@
         <entry key="..\:/Users/Blade/Desktop/img-social-network/app/src/main/res/layout/fragment_view_notification.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Blade/Desktop/img-social-network/app/src/main/res/layout/fragment_view_post.xml" value="0.20652173913043478" />
         <entry key="..\:/Users/Blade/Desktop/img-social-network/app/src/main/res/layout/fragment_view_share.xml" value="0.18432971014492755" />
-        <entry key="..\:/Users/Blade/Desktop/img-social-network/app/src/main/res/layout/layout_comment.xml" value="0.2" />
+        <entry key="..\:/Users/Blade/Desktop/img-social-network/app/src/main/res/layout/layout_comment.xml" value="0.2028985507246377" />
         <entry key="..\:/Users/Blade/Desktop/img-social-network/app/src/main/res/layout/layout_post_header.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Blade/Desktop/img-social-network/app/src/main/res/layout/layout_post_toolbars.xml" value="0.20652173913043478" />
         <entry key="..\:/Users/Blade/Desktop/img-social-network/app/src/main/res/layout/layout_profile_info.xml" value="0.25416666666666665" />

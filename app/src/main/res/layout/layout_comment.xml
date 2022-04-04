@@ -61,41 +61,52 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/comment_likes"
+                android:id="@+id/comment_likeCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/comment"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_toRightOf="@+id/comment_time_posted"
-                android:text="20 likes"
+                android:text="0 likes"
                 android:textColor="@color/grey"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/comment_reply"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/comment"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@+id/comment_likeCount"
                 android:text="Reply"
-                android:textStyle="bold"
                 android:textColor="@color/grey"
                 android:textSize="14sp"
-                android:id="@+id/comment_reply"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_below="@+id/comment"
-                android:layout_toRightOf="@+id/comment_likes"/>
+                android:textStyle="bold" />
 
 
         </RelativeLayout>
 
         <ImageView
+            android:id="@+id/comment_like"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:id="@+id/comment_like"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
             android:src="@drawable/ic_heart"
-            android:layout_centerVertical="true"/>
+            android:tag="black"/>
     </RelativeLayout>
+
+<!--    <TextView-->
+<!--        android:id="@+id/emptyTV"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:text="There is nothing to show here"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="13dp" />-->
 </RelativeLayout>
