@@ -14,19 +14,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.instagramclone.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class CommentAdapter extends ArrayAdapter<String> {
     private Context context;
-    private ArrayList<String> items;
+    private ArrayList<String> commentContent;
     private ArrayList<String> username;
+    private ArrayList<String> avatarArr;
 
-    public CommentAdapter(@NonNull Context context, int resource, ArrayList<String> items, ArrayList<String> username) {
-        super(context, resource, items);
+    public CommentAdapter(Context context, int resource, ArrayList<String> commentContent, ArrayList<String> username, ArrayList<String> avatarArr) {
+        super(context, resource, commentContent);
         this.context = context;
-        this.items = items;
+        this.commentContent = commentContent;
         this.username = username;
+        this.avatarArr = avatarArr;
     }
 
     @NonNull
@@ -36,10 +41,14 @@ public class CommentAdapter extends ArrayAdapter<String> {
         View row = inflater.inflate(R.layout.layout_comment, null);
         TextView comment = (TextView) row.findViewById(R.id.comment);
         TextView comment_username = (TextView) row.findViewById(R.id.comment_username);
-        comment.setText(items.get(position));
-//        comment_username.setText(username.get(position));
-        comment_username.setText(username.get(position));
-        Log.d("DATA IN ADAPTER", items.get(position) + " <-> " + username.get(position));
+        CircleImageView circleImageView = (CircleImageView) row.findViewById(R.id.comment_profile_image);
+        if (!commentContent.isEmpty()) {
+            comment.setText(commentContent.get(position));
+            comment_username.setText(username.get(position));
+            if (!avatarArr.get(position).equals("") && avatarArr.get(position) != null)
+                Picasso.get().load(avatarArr.get(position)).into(circleImageView);
+        }
+        Log.d("DATA IN ADAPTER", commentContent.get(position) + " <-> " + username.get(position));
         return (row);
     }
 }
