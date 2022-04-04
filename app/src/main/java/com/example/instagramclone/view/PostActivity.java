@@ -2,6 +2,7 @@ package com.example.instagramclone.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -42,6 +44,7 @@ public class PostActivity extends AppCompatActivity {
         ImageView backBtn = findViewById(R.id.backBtn);
         ImageView postBtn = findViewById(R.id.postDone);
         EditText caption = findViewById(R.id.caption);
+        ConstraintLayout loadingLayout = findViewById(R.id.LoadingLayout);
 
         byte[] arr = getIntent().getExtras().getByteArray("IMG");
         Bitmap bmp = BitmapFactory.decodeByteArray(arr, 0, arr.length);
@@ -59,7 +62,11 @@ public class PostActivity extends AppCompatActivity {
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(PostActivity.this, caption.getText().toString(), Toast.LENGTH_SHORT).show();
+                loadingLayout.setVisibility(View.VISIBLE);
+                //Hide keyboard
+                InputMethodManager imm = (InputMethodManager) getApplication().getSystemService(PostActivity.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+                
                 StorageReference ref = storageReference.child("Post/" + UUID.randomUUID().toString() + ".jpg");
                 ref.putBytes(arr).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -72,10 +79,12 @@ public class PostActivity extends AppCompatActivity {
                                 post.setCaption(caption.getText().toString());
                                 post.setUserId(UserAuthentication.userId);
                                 post.setTimestamp(new Date());
+                                post.setId(postCollection.document().getId());
                                 postCollection.add(post).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentReference> task) {
-                                        Intent intent = new Intent();
+                                        loadingLayout.setVisibility(View.GONE);
+                                        Intent intent = new Intent(PostActivity.this,HomeActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
                                     }

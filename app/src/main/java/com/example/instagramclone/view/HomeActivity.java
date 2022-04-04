@@ -127,7 +127,6 @@ public class HomeActivity extends AppCompatActivity{
                             Map<Post,Integer> unsortPost = new HashMap<>();
                             for (QueryDocumentSnapshot document: task.getResult()) {
                                 Post post = document.toObject(Post.class);
-                                post.setId(document.getId());
                                 unsortPost.put(post,userId.indexOf(post.getUserId()));
                                 //postArrayList.add(post);
                             }
