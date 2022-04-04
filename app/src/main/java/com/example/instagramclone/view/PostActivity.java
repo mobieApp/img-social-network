@@ -66,7 +66,7 @@ public class PostActivity extends AppCompatActivity {
                 //Hide keyboard
                 InputMethodManager imm = (InputMethodManager) getApplication().getSystemService(PostActivity.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(),0);
-                
+
                 StorageReference ref = storageReference.child("Post/" + UUID.randomUUID().toString() + ".jpg");
                 ref.putBytes(arr).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -80,9 +80,9 @@ public class PostActivity extends AppCompatActivity {
                                 post.setUserId(UserAuthentication.userId);
                                 post.setTimestamp(new Date());
                                 post.setId(postCollection.document().getId());
-                                postCollection.add(post).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                postCollection.document(post.getId()).set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
-                                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                                    public void onSuccess(Void unused) {
                                         loadingLayout.setVisibility(View.GONE);
                                         Intent intent = new Intent(PostActivity.this,HomeActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

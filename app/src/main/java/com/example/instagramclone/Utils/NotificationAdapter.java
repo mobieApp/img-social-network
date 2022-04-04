@@ -26,8 +26,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.squareup.picasso.Picasso;
 
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class NotificationAdapter extends  RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
 
@@ -99,6 +101,7 @@ public class NotificationAdapter extends  RecyclerView.Adapter<NotificationAdapt
 
     private void getPostImage(ImageView imageView, String postId){
         DocumentReference documentReference = FirebaseFirestore.getInstance().collection("Post").document(postId);
+        Log.d("AAA", "getPostImage: " + postId);
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -108,19 +111,24 @@ public class NotificationAdapter extends  RecyclerView.Adapter<NotificationAdapt
         });
     }
 
-    private void setTimestamp(TextView textView, Date createdAt){
+    private void setTimestamp(TextView textView, Date createdAt) {
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+        cal.setTime(createdAt);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
         duration = new TimestampDuration(createdAt);
-        if(duration.DiffDay() != 0){
+        if (duration.DiffDay() != 0) {
             if (duration.DiffDay() <= 7)
                 textView.setText(duration.DiffDay() + " ngày");
-            else textView.setText(LocalDate.parse(createdAt.toString()).toString());
-        }
-        else if(duration.DiffHour() != 0)
+            else if (year != LocalDate.now().getYear())
+                textView.setText(day + " tháng " + month + ", " + year);
+            else textView.setText(day + " tháng " + month);
+        } else if (duration.DiffHour() != 0)
             textView.setText(duration.DiffHour() + " giờ");
-        else if(duration.DiffMinute() != 0)
+        else if (duration.DiffMinute() != 0)
             textView.setText(duration.DiffMinute() + " phút");
-        else if(duration.DiffSecond() != 0)
+        else if (duration.DiffSecond() != 0)
             textView.setText(duration.DiffSecond() + " giây");
     }
-
 }
