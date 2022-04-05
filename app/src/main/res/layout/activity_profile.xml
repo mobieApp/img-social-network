@@ -46,6 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="75">
 
+                    <include layout="@layout/layout_profile_view" />
                     <include layout="@layout/layout_profile_info" />
                 </RelativeLayout>
             </LinearLayout>

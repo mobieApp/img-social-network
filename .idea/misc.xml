@@ -57,6 +57,7 @@
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable-xhdpi/ic_brush.xml" value="0.119" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable-xxhdpi/grey_border.xml" value="0.1984375" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/black_border.xml" value="0.18333333333333332" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/grey_border_blue_background.xml" value="0.2865" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/grey_border_bottom.xml" value="0.29384615384615387" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/rounded_edittext.xml" value="0.1445" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/rounded_searchview.xml" value="0.144" />
@@ -70,7 +71,7 @@
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_home.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_login.xml" value="0.16576086956521738" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_newpost.xml" value="0.21428572158424247" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_newpost.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_profile.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_search.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_share.xml" value="0.2828571524912001" />
@@ -98,6 +99,7 @@
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_post_toolbar.xml" value="0.5742857338457699" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_post_toolbars.xml" value="0.2028985507246377" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_profile_info.xml" value="0.42857144316848494" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_profile_view.xml" value="0.42857144316848494" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_row_follow.xml" value="0.11005434782608696" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_row_following.xml" value="0.42857144316848494" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_top_tabs.xml" value="0.2828571524912001" />

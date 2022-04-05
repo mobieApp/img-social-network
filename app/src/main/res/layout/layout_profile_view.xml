@@ -7,11 +7,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/profileInfo">
-
+        android:id="@+id/profileView">
 
         <LinearLayout
-            android:id="@+id/btnPosts1"
+            android:id="@+id/btnPosts"
             android:layout_width="74dp"
             android:layout_height="52dp"
             android:orientation="vertical"
@@ -21,7 +20,7 @@
             app:layout_constraintVertical_bias="0.337">
 
             <TextView
-                android:id="@+id/numberPost1"
+                android:id="@+id/numberPost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -39,18 +38,18 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/btnFollowers1"
+            android:id="@+id/btnFollowers"
             android:layout_width="74dp"
             android:layout_height="52dp"
             android:layout_marginTop="28dp"
             android:orientation="vertical"
-            app:layout_constraintEnd_toStartOf="@+id/btnFollowing1"
+            app:layout_constraintEnd_toStartOf="@+id/btnFollowing"
             app:layout_constraintHorizontal_bias="0.495"
-            app:layout_constraintStart_toEndOf="@+id/btnPosts1"
+            app:layout_constraintStart_toEndOf="@+id/btnPosts"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/numberFollower1"
+                android:id="@+id/numberFollower"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -69,7 +68,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/btnFollowing1"
+            android:id="@+id/btnFollowing"
             android:layout_width="74dp"
             android:layout_height="52dp"
             android:orientation="vertical"
@@ -79,7 +78,7 @@
             app:layout_constraintVertical_bias="0.337">
 
             <TextView
-                android:id="@+id/numberFollowing1"
+                android:id="@+id/numberFollowing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -97,21 +96,22 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/btnEditProfile"
+            android:id="@+id/btnFollow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:background="@drawable/grey_border"
-            android:paddingHorizontal="50dp"
-            android:paddingVertical="5dp"
-            android:text="Edit your profile"
+            android:background="@drawable/grey_border_blue_background"
+            android:paddingHorizontal="90dp"
+            android:paddingVertical="7dp"
+            android:text="Follow"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
+            android:textSize="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnFollowers1"
+            app:layout_constraintTop_toBottomOf="@+id/btnFollowers"
             app:layout_constraintVertical_bias="1.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </merge>

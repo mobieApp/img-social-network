@@ -1,26 +1,21 @@
 package com.example.instagramclone.Utils;
 
-import static android.content.ContentValues.TAG;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.instagramclone.R;
 import com.example.instagramclone.models.SearchRecent;
 import com.example.instagramclone.models.User;
+import com.example.instagramclone.view.ProfileActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -30,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 
 import java.util.ArrayList;
@@ -62,7 +58,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.username.setText(mUser.get(position).getUsername());
         holder.name.setText(mUser.get(position).getName());
         if (!mUser.get(position).getAvatar().equals("")) {
-            Glide.with(mContext).load(mUser.get(position).getAvatar()).into(holder.img_profile);
+            Picasso.get().load(mUser.get(position).getAvatar()).into(holder.img_profile);
         }
 
 
@@ -91,7 +87,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SearchRecent user = new SearchRecent(mUser.get(position).getUserid());
+                String userId = mUser.get(position).getUserid();
+                SearchRecent user = new SearchRecent(userId);
                 ref.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -112,6 +109,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                         view.refreshDrawableState();
                     }
                 });
+                Intent intent = new Intent(mContext, ProfileActivity.class);
+                intent.putExtra("userId",userId);
+                mContext.startActivity(intent);
             }
         });
 
@@ -131,7 +131,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 });
             }
         });
-
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.instagramclone.view;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -16,11 +17,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.instagramclone.R;
 import com.example.instagramclone.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class RegisterActivity extends AppCompatActivity {
     private User user;
@@ -91,8 +95,13 @@ public class RegisterActivity extends AppCompatActivity {
                 user.setUsername(Username);
                 user.setEmail(Email);
                 user.setPassword(Pass);
-//                user.setAvatar(getDrawable().to);
-
+                StorageReference ref = FirebaseStorage.getInstance().getReference().child("Avatar/defaultAvatar.jpg");
+                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        user.setAvatar(uri.toString());
+                    }
+                });
                 mAuth.createUserWithEmailAndPassword(Email,Pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
