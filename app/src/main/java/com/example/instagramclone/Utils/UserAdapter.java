@@ -28,8 +28,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.TimeZone;
 
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -38,6 +42,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private ArrayList<User> mUser;
     private Context mContext;
     private boolean isRecent;
+    private TimestampDuration duration;
 
 
     public UserAdapter(ArrayList<User> list, Context context, boolean isRecent) {
@@ -76,7 +81,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 Collections.sort(getUser.getRecent());
                 for (SearchRecent i : getUser.getRecent()) {
                     if (i.getUserid().equals(mUser.get(position).getUserid())) {
-                        holder.timeRecent.setText(i.GetStringTimestamp());
+                        setTimestamp(holder.timeRecent,i.getTimestamp());
                         return;
                     }
                 }
@@ -154,5 +159,26 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             delBtn = itemView.findViewById(R.id.delete_user);
             timeRecent = itemView.findViewById(R.id.timeRecent);
         }
+    }
+
+    private void setTimestamp(TextView textView, Date createdAt) {
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+        cal.setTime(createdAt);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        duration = new TimestampDuration(createdAt);
+        if (duration.DiffDay() != 0) {
+            if (duration.DiffDay() <= 7)
+                textView.setText(duration.DiffDay() + " ngày trước");
+            else if (year != LocalDate.now().getYear())
+                textView.setText(day + " tháng " + month + ", " + year);
+            else textView.setText(day + " tháng " + month);
+        } else if (duration.DiffHour() != 0)
+            textView.setText(duration.DiffHour() + " giờ trước");
+        else if (duration.DiffMinute() != 0)
+            textView.setText(duration.DiffMinute() + " phút trước");
+        else if (duration.DiffSecond() != 0)
+            textView.setText(duration.DiffSecond() + " giây trước");
     }
 }
