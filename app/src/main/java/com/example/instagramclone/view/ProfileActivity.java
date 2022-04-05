@@ -24,6 +24,7 @@ import com.example.instagramclone.Utils.BottomNavigationViewHolder;
 import com.example.instagramclone.Utils.UserAdapter;
 import com.example.instagramclone.Utils.UserAuthentication;
 import com.example.instagramclone.models.User;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -58,6 +59,7 @@ public class ProfileActivity extends AppCompatActivity {
         description = (TextView) findViewById(R.id.description);
         website = (TextView) findViewById(R.id.website);
         imageView = (CircleImageView) findViewById(R.id.userAvatar);
+        btnFollow = findViewById(R.id.btnFollow);
         profileView = findViewById(R.id.profileView);
         profileInfo = findViewById(R.id.profileInfo);
 
@@ -94,7 +96,12 @@ public class ProfileActivity extends AppCompatActivity {
 
                         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
-                        BindViewSearchedProfile();
+                        if(userAccountSetting.getFollower().contains(UserAuthentication.userId))
+                        {
+                            btnFollow.setText("Followed");
+                        }
+                        else btnFollow.setText("Follow");
+                        BindViewSearchedProfile(userAccountSetting);
 
                         numberPost.setText(userAccountSetting.getPosts().toString());
                         numberFollower.setText(userAccountSetting.NumberFollower().toString());
@@ -175,13 +182,15 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void BindViewSearchedProfile(){
+    private void BindViewSearchedProfile(User userAccountSetting){
         numberPost = (TextView) findViewById(R.id.numberPost);
         numberFollower = (TextView) findViewById(R.id.numberFollower);
         numberFollowing = (TextView) findViewById(R.id.numberFollowing);
         layoutFollower = (LinearLayout) findViewById(R.id.btnFollowers);
         layoutFollowing = (LinearLayout) findViewById(R.id.btnFollowing);
         btnFollow = (TextView) findViewById(R.id.btnFollow);
+
+
 
         layoutFollower.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,6 +213,23 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
+        btnFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(btnFollow.getText().toString().equals("Followed")){
+                    if(userAccountSetting.getFollower().contains(UserAuthentication.userId)){
+                        userAccountSetting.getFollower().remove(UserAuthentication.userId);
+                        FirebaseFirestore.getInstance().collection("User").document(userId).update("follower",userAccountSetting.getFollower());
+                    }
+                }
+                else {
+                     if(!userAccountSetting.getFollower().contains(UserAuthentication.userId)){
+                        userAccountSetting.getFollower().add(UserAuthentication.userId);
+                        FirebaseFirestore.getInstance().collection("User").document(userId).update("follower",userAccountSetting.getFollower());
+                    }
+                }
+            }
+    });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
