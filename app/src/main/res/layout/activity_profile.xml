@@ -102,11 +102,12 @@
                 android:layout_height="wrap_content"
                 android:icon="@drawable/ic_tag" />
         </com.google.android.material.tabs.TabLayout>
-
-        <androidx.viewpager2.widget.ViewPager2
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_img_post"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/tabLayout" />
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
     <include layout="@layout/layout_bottom_navigation" />
 </RelativeLayout>

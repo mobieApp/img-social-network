@@ -8,19 +8,20 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.example.instagramclone.R;
+import com.squareup.picasso.Picasso;
 
 public class ImageApater extends BaseAdapter {
     private Context context;
-    Integer[] images;
-    public ImageApater(Context mainActivityContext, Integer[] thumnails){
+    String[] imagesURL;
+    public ImageApater(Context mainActivityContext, String[] thumnail_URL){
         context = mainActivityContext;
-        images = thumnails;
+        imagesURL = thumnail_URL;
     }
     public int getCount(){
-        return images.length;
+        return imagesURL.length;
     }
     public Object getItem(int position){
-        return images[position];
+        return imagesURL[position];
     }
     public long getItemId(int position){
         return position;
@@ -37,7 +38,7 @@ public class ImageApater extends BaseAdapter {
         else{
             imageView = (ImageView) convertView;
         }
-        imageView.setImageResource(images[position]);
+        Picasso.get().load(imagesURL[position]).centerCrop().into(imageView);
         imageView.setId(position);
         return imageView;
     }

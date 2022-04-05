@@ -18,11 +18,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.instagramclone.R;
 import com.example.instagramclone.Utils.BottomNavigationViewHolder;
+import com.example.instagramclone.Utils.ImageApater;
+import com.example.instagramclone.Utils.ImagePostAdapter;
 import com.example.instagramclone.Utils.UserAdapter;
 import com.example.instagramclone.Utils.UserAuthentication;
+import com.example.instagramclone.models.Post;
 import com.example.instagramclone.models.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -32,9 +38,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -49,6 +58,8 @@ public class ProfileActivity extends AppCompatActivity {
     private CircleImageView imageView;
     private String userId;
     private ConstraintLayout profileView, profileInfo;
+    private ArrayList<Post> PostList = new ArrayList<Post>();
+    private RecyclerView rcv_img_post;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate: ");
@@ -62,6 +73,7 @@ public class ProfileActivity extends AppCompatActivity {
         btnFollow = findViewById(R.id.btnFollow);
         profileView = findViewById(R.id.profileView);
         profileInfo = findViewById(R.id.profileInfo);
+        rcv_img_post = findViewById(R.id.rcv_img_post);
 
         //------Set up toolbar---------
         Toolbar toolbar = (Toolbar) findViewById(R.id.profileToolBar);
@@ -128,6 +140,8 @@ public class ProfileActivity extends AppCompatActivity {
                 }else{
                     Log.d(TAG, "onEvent: Data null");
                 }
+                // bind img post
+                BindImgPostViewPager();
             }
         });
     }
@@ -231,6 +245,26 @@ public class ProfileActivity extends AppCompatActivity {
             }
     });
     }
+
+    private void BindImgPostViewPager(){
+        FirebaseFirestore.getInstance().collection("Post").whereEqualTo("userId",userId).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                Log.d("POST", "size: " + queryDocumentSnapshots.getDocuments().size());
+                Iterator<DocumentSnapshot> posts = queryDocumentSnapshots.getDocuments().listIterator();
+                int i = 1;
+                while (posts.hasNext()) {
+                    Post newPost = posts.next().toObject(Post.class);
+                    Log.d("POST", "index: " + i++ +" : "+newPost.getUserId());
+                    PostList.add(newPost);
+                }
+                ImagePostAdapter imagePostAdapter = new ImagePostAdapter(PostList,getApplicationContext());
+                rcv_img_post.setLayoutManager(new GridLayoutManager(null,3));
+                rcv_img_post.setAdapter(imagePostAdapter);
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_menu,menu);
