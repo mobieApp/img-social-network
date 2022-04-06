@@ -9,7 +9,6 @@
         android:layout_height="wrap_content">
 
         <include layout="@layout/snippet_comments_toolbars" />
-
     </RelativeLayout>
 
     <RelativeLayout
@@ -28,6 +27,33 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/relLayoutReply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relLayout3"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@color/white"
+            android:text="Reply to comment"
+            android:textSize="20dp"
+            android:layout_marginLeft="10dp"/>
+
+        <ImageView
+            android:id="@+id/closeRepBtn"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/close_icon"
+            android:layout_marginRight="10dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/relLayout3"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -36,7 +62,7 @@
 
 
         <EditText
-            android:id="@+id/comment"
+            android:id="@+id/commentEdt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

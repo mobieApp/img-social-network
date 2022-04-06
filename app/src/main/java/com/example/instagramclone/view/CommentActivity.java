@@ -1,8 +1,11 @@
 package com.example.instagramclone.view;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,11 +13,14 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.instagramclone.R;
 import com.example.instagramclone.Utils.CommentAdapter;
 import com.example.instagramclone.Utils.TimestampDuration;
+import com.example.instagramclone.Utils.UserAuthentication;
 import com.example.instagramclone.models.Comment;
+import com.example.instagramclone.models.Post;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -22,6 +28,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -50,7 +57,7 @@ public class CommentActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_view_comments);
         backArrow = findViewById(R.id.backArrow);
         postCmt = findViewById(R.id.ivPostComment);
-        cmtEditTxt = findViewById(R.id.comment);
+        cmtEditTxt = findViewById(R.id.commentEdt);
         listViewComment = (ListView) findViewById(R.id.listViewComment);
 
         String isFocus = getIntent().getExtras().getString("FOCUS");
@@ -67,10 +74,36 @@ public class CommentActivity extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         loadComment();
 
-        listViewComment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listViewComment.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("Delete at position", i + "");
+                AlertDialog alertDialog = new AlertDialog.Builder(CommentActivity.this).create();
+                alertDialog.setTitle("Do you want to delete this comment?");
+                alertDialog.setCancelable(true);
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Comment comment = (Comment) adapterView.getItemAtPosition(i);
+                        if (comment.getListReply().size() == 0)
+                            firestore.collection("Comment").document(comment.getId()).delete();
+                        else {
+                            for (String reply : comment.getListReply())
+                                firestore.collection("Comment").document(reply).delete();
+                            firestore.collection("Comment").document(comment.getId()).delete();
+                        }
+                        loadComment();
+                    }
+                });
 
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog.dismiss();
+                    }
+                });
+                alertDialog.show();
+                return true;
             }
         });
 
@@ -84,20 +117,23 @@ public class CommentActivity extends AppCompatActivity {
         postCmt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Comment comment = new Comment();
+                if (!cmtEditTxt.getText().toString().equals("")) {
+                    Comment comment = new Comment();
 
-                DocumentReference documentReference = firestore.collection("Comment").document();
-                comment.setId(documentReference.getId());
-                comment.setContent(cmtEditTxt.getText().toString());
-                comment.setListReply("");
-                comment.setTimestamp(Calendar.getInstance().getTime());
-                comment.setUserId(firebaseAuth.getCurrentUser().getUid());
-                comment.setPostID(postID);
-                comment.setReactList(new ArrayList<>());
+                    DocumentReference documentReference = firestore.collection("Comment").document();
+                    comment.setId(documentReference.getId());
+                    comment.setContent(cmtEditTxt.getText().toString());
+                    comment.setListReply(new ArrayList<>());
+                    comment.setTimestamp(Calendar.getInstance().getTime());
+                    comment.setUserId(firebaseAuth.getCurrentUser().getUid());
+                    comment.setPostID(postID);
+                    comment.setReactList(new ArrayList<>());
+                    comment.setReply(false);
 
-                documentReference.set(comment);
-                cmtEditTxt.setText("");
-                loadComment();
+                    documentReference.set(comment);
+                    cmtEditTxt.setText("");
+                    loadComment();
+                }
             }
         });
     }
@@ -121,11 +157,12 @@ public class CommentActivity extends AppCompatActivity {
 
                         comment.setId(document.getData().get("id").toString());
                         comment.setContent(document.getData().get("content").toString());
-                        comment.setListReply(document.getData().get("listReply").toString());
+                        comment.setListReply((ArrayList<String>) document.getData().get("listReply"));
                         comment.setPostID(document.getData().get("postID").toString());
                         comment.setReactList((ArrayList<String>) document.getData().get("reactList"));
                         comment.setTimestamp(ts.toDate());
                         comment.setUserId(document.getData().get("userId").toString());
+                        comment.setReply(Boolean.parseBoolean(document.getData().get("reply").toString()));
 
                         userCmtID.add(document.getData().get("userId").toString());
                         commentArr.add(comment);

@@ -25,11 +25,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.instagramclone.R;
 import com.example.instagramclone.models.Post;
 import com.example.instagramclone.view.CommentActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.time.LocalDate;
@@ -127,6 +129,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 bundle.putString("postID", modal.getId());
                 intent.putExtras(bundle);
                 context.startActivity(intent);
+            }
+        });
+
+        ArrayList<String> tmpArr = new ArrayList<>();
+        tmpArr.add(instaModalArrayList.get(position).getId());
+        firestore.collection("Comment").whereIn("postID", tmpArr).
+                get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.getResult().size() > 0)
+                    holder.commentTV.setText("Xem tất cả " + task.getResult().size() + " bình luận");
             }
         });
 
@@ -301,7 +314,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         ArrayList<String> hideLists = documentSnapshot.toObject(Post.class).getIsHide();
-                        if(hideLists.contains(UserAuthentication.userId))return;
+                        if (hideLists.contains(UserAuthentication.userId)) return;
                         hideLists.add(UserAuthentication.userId);
                         db.update("isHide", hideLists);
                         Activity activity = (Activity) context;

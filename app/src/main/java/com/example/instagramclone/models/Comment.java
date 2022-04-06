@@ -7,11 +7,28 @@ public class Comment {
 
     private String id;
     private String content;
-    private String listReply;
+    private ArrayList<String> listReply;
     private Date timestamp;
     private String userId;
     private String postID;
     private ArrayList<String> reactList;
+    private boolean isReply;
+
+    public boolean isReply() {
+        return isReply;
+    }
+
+    public void setReply(boolean isreply) {
+        this.isReply = isreply;
+    }
+
+    public ArrayList<String> getListReply() {
+        return listReply;
+    }
+
+    public void setListReply(ArrayList<String> listReply) {
+        this.listReply = listReply;
+    }
 
     public String getId() {
         return id;
@@ -27,14 +44,6 @@ public class Comment {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getListReply() {
-        return listReply;
-    }
-
-    public void setListReply(String listReply) {
-        this.listReply = listReply;
     }
 
     public Date getTimestamp() {

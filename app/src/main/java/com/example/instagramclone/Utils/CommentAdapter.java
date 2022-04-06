@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,8 @@ import com.squareup.picasso.Picasso;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,6 +51,50 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         this.commentArr = commentArr;
         this.username = username;
         this.avatarArr = avatarArr;
+
+        ArrayList<Comment> notReplyCmt = new ArrayList<>();
+        for(Comment comment : commentArr)
+            if(!comment.isReply())
+                notReplyCmt.add(comment);
+
+        for (int i = 0; i < commentArr.size(); i++) {
+            if (commentArr.get(i).isReply()) {
+                Comment singleCmt = commentArr.get(i);
+                this.commentArr.remove(i);
+
+                Comment mainCmt = new Comment();
+                for(Comment notReply : notReplyCmt)
+                    if(notReply.getListReply().contains(singleCmt.getId())) {
+                        mainCmt = notReply;
+                        break;
+                    }
+
+                int idx = this.commentArr.indexOf(mainCmt);
+                if (idx >= commentArr.size())
+                    commentArr.add(singleCmt);
+                else
+                    commentArr.add(idx + 1, singleCmt);
+
+                String singleUsername = this.username.get(i);
+                this.username.remove(i);
+                if (idx >= commentArr.size())
+                    this.username.add(singleUsername);
+                else
+                    this.username.add(idx + 1, singleUsername);
+
+
+                String singleAvatar = this.avatarArr.get(i);
+                this.avatarArr.remove(i);
+                if (idx >= commentArr.size())
+                    this.avatarArr.add(singleAvatar);
+                else
+                    this.avatarArr.add(idx + 1, singleAvatar);
+            }
+        }
+    }
+
+    public void refreshComment() {
+
     }
 
     @NonNull
@@ -62,6 +109,13 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         ImageView cmtReact = (ImageView) row.findViewById(R.id.comment_like);
         TextView cmtLikeCount = (TextView) row.findViewById(R.id.comment_likeCount);
         TextView cmtRep = (TextView) row.findViewById(R.id.comment_reply);
+        RelativeLayout layout = (RelativeLayout) row.findViewById(R.id.commentRelativeLayout);
+
+        if (commentArr.get(position).isReply()) {
+            RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) layout.getLayoutParams();
+            relativeParams.setMargins(160, 0, 0, 0);  // left, top, right, bottom
+            layout.setLayoutParams(relativeParams);
+        }
 
         if (!commentArr.isEmpty()) {
             comment.setText(commentArr.get(position).getContent());
@@ -70,7 +124,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 
             if (!avatarArr.get(position).equals("") && avatarArr.get(position) != null)
                 Picasso.get().load(avatarArr.get(position)).into(circleImageView);
-            setTimestamp(commentDate, commentArr.get(position).getTimestamp());
+            commentDate.setText(setTimestamp(commentArr.get(position).getTimestamp()));
 
             if (commentArr.get(position).getReactList().contains(UserAuthentication.userId)) {
                 cmtReact.setImageDrawable(context.getDrawable(R.drawable.ic_heart_red));
@@ -105,13 +159,20 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
                     }
                 }
             });
+
+            cmtRep.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
         }
 
 //        Log.d("DATA IN COMMENT ADAPTER", commentArr.get(position) + " <-> " + username.get(position));
         return (row);
     }
 
-    private void setTimestamp(TextView textView, Date createdAt) {
+    private String setTimestamp(Date createdAt) {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
         cal.setTime(createdAt);
         int year = cal.get(Calendar.YEAR);
@@ -120,15 +181,15 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         duration = new TimestampDuration(createdAt);
         if (duration.DiffDay() != 0) {
             if (duration.DiffDay() <= 7)
-                textView.setText(duration.DiffDay() + " ngày trước");
+                return (duration.DiffDay() + " ngày trước");
             else if (year != LocalDate.now().getYear())
-                textView.setText(day + " tháng " + month + ", " + year);
-            else textView.setText(day + " tháng " + month);
+                return (day + " tháng " + month + ", " + year);
+            else return (day + " tháng " + month);
         } else if (duration.DiffHour() != 0)
-            textView.setText(duration.DiffHour() + " giờ trước");
+            return (duration.DiffHour() + " giờ trước");
         else if (duration.DiffMinute() != 0)
-            textView.setText(duration.DiffMinute() + " phút trước");
-        else if (duration.DiffSecond() != 0)
-            textView.setText(duration.DiffSecond() + " giây trước");
+            return (duration.DiffMinute() + " phút trước");
+        else
+            return (duration.DiffSecond() + " giây trước");
     }
 }
