@@ -4,11 +4,12 @@ import com.example.instagramclone.Utils.UserAuthentication;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 
-public class Post {
+public class Post implements Serializable {
     // variables for storing data
     // of our recycler view item
     private String id;

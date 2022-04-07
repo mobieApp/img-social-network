@@ -52,6 +52,7 @@
             android:parentActivityName=".view.ProfileActivity" />
         <activity android:name=".view.NotificationActivity" />
         <activity android:name=".view.PostActivity"/>
+        <activity android:name=".view.PostProfileActivity"/>
     </application>
 
 </manifest>

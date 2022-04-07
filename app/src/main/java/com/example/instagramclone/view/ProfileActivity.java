@@ -137,11 +137,11 @@ public class ProfileActivity extends AppCompatActivity {
                     description.setText(userAccountSetting.getStory());
                     website.setText(userAccountSetting.getWebsite());
                     Picasso.get().load(userAccountSetting.getAvatar()).into(imageView);
+                    // bind img post
+                    BindImgPostViewPager(userAccountSetting);
                 }else{
                     Log.d(TAG, "onEvent: Data null");
                 }
-                // bind img post
-                BindImgPostViewPager();
             }
         });
     }
@@ -246,7 +246,7 @@ public class ProfileActivity extends AppCompatActivity {
     });
     }
 
-    private void BindImgPostViewPager(){
+    private void BindImgPostViewPager(User user){
         FirebaseFirestore.getInstance().collection("Post").whereEqualTo("userId",userId).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -255,10 +255,9 @@ public class ProfileActivity extends AppCompatActivity {
                 int i = 1;
                 while (posts.hasNext()) {
                     Post newPost = posts.next().toObject(Post.class);
-                    Log.d("POST", "index: " + i++ +" : "+newPost.getUserId());
                     PostList.add(newPost);
                 }
-                ImagePostAdapter imagePostAdapter = new ImagePostAdapter(PostList,getApplicationContext());
+                ImagePostAdapter imagePostAdapter = new ImagePostAdapter(PostList,getApplicationContext(),user.getUsername());
                 rcv_img_post.setLayoutManager(new GridLayoutManager(null,3));
                 rcv_img_post.setAdapter(imagePostAdapter);
             }
