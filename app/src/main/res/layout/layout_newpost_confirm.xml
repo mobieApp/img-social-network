@@ -31,7 +31,7 @@
                     android:background="#eeeeee"
                     android:src="@drawable/user_image" />
 
-                <EditText
+                <MultiAutoCompleteTextView
                     android:id="@+id/caption"
                     android:layout_width="0dp"
                     android:layout_height="96dp"

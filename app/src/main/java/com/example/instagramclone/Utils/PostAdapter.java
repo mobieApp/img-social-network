@@ -106,7 +106,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                             list.add(UserAuthentication.userId);
                             holder.icLike.setImageDrawable(context.getDrawable(R.drawable.ic_heart_red));
                             holder.icLike.setTag("red");
-                            addNotification(UserAuthentication.userId, modal.getId());
+                            addNotification(UserAuthentication.userId, modal.getId(),"like your post");
                             break;
                         case "red":
                             list.remove(UserAuthentication.userId);
@@ -222,11 +222,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             textView.setText(duration.DiffSecond() + " giây trước");
     }
 
-    private void addNotification(String userId, String postId) {
+    public static void addNotification(String userId, String postId, String message) {
         Map<String, Object> data = new HashMap<>();
         data.put("userId", userId);
         data.put("postId", postId);
-        data.put("text", "like your post");
+        data.put("text", message);
         data.put("isPost", true);
         data.put("timestamp", new Date());
         Task<DocumentReference> collectionReference = FirebaseFirestore.getInstance().collection("Notification").add(data);
