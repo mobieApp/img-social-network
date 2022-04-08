@@ -95,14 +95,16 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Drawable img = mImageParallaxHeader.getDrawable();
-                Bitmap bitmap = ((BitmapDrawable) img).getBitmap();
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                byte[] imgData = stream.toByteArray();
-                Intent intent = new Intent(getContext(), NPImageProcessingActivity.class);
-                intent.putExtra("IMG", imgData);
-                intent.putExtra("Action",newPostActivity.getAction());
-                startActivity(intent);
+                if (img != null) {
+                    Bitmap bitmap = ((BitmapDrawable) img).getBitmap();
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] imgData = stream.toByteArray();
+                    Intent intent = new Intent(getContext(), NPImageProcessingActivity.class);
+                    intent.putExtra("IMG", imgData);
+                    intent.putExtra("Action", newPostActivity.getAction());
+                    startActivity(intent);
+                }
             }
         });
 
