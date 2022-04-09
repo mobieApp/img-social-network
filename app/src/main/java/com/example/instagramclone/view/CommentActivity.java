@@ -23,6 +23,8 @@ import com.example.instagramclone.Utils.TimestampDuration;
 import com.example.instagramclone.Utils.UserAuthentication;
 import com.example.instagramclone.models.Comment;
 import com.example.instagramclone.models.Post;
+import com.example.instagramclone.models.React;
+import com.example.instagramclone.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -162,6 +164,28 @@ public class CommentActivity extends AppCompatActivity {
                     cmtEditTxt.setText("");
                     loadComment();
                 }
+                DocumentReference documentReference = FirebaseFirestore.getInstance().collection("Post").document(postID);
+                documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        String temp = documentSnapshot.getString("userId");
+                        if (!UserAuthentication.userId.equals(temp)) {
+                            DocumentReference docRef = FirebaseFirestore.getInstance().collection("User").document(UserAuthentication.userId);
+                            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    User user = documentSnapshot.toObject(User.class);
+                                    int index = user.getFollowing().indexOf(temp);
+                                    React react = user.getReact().get(index);
+                                    int point = react.getPoint() + 1;
+                                    react.setPoint(point);
+                                    user.getReact().set(index, react);
+                                    docRef.update("react", user.getReact());
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
     }

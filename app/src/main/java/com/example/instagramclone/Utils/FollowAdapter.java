@@ -14,8 +14,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FollowAdapter extends BaseAdapter {
     private Context context;
@@ -50,6 +53,7 @@ public class FollowAdapter extends BaseAdapter {
         String currentUserId = getItem(i);
         TextView usernameFollow = (TextView) view.findViewById(R.id.usernameFollow);
         TextView nameFollow = (TextView) view.findViewById(R.id.nameFollow);
+        CircleImageView imageView = (CircleImageView) view.findViewById(R.id.imageView2);
         firestore = FirebaseFirestore.getInstance();
         documentReference = firestore.collection("User").document(currentUserId);
         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -59,6 +63,7 @@ public class FollowAdapter extends BaseAdapter {
                     User currentUser = documentSnapshot.toObject(User.class);
                     usernameFollow.setText(currentUser.getUsername());
                     nameFollow.setText(currentUser.getName());
+                    Picasso.get().load(currentUser.getAvatar()).into(imageView);
                 }
             }
         });

@@ -29,6 +29,7 @@ import com.example.instagramclone.Utils.ImagePostAdapter;
 import com.example.instagramclone.Utils.UserAdapter;
 import com.example.instagramclone.Utils.UserAuthentication;
 import com.example.instagramclone.models.Post;
+import com.example.instagramclone.models.React;
 import com.example.instagramclone.models.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -103,6 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                     //Searched User Profile
                     if(userId != UserAuthentication.userId){
+                        userAccountSetting.setUserid(userId);
                         profileView.setVisibility(View.VISIBLE);
                         profileInfo.setVisibility(View.GONE);
 
@@ -228,20 +230,33 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         btnFollow.setOnClickListener(new View.OnClickListener() {
+            DocumentReference documentReference = FirebaseFirestore.getInstance().collection("User").document(UserAuthentication.userId);
             @Override
             public void onClick(View view) {
-                if(btnFollow.getText().toString().equals("Followed")){
-                    if(userAccountSetting.getFollower().contains(UserAuthentication.userId)){
-                        userAccountSetting.getFollower().remove(UserAuthentication.userId);
+                documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        User user = documentSnapshot.toObject(User.class);
+                        if(btnFollow.getText().toString().equals("Followed")){
+                            if(userAccountSetting.getFollower().contains(UserAuthentication.userId)){
+                                userAccountSetting.getFollower().remove(UserAuthentication.userId);
+                                int index = user.getFollowing().indexOf(userAccountSetting.getUserid());
+                                user.getReact().remove(index);
+                                user.getFollowing().remove(index);
+                            }
+                        }
+                        else {
+                            if(!userAccountSetting.getFollower().contains(UserAuthentication.userId)){
+                                userAccountSetting.getFollower().add(UserAuthentication.userId);
+                                user.getFollowing().add(userAccountSetting.getUserid());
+                                user.getReact().add(new React(userAccountSetting.getUserid(),0));
+                            }
+                        }
                         FirebaseFirestore.getInstance().collection("User").document(userId).update("follower",userAccountSetting.getFollower());
+                        documentReference.update("react",user.getReact());
+                        documentReference.update("following",user.getFollowing());
                     }
-                }
-                else {
-                     if(!userAccountSetting.getFollower().contains(UserAuthentication.userId)){
-                        userAccountSetting.getFollower().add(UserAuthentication.userId);
-                        FirebaseFirestore.getInstance().collection("User").document(userId).update("follower",userAccountSetting.getFollower());
-                    }
-                }
+                });
             }
     });
     }
