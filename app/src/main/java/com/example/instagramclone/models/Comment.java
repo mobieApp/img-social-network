@@ -13,6 +13,15 @@ public class Comment {
     private String postID;
     private ArrayList<String> reactList;
     private boolean isReply;
+    private String replyToID;
+
+    public String getReplyToID() {
+        return replyToID;
+    }
+
+    public void setReplyToID(String replyToID) {
+        this.replyToID = replyToID;
+    }
 
     public boolean isReply() {
         return isReply;
