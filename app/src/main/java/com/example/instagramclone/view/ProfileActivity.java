@@ -160,7 +160,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (Integer.parseInt(numberFollower1.getText().toString()) != 0) {
                     Intent intent = new Intent(ProfileActivity.this, FollowActivity.class);
-                    intent.putExtra("nameActivity", "Follower");
+                    intent.putExtra("nameActivity", "Follower "+userId);
                     startActivity(intent);
                 }
             }
@@ -171,7 +171,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (Integer.parseInt(numberFollowing1.getText().toString()) != 0) {
                     Intent intent = new Intent(ProfileActivity.this, FollowActivity.class);
-                    intent.putExtra("nameActivity", "Following");
+                    intent.putExtra("nameActivity", "Following "+userId);
                     startActivity(intent);
                 }
             }
@@ -266,6 +266,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Log.d("POST", "size: " + queryDocumentSnapshots.getDocuments().size());
                 Iterator<DocumentSnapshot> posts = queryDocumentSnapshots.getDocuments().listIterator();
                 int i = 0;
+                PostList.clear();
                 while (posts.hasNext()) {
                     Post newPost = posts.next().toObject(Post.class);
                     PostList.add(newPost);

@@ -40,7 +40,7 @@ public class FollowActivity extends AppCompatActivity {
 //        Log.d("userid", "onCreate: "+values[1]);
 
         firestore = FirebaseFirestore.getInstance();
-        documentReference = firestore.collection("User").document(UserAuthentication.userId);
+        documentReference = firestore.collection("User").document(values[1]);
         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {

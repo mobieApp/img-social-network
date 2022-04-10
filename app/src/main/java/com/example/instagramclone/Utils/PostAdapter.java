@@ -30,6 +30,7 @@ import com.example.instagramclone.view.CommentActivity;
 import com.example.instagramclone.view.PostProfileActivity;
 import com.example.instagramclone.view.ProfileActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -299,6 +300,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 CreateDialogReport(pos);
                 Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show();
             case R.id.delete_post:
+                CreateDialogDelete(pos);
                 Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show();
             default:
                 Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
@@ -382,8 +384,55 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 });
             }
         });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+    }
 
+    private void CreateDialogDelete(int pos) {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("Are your sure delete this post?");
+//        alertDialog.setIcon("Icon id here");
+        alertDialog.setCancelable(false);
+//        alertDialog.setMessage("Enter the content of the report ");
 
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.d("Post id", "onClick: "+instaModalArrayList.get(pos).getId());
+                FirebaseFirestore.getInstance().collection("Post").document(instaModalArrayList.get(pos).getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        AlertDialog successDialog = new AlertDialog.Builder(context).create();
+                        successDialog.setTitle("Delete post successfully!");
+                        successDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                successDialog.dismiss();
+                                Activity activity = (Activity) context;
+                                activity.recreate();
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        AlertDialog failureDialog = new AlertDialog.Builder(context).create();
+                        failureDialog.setTitle("Delete post not available!");
+                        failureDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                failureDialog.dismiss();
+                            }
+                        });
+                    }
+                });
+            }
+        });
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
