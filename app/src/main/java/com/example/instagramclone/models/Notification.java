@@ -1,19 +1,22 @@
 package com.example.instagramclone.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 
-public class Notification {
-    private String userId;
-    private String text;
+public class Notification implements Comparable<Notification>{
+    private String FromUserId;
+    private String ToUserId;
+    private String message;
     private String postId;
     private boolean isPost;
     private Date timestamp;
 
-    public Notification(String userId, String text, String postId, boolean ispost, Date timestamp) {
-        this.userId = userId;
-        this.text = text;
+    public Notification(String FromUserId,String toUserId ,String msg, String postId, boolean isPost, Date timestamp) {
+        this.FromUserId = FromUserId;
+        this.ToUserId = toUserId;
+        this.message = msg;
         this.postId = postId;
-        this.isPost = ispost;
+        this.isPost = isPost;
         this.timestamp = timestamp;
     }
 
@@ -21,20 +24,36 @@ public class Notification {
 
     }
 
-    public String getUserId() {
-        return userId;
+    public String getFromUserId() {
+        return FromUserId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setFromUserId(String fromUserId) {
+        FromUserId = fromUserId;
     }
 
-    public String getText() {
-        return text;
+    public String getToUserId() {
+        return ToUserId;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setToUserId(String toUserId) {
+        ToUserId = toUserId;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public boolean isPost() {
+        return isPost;
+    }
+
+    public void setPost(boolean post) {
+        isPost = post;
     }
 
     public String getPostId() {
@@ -59,5 +78,10 @@ public class Notification {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @Override
+    public int compareTo(Notification o) {
+        return -1*getTimestamp().compareTo(o.getTimestamp());
     }
 }

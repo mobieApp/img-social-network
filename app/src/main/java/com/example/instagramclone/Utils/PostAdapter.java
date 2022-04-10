@@ -42,6 +42,7 @@ import com.squareup.picasso.Picasso;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -126,7 +127,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                                         Log.d("AAA", "onSuccess: liked");
                                         holder.icLike.setImageDrawable(context.getDrawable(R.drawable.ic_heart_red));
                                         holder.icLike.setTag("red");
-                                        addNotification(UserAuthentication.userId, modal.getId(), "like your post");
+                                        addNotification(UserAuthentication.userId,modal.getUserId(),modal.getId(), "like your post");
                                         int point = react.getPoint() + 1;
                                         react.setPoint(point);
                                         break;
@@ -135,12 +136,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                                         holder.icLike.setImageDrawable(context.getDrawable(R.drawable.ic_heart));
                                         holder.icLike.setTag("black");
                                         int point1 = react.getPoint() - 1;
+//                                        TODO deleteNotification for like
                                         react.setPoint(point1);
                                         break;
                                 }
                                 user.getReact().set(index, react);
                                 docRef.update("react", user.getReact());
-
                                 updateRef.update("listLike", list);
                                 holder.likeTV.setText("" + modal.getListLike().size() + " likes");
                             }
@@ -155,7 +156,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                                 list.add(UserAuthentication.userId);
                                 holder.icLike.setImageDrawable(context.getDrawable(R.drawable.ic_heart_red));
                                 holder.icLike.setTag("red");
-                                addNotification(UserAuthentication.userId, modal.getId(), "like your post");
+                                // for testing
+                                addNotification(UserAuthentication.userId,UserAuthentication.userId ,modal.getId(), "like your post");
                                 break;
                             case "red":
                                 list.remove(UserAuthentication.userId);
@@ -280,11 +282,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             textView.setText(duration.DiffSecond() + " giây trước");
     }
 
-    public static void addNotification(String userId, String postId, String message) {
+    public static void addNotification(String FromUserID,String ToUserId ,String postId, String message) {
         Map<String, Object> data = new HashMap<>();
-        data.put("userId", userId);
+        data.put("FromUserId", FromUserID);
+        data.put("ToUserId",ToUserId);
         data.put("postId", postId);
-        data.put("text", message);
+        data.put("message", message);
         data.put("isPost", true);
         data.put("timestamp", new Date());
         Task<DocumentReference> collectionReference = FirebaseFirestore.getInstance().collection("Notification").add(data);

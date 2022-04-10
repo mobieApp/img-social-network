@@ -1,7 +1,6 @@
 package com.example.instagramclone.Utils;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.instagramclone.R;
@@ -54,9 +52,9 @@ public class NotificationAdapter extends  RecyclerView.Adapter<NotificationAdapt
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Notification notification = notificationList.get(position);
 
-        holder.text.setText(notification.getText());
+        holder.text.setText(notification.getMessage());
 
-        getUserInfo(holder.image_profile,holder.username,notification.getUserId());
+        getUserInfo(holder.image_profile,holder.username,notification.getFromUserId());
 
         Log.d("AAA", "onBindViewHolder: " + notification.isIspost());
         if (notification.isIspost()){

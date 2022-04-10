@@ -16,6 +16,7 @@ import com.example.instagramclone.Utils.UserAuthentication;
 import com.example.instagramclone.models.Notification;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -59,17 +60,20 @@ public class NotificationActivity extends AppCompatActivity {
 
     private void readNotification() {
         CollectionReference reference = FirebaseFirestore.getInstance().collection("Notification");
-        reference.whereEqualTo("userId",UserAuthentication.userId).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        reference.whereEqualTo("ToUserId",UserAuthentication.userId).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value,
                                 @Nullable FirebaseFirestoreException e) {
-                notificationList.clear();
-                for (QueryDocumentSnapshot doc : value) {
-                    Notification notification = doc.toObject(Notification.class);
-                    notificationList.add(notification);
+                if(e != null){
+                    return;
                 }
-
-                Collections.reverse(notificationList);
+                for (DocumentChange dc : value.getDocumentChanges()){
+                    if (dc.getType() == DocumentChange.Type.ADDED) {
+                        Notification notification = dc.getDocument().toObject(Notification.class);
+                        notificationList.add(notification);
+                    }
+                }
+                Collections.sort(notificationList);
                 notificationAdapter.notifyDataSetChanged();
             }
         });

@@ -141,10 +141,11 @@ public class PostActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Void unused) {
                                         String[] words = caption.getText().toString().split(" ");
+
                                         for (String word : words){
                                             if(word.startsWith("@")){
                                                 User tagUser = UserList.get(word.substring(1));
-                                                if(tagUser != null) PostAdapter.addNotification(tagUser.getUserid(),post.getId(),"tag you in a post");;
+                                                if(tagUser != null)  PostAdapter.addNotification(UserAuthentication.userId, tagUser.getUserid(), post.getId(), "Tagged you in a post");
                                             }
                                         }
                                         loadingLayout.setVisibility(View.GONE);
