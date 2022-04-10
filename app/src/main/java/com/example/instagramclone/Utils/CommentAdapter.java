@@ -6,7 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,6 +19,8 @@ import androidx.annotation.Nullable;
 import com.example.instagramclone.R;
 import com.example.instagramclone.models.Comment;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
@@ -35,13 +39,19 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CommentAdapter extends ArrayAdapter<Comment> {
     private Context context;
-//    private ArrayList<String> commentArr;
-//    private ArrayList<Date> timestamp;
-
     private ArrayList<Comment> commentArr;
     private ArrayList<String> username;
     private ArrayList<String> avatarArr;
     private TimestampDuration duration;
+    private FirebaseUser user;
+    private FirebaseFirestore firestore;
+    private FirebaseAuth firebaseAuth;
+
+    public static boolean isReply = false;
+    public static boolean replyToReply = false;
+    public static String replyToUsername;
+    public static String replyToID;
+    public static ArrayList<String> listReply;
 
     public CommentAdapter(Context context, int resource,
                           ArrayList<Comment> commentArr, ArrayList<String> username,
@@ -51,50 +61,15 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         this.commentArr = commentArr;
         this.username = username;
         this.avatarArr = avatarArr;
+        isReply = replyToReply = false;
+        firebaseAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
+        user = firebaseAuth.getCurrentUser();
 
-        ArrayList<Comment> notReplyCmt = new ArrayList<>();
-        for(Comment comment : commentArr)
-            if(!comment.isReply())
-                notReplyCmt.add(comment);
-
-        for (int i = 0; i < commentArr.size(); i++) {
-            if (commentArr.get(i).isReply()) {
-                Comment singleCmt = commentArr.get(i);
-                this.commentArr.remove(i);
-
-                Comment mainCmt = new Comment();
-                for(Comment notReply : notReplyCmt)
-                    if(notReply.getListReply().contains(singleCmt.getId())) {
-                        mainCmt = notReply;
-                        break;
-                    }
-
-                int idx = this.commentArr.indexOf(mainCmt);
-                if (idx >= commentArr.size())
-                    commentArr.add(singleCmt);
-                else
-                    commentArr.add(idx + 1, singleCmt);
-
-                String singleUsername = this.username.get(i);
-                this.username.remove(i);
-                if (idx >= commentArr.size())
-                    this.username.add(singleUsername);
-                else
-                    this.username.add(idx + 1, singleUsername);
-
-
-                String singleAvatar = this.avatarArr.get(i);
-                this.avatarArr.remove(i);
-                if (idx >= commentArr.size())
-                    this.avatarArr.add(singleAvatar);
-                else
-                    this.avatarArr.add(idx + 1, singleAvatar);
-            }
-        }
-    }
-
-    public void refreshComment() {
-
+        ArrayList<String> tmpArr = new ArrayList<>();
+        for (Comment comment : commentArr)
+            tmpArr.add(comment.getContent());
+        Log.d("Comment Arr content []", tmpArr.toString());
     }
 
     @NonNull
@@ -110,14 +85,19 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         TextView cmtLikeCount = (TextView) row.findViewById(R.id.comment_likeCount);
         TextView cmtRep = (TextView) row.findViewById(R.id.comment_reply);
         RelativeLayout layout = (RelativeLayout) row.findViewById(R.id.commentRelativeLayout);
+        EditText commentEdt = (EditText) ((Activity) context).findViewById(R.id.commentEdt);
+        RelativeLayout relLayoutReply = (RelativeLayout) ((Activity) context).findViewById(R.id.relLayoutReply);
+        TextView replyToUsernameTV = (TextView) ((Activity) context).findViewById(R.id.replyToUsername);
 
-        if (commentArr.get(position).isReply()) {
-            RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) layout.getLayoutParams();
-            relativeParams.setMargins(160, 0, 0, 0);  // left, top, right, bottom
-            layout.setLayoutParams(relativeParams);
-        }
 
         if (!commentArr.isEmpty()) {
+//            Log.d("Comment Arr content at pos", commentArr.get(position).getContent());
+            if (commentArr.get(position).isReply()) {
+                RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) layout.getLayoutParams();
+                relativeParams.setMargins(160, 0, 0, 0);  // left, top, right, bottom
+                layout.setLayoutParams(relativeParams);
+            }
+
             comment.setText(commentArr.get(position).getContent());
             comment_username.setText(username.get(position));
             cmtLikeCount.setText("" + commentArr.get(position).getReactList().size() + " likes");
@@ -163,7 +143,21 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
             cmtRep.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    Log.d("Reply for position", position + "");
+                    isReply = true;
+                    listReply = commentArr.get(position).getListReply();
+                    replyToUsername = username.get(position);
+                    commentEdt.requestFocus();
+                    relLayoutReply.setVisibility(View.VISIBLE);
+                    replyToUsernameTV.setText("Replying to " + replyToUsername + " ...");
+                    if (commentArr.get(position).isReply()) {
+                        replyToReply = true;
+                        replyToID = commentArr.get(position).getReplyToID();
+                    }
+                    else
+                        replyToID = commentArr.get(position).getId();
+//                    InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                 }
             });
         }

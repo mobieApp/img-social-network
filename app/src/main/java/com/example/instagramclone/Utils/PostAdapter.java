@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.instagramclone.R;
 import com.example.instagramclone.models.Post;
+import com.example.instagramclone.models.React;
+import com.example.instagramclone.models.User;
 import com.example.instagramclone.view.CommentActivity;
 import com.example.instagramclone.view.PostProfileActivity;
 import com.example.instagramclone.view.ProfileActivity;
@@ -71,6 +73,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull PostAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        Log.d("AAA", "onBindViewHolder: ");
         Post modal = instaModalArrayList.get(position);
 
         documentReference = firestore.collection("User").document(modal.getUserId());
@@ -96,28 +99,72 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.icLike.setImageDrawable(context.getDrawable(R.drawable.ic_heart_red));
             holder.icLike.setTag("red");
         }
+        else {
+            holder.icLike.setImageDrawable(context.getDrawable(R.drawable.ic_heart));
+            holder.icLike.setTag("black");
+        }
         DocumentReference updateRef = FirebaseFirestore.getInstance().collection("Post").document(modal.getId());
         holder.icLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<String> list = modal.getListLike();
-                String statusHeart = (String) holder.icLike.getTag();
-                if (statusHeart != null) {
-                    switch (statusHeart) {
-                        case "black":
-                            list.add(UserAuthentication.userId);
-                            holder.icLike.setImageDrawable(context.getDrawable(R.drawable.ic_heart_red));
-                            holder.icLike.setTag("red");
-                            addNotification(UserAuthentication.userId, modal.getId(),"like your post");
-                            break;
-                        case "red":
-                            list.remove(UserAuthentication.userId);
-                            holder.icLike.setImageDrawable(context.getDrawable(R.drawable.ic_heart));
-                            holder.icLike.setTag("black");
-                            break;
+                Log.d("AAA", "onClick: " + modal.getUserId());
+                if (!UserAuthentication.userId.equals(modal.getUserId())) {
+                    DocumentReference docRef = FirebaseFirestore.getInstance().collection("User").document(UserAuthentication.userId);
+                    docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            ArrayList<String> list = modal.getListLike();
+                            String statusHeart = (String) holder.icLike.getTag();
+                            if (statusHeart != null) {
+                                User user = documentSnapshot.toObject(User.class);
+                                int index = user.getFollowing().indexOf(modal.getUserId());
+                                React react = user.getReact().get(index);
+                                switch (statusHeart) {
+                                    case "black":
+                                        list.add(UserAuthentication.userId);
+                                        Log.d("AAA", "onSuccess: liked");
+                                        holder.icLike.setImageDrawable(context.getDrawable(R.drawable.ic_heart_red));
+                                        holder.icLike.setTag("red");
+                                        addNotification(UserAuthentication.userId, modal.getId(), "like your post");
+                                        int point = react.getPoint() + 1;
+                                        react.setPoint(point);
+                                        break;
+                                    case "red":
+                                        list.remove(UserAuthentication.userId);
+                                        holder.icLike.setImageDrawable(context.getDrawable(R.drawable.ic_heart));
+                                        holder.icLike.setTag("black");
+                                        int point1 = react.getPoint() - 1;
+                                        react.setPoint(point1);
+                                        break;
+                                }
+                                user.getReact().set(index, react);
+                                docRef.update("react", user.getReact());
+
+                                updateRef.update("listLike", list);
+                                holder.likeTV.setText("" + modal.getListLike().size() + " likes");
+                            }
+                        }
+                    });
+                }else{
+                    ArrayList<String> list = modal.getListLike();
+                    String statusHeart = (String) holder.icLike.getTag();
+                    if (statusHeart != null) {
+                        switch (statusHeart) {
+                            case "black":
+                                list.add(UserAuthentication.userId);
+                                holder.icLike.setImageDrawable(context.getDrawable(R.drawable.ic_heart_red));
+                                holder.icLike.setTag("red");
+                                addNotification(UserAuthentication.userId, modal.getId(), "like your post");
+                                break;
+                            case "red":
+                                list.remove(UserAuthentication.userId);
+                                holder.icLike.setImageDrawable(context.getDrawable(R.drawable.ic_heart));
+                                holder.icLike.setTag("black");
+                                break;
+                        }
+                        updateRef.update("listLike", list);
+                        holder.likeTV.setText("" + modal.getListLike().size() + " likes");
                     }
-                    updateRef.update("listLike", list);
-                    holder.likeTV.setText("" + modal.getListLike().size() + " likes");
                 }
             }
         });

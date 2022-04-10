@@ -87,6 +87,7 @@
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/white_grey_border_bottom.xml" value="0.2851851851851852" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/drawable/white_grey_border_top.xml" value="0.1" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_edit_and_filter.xml" value="0.24896265560165975" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_follow.xml" value="0.17395833333333333" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_follower.xml" value="0.13728470111448834" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_following.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/activity_home.xml" value="0.2828571524912001" />
@@ -106,6 +107,7 @@
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/fragment_view_notification.xml" value="0.21428572158424247" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/fragment_view_post.xml" value="0.42857144316848494" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/gallery_item.xml" value="0.12135416666666667" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/img_post_grid_item.xml" value="0.26132246376811596" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_bottom_navigation.xml" value="0.21428572158424247" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_center_viewpager.xml" value="0.18857143499413337" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_comment.xml" value="0.2828571524912001" />
@@ -121,7 +123,7 @@
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_post_toolbars.xml" value="0.2028985507246377" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_profile_info.xml" value="0.42857144316848494" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_profile_view.xml" value="0.42857144316848494" />
-        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_row_follow.xml" value="0.11005434782608696" />
+        <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_row_follow.xml" value="0.21978021978021978" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_row_following.xml" value="0.42857144316848494" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/layout_top_tabs.xml" value="0.2828571524912001" />
         <entry key="..\:/HK2_YEAR3/Mobile/img-social-network/app/src/main/res/layout/notification_item.xml" value="0.5742857338457699" />
@@ -178,6 +180,7 @@
         <entry key="..\:/Users/Blade/Desktop/img-social-network/app/src/main/res/layout/fragment_view_post.xml" value="0.20652173913043478" />
         <entry key="..\:/Users/Blade/Desktop/img-social-network/app/src/main/res/layout/fragment_view_share.xml" value="0.18432971014492755" />
         <entry key="..\:/Users/Blade/Desktop/img-social-network/app/src/main/res/layout/layout_comment.xml" value="0.2028985507246377" />
+        <entry key="..\:/Users/Blade/Desktop/img-social-network/app/src/main/res/layout/layout_newpost_confirm.xml" value="0.2028985507246377" />
         <entry key="..\:/Users/Blade/Desktop/img-social-network/app/src/main/res/layout/layout_post_header.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Blade/Desktop/img-social-network/app/src/main/res/layout/layout_post_toolbars.xml" value="0.20652173913043478" />
         <entry key="..\:/Users/Blade/Desktop/img-social-network/app/src/main/res/layout/layout_profile_info.xml" value="0.25416666666666665" />

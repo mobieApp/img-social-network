@@ -29,6 +29,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -119,7 +120,7 @@ public class HomeActivity extends AppCompatActivity{
                 userId.add(0,UserAuthentication.userId);
                 //Log.d("AAA", "onSuccess: Reacts => " + userIdSort.toString());
 
-                postCollection.whereIn("userId",userId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                postCollection.whereIn("userId",userId).orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         progressBar.setVisibility(View.GONE);

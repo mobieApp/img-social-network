@@ -13,6 +13,8 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.instagramclone.R;
@@ -21,6 +23,8 @@ import com.example.instagramclone.Utils.TimestampDuration;
 import com.example.instagramclone.Utils.UserAuthentication;
 import com.example.instagramclone.models.Comment;
 import com.example.instagramclone.models.Post;
+import com.example.instagramclone.models.React;
+import com.example.instagramclone.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -31,6 +35,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -59,6 +64,8 @@ public class CommentActivity extends AppCompatActivity {
         postCmt = findViewById(R.id.ivPostComment);
         cmtEditTxt = findViewById(R.id.commentEdt);
         listViewComment = (ListView) findViewById(R.id.listViewComment);
+        RelativeLayout relLayoutReply = (RelativeLayout) findViewById(R.id.relLayoutReply);
+        ImageView closeRepBtn = (ImageView) findViewById(R.id.closeRepBtn);
 
         String isFocus = getIntent().getExtras().getString("FOCUS");
         ArrayList<String> tmpArr = new ArrayList<>();
@@ -68,10 +75,18 @@ public class CommentActivity extends AppCompatActivity {
         if (isFocus.equals("TRUE"))
             cmtEditTxt.requestFocus();
 
+        closeRepBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                relLayoutReply.setVisibility(View.GONE);
+                CommentAdapter.isReply = false;
+            }
+        });
+
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
-
         user = firebaseAuth.getCurrentUser();
+
         loadComment();
 
         listViewComment.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -81,10 +96,11 @@ public class CommentActivity extends AppCompatActivity {
                 AlertDialog alertDialog = new AlertDialog.Builder(CommentActivity.this).create();
                 alertDialog.setTitle("Do you want to delete this comment?");
                 alertDialog.setCancelable(true);
+                Comment comment = (Comment) adapterView.getItemAtPosition(i);
+                Log.d("COMMENT DELETE", comment.getContent());
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Comment comment = (Comment) adapterView.getItemAtPosition(i);
                         if (comment.getListReply().size() == 0)
                             firestore.collection("Comment").document(comment.getId()).delete();
                         else {
@@ -128,12 +144,48 @@ public class CommentActivity extends AppCompatActivity {
                     comment.setUserId(firebaseAuth.getCurrentUser().getUid());
                     comment.setPostID(postID);
                     comment.setReactList(new ArrayList<>());
-                    comment.setReply(false);
-
+                    if (!CommentAdapter.isReply) {
+                        comment.setReply(false);
+                        comment.setReplyToID("");
+                    }
+                    else {
+                        comment.setReply(true);
+                        comment.setReplyToID(CommentAdapter.replyToID);
+                        DocumentReference docRef = firestore.collection("Comment").document(CommentAdapter.replyToID);
+                        ArrayList<String> arr = CommentAdapter.listReply;
+                        arr.add(documentReference.getId());
+                        docRef.update("listReply", arr);
+                        relLayoutReply.setVisibility(View.GONE);
+                        if (CommentAdapter.replyToReply)
+                            CommentAdapter.replyToReply = false;
+                        CommentAdapter.isReply = false;
+                    }
                     documentReference.set(comment);
                     cmtEditTxt.setText("");
                     loadComment();
                 }
+                DocumentReference documentReference = FirebaseFirestore.getInstance().collection("Post").document(postID);
+                documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        String temp = documentSnapshot.getString("userId");
+                        if (!UserAuthentication.userId.equals(temp)) {
+                            DocumentReference docRef = FirebaseFirestore.getInstance().collection("User").document(UserAuthentication.userId);
+                            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    User user = documentSnapshot.toObject(User.class);
+                                    int index = user.getFollowing().indexOf(temp);
+                                    React react = user.getReact().get(index);
+                                    int point = react.getPoint() + 1;
+                                    react.setPoint(point);
+                                    user.getReact().set(index, react);
+                                    docRef.update("react", user.getReact());
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
     }
@@ -163,6 +215,7 @@ public class CommentActivity extends AppCompatActivity {
                         comment.setTimestamp(ts.toDate());
                         comment.setUserId(document.getData().get("userId").toString());
                         comment.setReply(Boolean.parseBoolean(document.getData().get("reply").toString()));
+                        comment.setReplyToID(document.getData().get("replyToID").toString());
 
                         userCmtID.add(document.getData().get("userId").toString());
                         commentArr.add(comment);
@@ -180,8 +233,7 @@ public class CommentActivity extends AppCompatActivity {
 
     public void getCommentUsers(ArrayList<String> userCmtID, ArrayList<Comment> commentsArr) {
         if (!commentsArr.isEmpty()) {
-            firestore.collection("User").whereIn(FieldPath.documentId(), userCmtID)
-                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            firestore.collection("User").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
@@ -193,19 +245,45 @@ public class CommentActivity extends AppCompatActivity {
 
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Log.d("DOCUMENT in getCommentUsers()", document.getId() + " => " + document.getData());
-                            HashMap<String, Object> map = (HashMap) document.getData();
-                            usernameArr.add(map.get("username").toString());
-                            avatarArr.add(map.get("avatar").toString());
-                            idArr.add(document.getId());
+                            if (userCmtID.contains(document.getId())) {
+                                HashMap<String, Object> map = (HashMap) document.getData();
+                                usernameArr.add(map.get("username").toString());
+                                avatarArr.add(map.get("avatar").toString());
+                                idArr.add(document.getId());
+                            }
                         }
 
                         for (String id : userCmtID) {
                             commentsUserArr.add(usernameArr.get(idArr.indexOf(id)));
                             commentUserAvatar.add(avatarArr.get(idArr.indexOf(id)));
                         }
-
                         Log.d("DATA OF commentsUserArr", commentsUserArr.toString());
-                        listViewComment.setAdapter(new CommentAdapter(CommentActivity.this, R.layout.layout_comment, commentsArr, commentsUserArr, commentUserAvatar));
+                        ArrayList<String> tmpArr = new ArrayList<>();
+                        for (Comment comment : commentsArr)
+                            tmpArr.add(comment.getContent());
+                        Log.d("commentsArr original content []", tmpArr.toString());
+
+                        ArrayList<Comment> commentArrayList = new ArrayList<>();
+                        ArrayList<String> usernameArrList = new ArrayList<>();
+                        ArrayList<String> avatarArrList = new ArrayList<>();
+
+                        for (int i = 0; i < commentsArr.size(); i++) {
+                            if (!commentsArr.get(i).isReply()) {
+                                Comment singleCmt = commentsArr.get(i);
+                                commentArrayList.add(commentsArr.get(i));
+                                usernameArrList.add(commentsUserArr.get(i));
+                                avatarArrList.add(commentUserAvatar.get(i));
+                                for (int j = 0; j < commentsArr.size(); j++) {
+                                    if (commentsArr.get(j).isReply() && commentsArr.get(j).getReplyToID().equals(singleCmt.getId())) {
+                                        commentArrayList.add(commentsArr.get(j));
+                                        usernameArrList.add(commentsUserArr.get(j));
+                                        avatarArrList.add(commentUserAvatar.get(j));
+                                    }
+                                }
+                            }
+                        }
+
+                        listViewComment.setAdapter(new CommentAdapter(CommentActivity.this, R.layout.layout_comment, commentArrayList, usernameArrList, avatarArrList));
                     } else {
                         Log.d("TAG", "Error getting documents: ", task.getException());
                     }
