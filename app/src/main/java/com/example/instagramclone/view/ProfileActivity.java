@@ -117,7 +117,6 @@ public class ProfileActivity extends AppCompatActivity {
                         else btnFollow.setText("Follow");
                         BindViewSearchedProfile(userAccountSetting);
 
-                        numberPost.setText(userAccountSetting.getPosts().toString());
                         numberFollower.setText(userAccountSetting.NumberFollower().toString());
                         numberFollowing.setText(userAccountSetting.NumberFollowing().toString());
                         setNavView(1);
@@ -129,7 +128,6 @@ public class ProfileActivity extends AppCompatActivity {
 
                         BindViewProfileInfo();
 
-                        numberPost1.setText(userAccountSetting.getPosts().toString());
                         numberFollower1.setText(userAccountSetting.NumberFollower().toString());
                         numberFollowing1.setText(userAccountSetting.NumberFollowing().toString());
                         setNavView(ACTIVITY_NUM);
@@ -140,7 +138,9 @@ public class ProfileActivity extends AppCompatActivity {
                     website.setText(userAccountSetting.getWebsite());
                     Picasso.get().load(userAccountSetting.getAvatar()).into(imageView);
                     // bind img post
-                    BindImgPostViewPager(userAccountSetting);
+                    numberPost = (TextView) findViewById(R.id.numberPost);
+                    numberPost1 = (TextView) findViewById(R.id.numberPost1);
+                    BindImgPostViewPager(userAccountSetting,numberPost,numberPost1);
                 }else{
                     Log.d(TAG, "onEvent: Data null");
                 }
@@ -149,7 +149,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void BindViewProfileInfo(){
-        numberPost1 = (TextView) findViewById(R.id.numberPost1);
         numberFollower1 = (TextView) findViewById(R.id.numberFollower1);
         numberFollowing1 = (TextView) findViewById(R.id.numberFollowing1);
         layoutFollower1 = (LinearLayout) findViewById(R.id.btnFollowers1);
@@ -199,7 +198,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void BindViewSearchedProfile(User userAccountSetting){
-        numberPost = (TextView) findViewById(R.id.numberPost);
         numberFollower = (TextView) findViewById(R.id.numberFollower);
         numberFollowing = (TextView) findViewById(R.id.numberFollowing);
         layoutFollower = (LinearLayout) findViewById(R.id.btnFollowers);
@@ -212,8 +210,8 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (Integer.parseInt(numberFollower.getText().toString()) != 0) {
-                    Intent intent = new Intent(ProfileActivity.this, FollowActivity.class);
-                    intent.putExtra("nameActivity", "Follower");
+                    Intent intent = new Intent(getApplicationContext(), FollowActivity.class);
+                    intent.putExtra("nameActivity", "Follower "+userId);
                     startActivity(intent);
                 }
             }
@@ -223,8 +221,8 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (Integer.parseInt(numberFollowing.getText().toString()) != 0) {
-                    Intent intent = new Intent(ProfileActivity.this, FollowActivity.class);
-                    intent.putExtra("nameActivity", "Following");
+                    Intent intent = new Intent(getApplicationContext(), FollowActivity.class);
+                    intent.putExtra("nameActivity", "Following "+userId);
                     startActivity(intent);
                 }
             }
@@ -261,17 +259,20 @@ public class ProfileActivity extends AppCompatActivity {
     });
     }
 
-    private void BindImgPostViewPager(User user){
+    private void BindImgPostViewPager(User user, TextView numpost1, TextView numpost2){
         FirebaseFirestore.getInstance().collection("Post").whereEqualTo("userId",userId).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 Log.d("POST", "size: " + queryDocumentSnapshots.getDocuments().size());
                 Iterator<DocumentSnapshot> posts = queryDocumentSnapshots.getDocuments().listIterator();
-                int i = 1;
+                int i = 0;
                 while (posts.hasNext()) {
                     Post newPost = posts.next().toObject(Post.class);
                     PostList.add(newPost);
+                    i++;
                 }
+                if(numpost1 != null) numpost1.setText(i+"");
+                if(numpost2 != null) numpost2.setText(i+"");
                 ImagePostAdapter imagePostAdapter = new ImagePostAdapter(PostList,getApplicationContext(),user.getUsername());
                 rcv_img_post.setLayoutManager(new GridLayoutManager(null,3));
                 rcv_img_post.setAdapter(imagePostAdapter);

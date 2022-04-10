@@ -1,6 +1,7 @@
 package com.example.instagramclone.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
@@ -32,9 +33,11 @@ public class FollowActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbarFollowing);
         setSupportActionBar(toolbar);
 
-        String nameActivity = getIntent().getStringExtra("nameActivity");
-        getSupportActionBar().setTitle(nameActivity);
+        String[] values = getIntent().getStringExtra("nameActivity").split(" ");
+
+        getSupportActionBar().setTitle(values[0]);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        Log.d("userid", "onCreate: "+values[1]);
 
         firestore = FirebaseFirestore.getInstance();
         documentReference = firestore.collection("User").document(UserAuthentication.userId);
@@ -43,7 +46,7 @@ public class FollowActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User user = documentSnapshot.toObject(User.class);
                 ArrayList<String> listFollow = null;
-                if (nameActivity.equals("Following"))
+                if (values[0].equals("Following"))
                     listFollow = user.getFollowing();
                 else
                     listFollow = user.getFollower();
@@ -51,5 +54,10 @@ public class FollowActivity extends AppCompatActivity {
                 listView.setAdapter(adapter);
             }
         });
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }
