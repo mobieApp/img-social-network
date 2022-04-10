@@ -4,4 +4,6 @@
         android:id="@+id/report_post"/>
     <item android:title="hide"
         android:id="@+id/hide_post"/>
+    <item android:id="@+id/delete_post"
+        android:title="delete"/>
 </menu>

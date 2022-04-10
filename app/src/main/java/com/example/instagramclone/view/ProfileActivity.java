@@ -267,6 +267,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_menu,menu);
+        if(!UserAuthentication.userId.equals(userId)) menu.getItem(0).setVisible(false);
         return true;
     }
 

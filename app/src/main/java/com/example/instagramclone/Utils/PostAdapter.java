@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.instagramclone.R;
 import com.example.instagramclone.models.Post;
 import com.example.instagramclone.view.CommentActivity;
+import com.example.instagramclone.view.PostProfileActivity;
+import com.example.instagramclone.view.ProfileActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -160,9 +162,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             public void onClick(View view) {
                 PopupMenu pop = new PopupMenu(context, holder.popupMenu);
                 pop.inflate(R.menu.post_menu);
-
                 Menu popMenu = pop.getMenu();
-                Log.i("Pop", "Menu class: " + popMenu.getClass().getName());
+                MenuItem hide = (MenuItem) popMenu.getItem(0);
+                // check owner
+                popMenu.getItem(0).setVisible(!modal.getUserId().equals(UserAuthentication.userId));
+                popMenu.getItem(1).setVisible((!context.getClass().toString().equals(PostProfileActivity.class.toString()))
+                        && !modal.getUserId().equals(UserAuthentication.userId));
+
+                popMenu.getItem(2).setVisible(modal.getUserId().equals(UserAuthentication.userId));
                 pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
@@ -185,9 +192,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         private TextView authorTV;
         private ImageView postIV, icLike, cmtBtn, popupMenu;
         private TextView likeTV, desctv, timetv, commentTV;
+        private MenuItem delete,hide,report;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
             authorIV = itemView.findViewById(R.id.UserAvatar);
             authorTV = itemView.findViewById(R.id.UserName);
             postIV = itemView.findViewById(R.id.IVPost);
@@ -198,6 +207,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             cmtBtn = itemView.findViewById(R.id.commentBtn);
             commentTV = itemView.findViewById(R.id.textViewComment);
             popupMenu = itemView.findViewById(R.id.popup_post);
+
         }
     }
 
@@ -240,6 +250,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 break;
             case R.id.report_post:
                 CreateDialogReport(pos);
+                Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show();
+            case R.id.delete_post:
                 Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show();
             default:
                 Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();

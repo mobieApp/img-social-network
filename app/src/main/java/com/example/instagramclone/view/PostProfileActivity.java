@@ -41,7 +41,7 @@ public class PostProfileActivity extends AppCompatActivity {
         int pos = bundle.getInt("pos");
         String username = bundle.getString("username");
         ArrayList<Post> list = (ArrayList<Post>) bundle.getSerializable("PostList");
-        PostAdapter adapter = new PostAdapter(list,getApplicationContext());
+        PostAdapter adapter = new PostAdapter(list,PostProfileActivity.this);
 
         usernameToolbar.setText(username);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(null, RecyclerView.VERTICAL, false);
