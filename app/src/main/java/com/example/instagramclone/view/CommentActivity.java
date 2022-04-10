@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -46,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 public class CommentActivity extends AppCompatActivity {
     private ImageView backArrow, postCmt;
@@ -92,33 +94,35 @@ public class CommentActivity extends AppCompatActivity {
         listViewComment.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("Delete at position", i + "");
-                AlertDialog alertDialog = new AlertDialog.Builder(CommentActivity.this).create();
-                alertDialog.setTitle("Do you want to delete this comment?");
-                alertDialog.setCancelable(true);
                 Comment comment = (Comment) adapterView.getItemAtPosition(i);
-                Log.d("COMMENT DELETE", comment.getContent());
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (comment.getListReply().size() == 0)
-                            firestore.collection("Comment").document(comment.getId()).delete();
-                        else {
-                            for (String reply : comment.getListReply())
-                                firestore.collection("Comment").document(reply).delete();
-                            firestore.collection("Comment").document(comment.getId()).delete();
+                if (comment.getUserId().equals(user.getUid())) {
+                    Log.d("Delete at position", i + "");
+                    AlertDialog alertDialog = new AlertDialog.Builder(CommentActivity.this).create();
+                    alertDialog.setTitle("Do you want to delete this comment?");
+                    alertDialog.setCancelable(true);
+                    Log.d("COMMENT DELETE", comment.getContent());
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (comment.getListReply().size() == 0)
+                                firestore.collection("Comment").document(comment.getId()).delete();
+                            else {
+                                for (String reply : comment.getListReply())
+                                    firestore.collection("Comment").document(reply).delete();
+                                firestore.collection("Comment").document(comment.getId()).delete();
+                            }
+                            loadComment();
                         }
-                        loadComment();
-                    }
-                });
+                    });
 
-                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        alertDialog.dismiss();
-                    }
-                });
-                alertDialog.show();
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
+                }
                 return true;
             }
         });
@@ -134,6 +138,7 @@ public class CommentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!cmtEditTxt.getText().toString().equals("")) {
+                    String notification;
                     Comment comment = new Comment();
 
                     DocumentReference documentReference = firestore.collection("Comment").document();
@@ -147,9 +152,10 @@ public class CommentActivity extends AppCompatActivity {
                     if (!CommentAdapter.isReply) {
                         comment.setReply(false);
                         comment.setReplyToID("");
-                    }
-                    else {
+                        notification = " commented on your post";
+                    } else {
                         comment.setReply(true);
+                        notification = " replied your comment on a post";
                         comment.setReplyToID(CommentAdapter.replyToID);
                         DocumentReference docRef = firestore.collection("Comment").document(CommentAdapter.replyToID);
                         ArrayList<String> arr = CommentAdapter.listReply;
@@ -163,6 +169,26 @@ public class CommentActivity extends AppCompatActivity {
                     documentReference.set(comment);
                     cmtEditTxt.setText("");
                     loadComment();
+
+                    firestore.collection("Post").document(postID)
+                            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            String id = task.getResult().getString("userId");
+                            if (notification.equals(" commented on your post"))
+                                addNotification(UserAuthentication.userId, id, postID, notification);
+                            else {
+                                firestore.collection("Comment").document(CommentAdapter.replyToID)
+                                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        String id = task.getResult().getString("userId");
+                                        addNotification(UserAuthentication.userId, id, postID, notification);
+                                    }
+                                });
+                            }
+                        }
+                    });
                 }
                 DocumentReference documentReference = FirebaseFirestore.getInstance().collection("Post").document(postID);
                 documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -291,5 +317,16 @@ public class CommentActivity extends AppCompatActivity {
             });
         } else
             listViewComment.setAdapter(new CommentAdapter(CommentActivity.this, R.layout.layout_comment, commentsArr, userCmtID, userCmtID));
+    }
+
+    public static void addNotification(String FromUserID, String ToUserId, String postId, String message) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("FromUserId", FromUserID);
+        data.put("ToUserId", ToUserId);
+        data.put("postId", postId);
+        data.put("message", message);
+        data.put("isPost", true);
+        data.put("timestamp", new Date());
+        Task<DocumentReference> collectionReference = FirebaseFirestore.getInstance().collection("Notification").add(data);
     }
 }

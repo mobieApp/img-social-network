@@ -2,6 +2,7 @@ package com.example.instagramclone.Utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Rect;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -126,7 +127,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
                                 list.add(UserAuthentication.userId);
                                 cmtReact.setImageDrawable(context.getDrawable(R.drawable.ic_heart_red));
                                 cmtReact.setTag("red");
-//                                addNotification(UserAuthentication.userId, singleCmt.getId());
+                                addNotification(UserAuthentication.userId, commentArr.get(position).getUserId(), commentArr.get(position).getPostID(), " reacted your comment");
                                 break;
                             case "red":
                                 list.remove(UserAuthentication.userId);
@@ -145,7 +146,6 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
                 public void onClick(View view) {
                     Log.d("Reply for position", position + "");
                     isReply = true;
-                    listReply = commentArr.get(position).getListReply();
                     replyToUsername = username.get(position);
                     commentEdt.requestFocus();
                     relLayoutReply.setVisibility(View.VISIBLE);
@@ -153,11 +153,23 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
                     if (commentArr.get(position).isReply()) {
                         replyToReply = true;
                         replyToID = commentArr.get(position).getReplyToID();
-                    }
-                    else
+                        for (Comment cmt : commentArr)
+                            if (cmt.getId().equals(commentArr.get(position).getReplyToID()))
+                                listReply = cmt.getListReply();
+                    } else {
+                        listReply = commentArr.get(position).getListReply();
                         replyToID = commentArr.get(position).getId();
-//                    InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-//                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                    }
+                    InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    Rect rect = new Rect();
+                    view.getWindowVisibleDisplayFrame(rect);
+                    int screenHeight = view.getRootView().getHeight();
+
+                    // rect.bottom is the position above soft keypad or device button.
+                    // if keypad is shown, the rect.bottom is smaller than that before.
+                    int keypadHeight = screenHeight - rect.bottom;
+                    if (keypadHeight <= screenHeight * 0.15)
+                        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                 }
             });
         }
@@ -185,5 +197,16 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
             return (duration.DiffMinute() + " phút trước");
         else
             return (duration.DiffSecond() + " giây trước");
+    }
+
+    public static void addNotification(String FromUserID, String ToUserId, String postId, String message) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("FromUserId", FromUserID);
+        data.put("ToUserId", ToUserId);
+        data.put("postId", postId);
+        data.put("message", message);
+        data.put("isPost", true);
+        data.put("timestamp", new Date());
+        Task<DocumentReference> collectionReference = FirebaseFirestore.getInstance().collection("Notification").add(data);
     }
 }
