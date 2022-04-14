@@ -1,6 +1,7 @@
 package com.example.instagramclone.view;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,18 +9,25 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Layout;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.instagramclone.R;
 import com.example.instagramclone.Utils.CommentAdapter;
+import com.example.instagramclone.Utils.PostAdapter;
+import com.example.instagramclone.Utils.SpaceTokenizer;
 import com.example.instagramclone.Utils.TimestampDuration;
 import com.example.instagramclone.Utils.UserAuthentication;
 import com.example.instagramclone.models.Comment;
@@ -32,10 +40,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -51,12 +62,15 @@ import java.util.Map;
 
 public class CommentActivity extends AppCompatActivity {
     private ImageView backArrow, postCmt;
-    private EditText cmtEditTxt;
+    private MultiAutoCompleteTextView cmtEditTxt;
     private ListView listViewComment;
     private FirebaseUser user;
     private FirebaseFirestore firestore;
     private FirebaseAuth firebaseAuth;
     private String postID;
+    private HashMap<String,User> UserList = new HashMap<>();
+    private ArrayList<String> usernameList = new ArrayList<String>();
+    private ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +148,36 @@ public class CommentActivity extends AppCompatActivity {
             }
         });
 
+        adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, usernameList);
+        cmtEditTxt.setAdapter(adapter);
+        cmtEditTxt.setThreshold(2);
+        EventChangeListener();
+        cmtEditTxt.setTokenizer(new SpaceTokenizer());
+
+        cmtEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Layout layout = cmtEditTxt.getLayout();
+                int pos = cmtEditTxt.getSelectionStart();
+                int line = layout.getLineForOffset(pos);
+                int baseline = layout.getLineBaseline(line);
+
+                int bottom = cmtEditTxt.getHeight();
+
+                cmtEditTxt.setDropDownVerticalOffset(baseline - bottom);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
         postCmt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,6 +211,7 @@ public class CommentActivity extends AppCompatActivity {
                         CommentAdapter.isReply = false;
                     }
                     documentReference.set(comment);
+                    String[] words = cmtEditTxt.getText().toString().split(" ");
                     cmtEditTxt.setText("");
                     loadComment();
 
@@ -175,6 +220,13 @@ public class CommentActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             String id = task.getResult().getString("userId");
+                            for (String word : words){
+                                if(word.startsWith("@")){
+                                    User tagUser = UserList.get(word.substring(1));
+                                    if(tagUser != null)  addNotification(UserAuthentication.userId, tagUser.getUserid(), postID, "Tagged you in a comment");
+                                }
+                            }
+
                             if (notification.equals(" commented on your post"))
                                 addNotification(UserAuthentication.userId, id, postID, notification);
                             else {
@@ -329,4 +381,27 @@ public class CommentActivity extends AppCompatActivity {
         data.put("timestamp", new Date());
         Task<DocumentReference> collectionReference = FirebaseFirestore.getInstance().collection("Notification").add(data);
     }
+
+    private void EventChangeListener() {
+        FirebaseFirestore.getInstance().collection("User")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            return;
+                        }
+                        for (DocumentChange dc : value.getDocumentChanges()) {
+                            if (dc.getType() == DocumentChange.Type.ADDED) {
+                                User user = dc.getDocument().toObject(User.class);
+                                user.setUserid(dc.getDocument().getId());
+//                                if(user.getUserid().equals(UserAuthentication.userId)) continue;
+                                usernameList.add(user.getUsername());
+                                UserList.put(user.getUsername(),user);
+                            }
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+    }
+
 }
