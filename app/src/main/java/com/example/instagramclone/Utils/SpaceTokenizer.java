@@ -5,20 +5,25 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.widget.MultiAutoCompleteTextView;
 
-public class SpaceTokenizer implements MultiAutoCompleteTextView.Tokenizer{
+public class SpaceTokenizer implements MultiAutoCompleteTextView.Tokenizer {
+
+    @Override
     public int findTokenStart(CharSequence text, int cursor) {
         int i = cursor;
 
         while (i > 0 && text.charAt(i - 1) != '@') {
             i--;
         }
-        while (i < cursor && text.charAt(i) == '@') {
-            i++;
+
+        //Check if token really started with @, else we don't have a valid token
+        if (i < 1 || text.charAt(i - 1) != '@') {
+            return cursor;
         }
 
         return i;
     }
 
+    @Override
     public int findTokenEnd(CharSequence text, int cursor) {
         int i = cursor;
         int len = text.length();
@@ -34,6 +39,7 @@ public class SpaceTokenizer implements MultiAutoCompleteTextView.Tokenizer{
         return len;
     }
 
+    @Override
     public CharSequence terminateToken(CharSequence text) {
         int i = text.length();
 
