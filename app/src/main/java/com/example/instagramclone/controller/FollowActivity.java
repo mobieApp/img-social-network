@@ -48,8 +48,19 @@ public class FollowActivity extends AppCompatActivity {
                     listFollow = user.getFollowing();
                 else
                     listFollow = user.getFollower();
-                FollowAdapter adapter = new FollowAdapter(FollowActivity.this, listFollow);
-                listView.setAdapter(adapter);
+                ArrayList<User> userFollowing = new ArrayList<>();
+                for (String id : listFollow) {
+                    documentReference = firestore.collection("User").document(id);
+                    documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            userFollowing.add(documentSnapshot.toObject(User.class));
+                            FollowAdapter adapter = new FollowAdapter(FollowActivity.this, userFollowing);
+                            listView.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
             }
         });
     }

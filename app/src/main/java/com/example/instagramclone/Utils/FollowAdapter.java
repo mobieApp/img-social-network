@@ -1,5 +1,6 @@
 package com.example.instagramclone.Utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,21 +23,21 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FollowAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<String> userId;
+    private ArrayList<User> listUser;
     private FirebaseFirestore firestore;
     private DocumentReference documentReference;
-    public FollowAdapter(Context context, ArrayList<String> data){
+    public FollowAdapter(Context context, ArrayList<User> data){
         this.context = context;
-        this.userId = data;
+        this.listUser = data;
     }
     @Override
     public int getCount() {
-        return userId.size();
+        return listUser.size();
     }
 
     @Override
-    public String getItem(int i) {
-        return userId.get(i);
+    public User getItem(int i) {
+        return listUser.get(i);
     }
 
     @Override
@@ -46,27 +47,20 @@ public class FollowAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if (view == null){
-            view = LayoutInflater.from(context).inflate(R.layout.layout_row_follow, viewGroup, false);
+        if (view == null) {
+            LayoutInflater layoutInflator = ((Activity) context).getLayoutInflater();
+            view = layoutInflator.inflate(R.layout.layout_row_follow, viewGroup, false);
         }
 
-        String currentUserId = getItem(i);
+        User currentUser = getItem(i);
         TextView usernameFollow = (TextView) view.findViewById(R.id.usernameFollow);
         TextView nameFollow = (TextView) view.findViewById(R.id.nameFollow);
         CircleImageView imageView = (CircleImageView) view.findViewById(R.id.imageView2);
-        firestore = FirebaseFirestore.getInstance();
-        documentReference = firestore.collection("User").document(currentUserId);
-        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    User currentUser = documentSnapshot.toObject(User.class);
-                    usernameFollow.setText(currentUser.getUsername());
-                    nameFollow.setText(currentUser.getName());
-                    Picasso.get().load(currentUser.getAvatar()).into(imageView);
-                }
-            }
-        });
+
+        usernameFollow.setText(currentUser.getUsername());
+        nameFollow.setText(currentUser.getName());
+        Picasso.get().load(currentUser.getAvatar()).into(imageView);
+
         return view;
     }
 }

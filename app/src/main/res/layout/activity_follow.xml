@@ -17,11 +17,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
+        android:paddingTop="10sp"
         android:id="@+id/listFollowing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarFollowing" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbarFollowing"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10.0sp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

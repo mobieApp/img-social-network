@@ -56,6 +56,12 @@ public class User {
         avatar = "";
     }
 
+    public User(String username, String name, String avatar) {
+        this.username = username;
+        this.name = name;
+        this.avatar = avatar;
+    }
+
     public String getPassword() {
         return password;
     }
