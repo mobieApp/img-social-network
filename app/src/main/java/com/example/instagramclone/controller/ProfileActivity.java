@@ -1,4 +1,4 @@
-package com.example.instagramclone.view;
+package com.example.instagramclone.controller;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,13 +19,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.instagramclone.R;
 import com.example.instagramclone.Utils.BottomNavigationViewHolder;
-import com.example.instagramclone.Utils.ImageApater;
 import com.example.instagramclone.Utils.ImagePostAdapter;
-import com.example.instagramclone.Utils.UserAdapter;
 import com.example.instagramclone.Utils.UserAuthentication;
 import com.example.instagramclone.models.Post;
 import com.example.instagramclone.models.React;

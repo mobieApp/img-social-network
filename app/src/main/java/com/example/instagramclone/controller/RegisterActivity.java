@@ -1,4 +1,4 @@
-package com.example.instagramclone.view;
+package com.example.instagramclone.controller;
 
 import android.content.Intent;
 import android.net.Uri;

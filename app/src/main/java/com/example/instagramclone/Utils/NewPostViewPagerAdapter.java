@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.instagramclone.view.GalleryFragment;
-import com.example.instagramclone.view.PhotoFragment;
+import com.example.instagramclone.controller.GalleryFragment;
+import com.example.instagramclone.controller.PhotoFragment;
 
 public class NewPostViewPagerAdapter extends FragmentStateAdapter {
     public GalleryFragment mGalleryFragment;

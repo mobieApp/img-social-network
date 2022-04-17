@@ -1,24 +1,18 @@
-package com.example.instagramclone.view;
+package com.example.instagramclone.controller;
 
-import android.app.Activity;
-import android.app.blob.BlobHandle;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.instagramclone.R;
-import com.example.instagramclone.Utils.BitmapUtils;
 import com.example.instagramclone.Utils.PhotoFilterAdapter;
 import com.example.instagramclone.Utils.SpacesItemDecoration;
 import com.zomato.photofilters.FilterPack;
@@ -27,13 +21,10 @@ import com.zomato.photofilters.utils.ThumbnailItem;
 import com.zomato.photofilters.utils.ThumbnailsManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.internal.tls.BasicTrustRootIndex;
 
 
 public class PhotoEffectFragment extends Fragment implements PhotoFilterAdapter.ThumbnailsAdapterListener {

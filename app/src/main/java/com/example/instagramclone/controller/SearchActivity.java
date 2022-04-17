@@ -1,4 +1,4 @@
-package com.example.instagramclone.view;
+package com.example.instagramclone.controller;
 
 import static android.content.ContentValues.TAG;
 

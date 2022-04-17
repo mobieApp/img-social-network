@@ -7,11 +7,11 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 
 import com.example.instagramclone.R;
-import com.example.instagramclone.view.HomeActivity;
-import com.example.instagramclone.view.NewPostActivity;
-import com.example.instagramclone.view.NotificationActivity;
-import com.example.instagramclone.view.ProfileActivity;
-import com.example.instagramclone.view.SearchActivity;
+import com.example.instagramclone.controller.HomeActivity;
+import com.example.instagramclone.controller.NewPostActivity;
+import com.example.instagramclone.controller.NotificationActivity;
+import com.example.instagramclone.controller.ProfileActivity;
+import com.example.instagramclone.controller.SearchActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 

@@ -1,11 +1,7 @@
 package com.example.instagramclone.Utils;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,9 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.instagramclone.R;
-import com.example.instagramclone.view.GalleryFragment;
-import com.example.instagramclone.view.NewPostActivity;
-import com.squareup.picasso.Callback;
+import com.example.instagramclone.controller.GalleryFragment;
+import com.example.instagramclone.controller.NewPostActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;

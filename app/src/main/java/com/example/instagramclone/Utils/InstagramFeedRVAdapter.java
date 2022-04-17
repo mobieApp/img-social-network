@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.instagramclone.R;
 import com.example.instagramclone.RecyclerViewClickListener;
 import com.example.instagramclone.models.Post;
-import com.example.instagramclone.view.CommentActivity;
+import com.example.instagramclone.controller.CommentActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;

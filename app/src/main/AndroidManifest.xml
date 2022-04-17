@@ -23,16 +23,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InstagramClone">
         <activity
-            android:name=".view.NPImageProcessingActivity"
+            android:name=".controller.NPImageProcessingActivity"
             android:exported="false" />
         <activity
-            android:name=".view.CommentActivity"
+            android:name=".controller.CommentActivity"
             android:exported="false" />
         <activity
-            android:name=".view.EditPersonalProfile"
+            android:name=".controller.EditPersonalProfile"
             android:exported="false" />
         <activity
-            android:name=".view.LoginActivity"
+            android:name=".controller.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,19 +40,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.RegisterActivity" />
-        <activity android:name=".view.HomeActivity" />
-        <activity android:name=".view.ProfileActivity" />
-        <activity android:name=".view.EditProfileActivity" />
-        <activity android:name=".view.NewPostActivity" />
-        <activity android:name=".view.SearchActivity"
+        <activity android:name=".controller.RegisterActivity" />
+        <activity android:name=".controller.HomeActivity" />
+        <activity android:name=".controller.ProfileActivity" />
+        <activity android:name=".controller.EditProfileActivity" />
+        <activity android:name=".controller.NewPostActivity" />
+        <activity android:name=".controller.SearchActivity"
                   android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".view.FollowActivity"
-            android:parentActivityName=".view.ProfileActivity" />
-        <activity android:name=".view.NotificationActivity" />
-        <activity android:name=".view.PostActivity"/>
-        <activity android:name=".view.PostProfileActivity"/>
+            android:name=".controller.FollowActivity"
+            android:parentActivityName=".controller.ProfileActivity" />
+        <activity android:name=".controller.NotificationActivity" />
+        <activity android:name=".controller.PostActivity"/>
+        <activity android:name=".controller.PostProfileActivity"/>
     </application>
 
 </manifest>

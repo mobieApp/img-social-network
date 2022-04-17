@@ -14,8 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.instagramclone.R;
 import com.example.instagramclone.models.Post;
-import com.example.instagramclone.view.PostProfileActivity;
-import com.example.instagramclone.view.ProfileActivity;
+import com.example.instagramclone.controller.PostProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

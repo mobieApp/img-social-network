@@ -1,7 +1,6 @@
-package com.example.instagramclone.view;
+package com.example.instagramclone.controller;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
@@ -10,7 +9,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.instagramclone.R;
 import com.example.instagramclone.Utils.FollowAdapter;
-import com.example.instagramclone.Utils.UserAuthentication;
 import com.example.instagramclone.models.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;

@@ -1,11 +1,9 @@
-package com.example.instagramclone.view;
+package com.example.instagramclone.controller;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -15,9 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.instagramclone.R;
-import com.example.instagramclone.Utils.BottomNavigationViewHolder;
 import com.example.instagramclone.Utils.NewPostViewPagerAdapter;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 

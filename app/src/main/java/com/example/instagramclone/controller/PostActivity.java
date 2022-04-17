@@ -1,6 +1,5 @@
-package com.example.instagramclone.view;
+package com.example.instagramclone.controller;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -12,34 +11,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Layout;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
-import android.widget.Toast;
 
 import com.example.instagramclone.R;
 import com.example.instagramclone.Utils.PostAdapter;
 import com.example.instagramclone.Utils.SpaceTokenizer;
-import com.example.instagramclone.Utils.UserAdapter;
 import com.example.instagramclone.Utils.UserAuthentication;
 import com.example.instagramclone.models.Post;
 import com.example.instagramclone.models.User;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -51,7 +38,6 @@ import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class PostActivity extends AppCompatActivity {
