@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                     password.requestFocus();
                     return;
                 }
+//                check decode password
 
                 mAuth.signInWithEmailAndPassword(Email,Pass).addOnCompleteListener(task -> {
                     if(task.isSuccessful()){

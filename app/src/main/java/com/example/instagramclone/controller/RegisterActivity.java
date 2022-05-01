@@ -26,6 +26,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
+
 public class RegisterActivity extends AppCompatActivity {
     private User user;
     private TextView linkLogin;
@@ -61,6 +63,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String Username = username.getText().toString();
                 String Email = email.getText().toString().trim();
                 String Pass = password.getText().toString().trim();
+                String HashPassword = new String();
                 if(Username.isEmpty()){
                     username.setError("Fullname is empty");
                     username.requestFocus();
@@ -94,7 +97,8 @@ public class RegisterActivity extends AppCompatActivity {
                 user = new User();
                 user.setUsername(Username);
                 user.setEmail(Email);
-                user.setPassword(Pass);
+                HashPassword = BCrypt.withDefaults().hashToString(12,Pass.toCharArray());
+                user.setPassword(HashPassword);
                 StorageReference ref = FirebaseStorage.getInstance().getReference().child("Avatar/defaultAvatar.jpg");
                 ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
