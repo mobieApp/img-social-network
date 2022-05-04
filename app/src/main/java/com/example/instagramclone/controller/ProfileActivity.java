@@ -59,7 +59,7 @@ public class ProfileActivity extends AppCompatActivity {
     private RecyclerView rcv_img_post;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate: ");
+        //Log.d(TAG, "onCreate: ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         usernameToolbar = (TextView) findViewById(R.id.toolbarUserName);
@@ -81,7 +81,7 @@ public class ProfileActivity extends AppCompatActivity {
             userId = intent.getStringExtra("userId");
         }
         else userId = UserAuthentication.userId;
-        Log.d(TAG, "onCreate: " + userId);
+        //Log.d(TAG, "onCreate: " + userId);
         setUserInfo();
     }
 
@@ -92,7 +92,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null){
-                    Log.e(TAG, "onEvent: Listen failed - " + error);
+                    //Log.e(TAG, "onEvent: Listen failed - " + error);
                     return;
                 }
                 if (value != null && value.exists()){
@@ -138,7 +138,7 @@ public class ProfileActivity extends AppCompatActivity {
                     numberPost1 = (TextView) findViewById(R.id.numberPost1);
                     BindImgPostViewPager(userAccountSetting,numberPost,numberPost1);
                 }else{
-                    Log.d(TAG, "onEvent: Data null");
+                    //Log.d(TAG, "onEvent: Data null");
                 }
             }
         });
@@ -176,10 +176,11 @@ public class ProfileActivity extends AppCompatActivity {
         btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d(TAG, "onClick: BtnEditProfile");
                 Drawable img = imageView.getDrawable();
                 Bitmap bitmap = ((BitmapDrawable) img).getBitmap();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
                 byte[] imgData = stream.toByteArray();
 
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
@@ -189,6 +190,7 @@ public class ProfileActivity extends AppCompatActivity {
                 intent.putExtra("website",website.getText().toString());
                 intent.putExtra("avatar",imgData);
                 startActivity(intent);
+
             }
         });
     }
@@ -259,7 +261,7 @@ public class ProfileActivity extends AppCompatActivity {
         FirebaseFirestore.getInstance().collection("Post").whereEqualTo("userId",userId).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                Log.d("POST", "size: " + queryDocumentSnapshots.getDocuments().size());
+                //Log.d("POST", "size: " + queryDocumentSnapshots.getDocuments().size());
                 Iterator<DocumentSnapshot> posts = queryDocumentSnapshots.getDocuments().listIterator();
                 int i = 0;
                 PostList.clear();

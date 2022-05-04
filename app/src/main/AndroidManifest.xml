@@ -53,6 +53,7 @@
         <activity android:name=".controller.NotificationActivity" />
         <activity android:name=".controller.PostActivity"/>
         <activity android:name=".controller.PostProfileActivity"/>
+        <activity android:name=".controller.ResetPasswordActivity"/>
     </application>
 
 </manifest>

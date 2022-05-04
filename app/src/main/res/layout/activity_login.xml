@@ -34,13 +34,35 @@
             android:hint="Password"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="25dp">
+            <CheckBox
+                android:id="@+id/showPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show password"/>
+
+            <TextView
+                android:id="@+id/forgetPass"
+                android:layout_alignParentBottom="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="123dp"
+                android:layout_marginTop="0dp"
+                android:layout_toEndOf="@+id/showPassword"
+                android:text="Forget Password?"
+                android:textColor="@color/black"
+                android:textSize="17dp" />
+        </RelativeLayout>
         <Button
             android:id="@+id/loginBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Login"
-            android:layout_marginBottom="8dp"
-            />
+            android:layout_marginBottom="8dp" />
         <TextView
             android:id="@+id/createAccount"
             android:layout_width="match_parent"

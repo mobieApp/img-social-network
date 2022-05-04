@@ -122,12 +122,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Birthday" />
-
-        <DatePicker
-            android:id="@+id/birthday"
+        <Button
+            android:id="@+id/birthdayBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_horizontal_margin" />
+            android:text="4/9/2001"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            style="?android:spinnerStyle"/>
     </LinearLayout>
 
     <RelativeLayout

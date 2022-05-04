@@ -3,9 +3,13 @@ package com.example.instagramclone.controller;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,6 +26,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,8 +37,9 @@ public class EditPersonalProfile extends AppCompatActivity {
     private EditText email, phone;
     private RadioGroup radioGroup;
     RadioButton male, female, notSay;
-    private DatePicker datePicker;
+    private DatePickerDialog datePickerDialog;
     private ImageView btnCancel, btnSave;
+    private Button dateButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +55,13 @@ public class EditPersonalProfile extends AppCompatActivity {
         notSay = (RadioButton) findViewById(R.id.notToSay);
         btnCancel = (ImageView) findViewById(R.id.btnCancelEdit);
         btnSave = (ImageView) findViewById(R.id.btnSaveEdit);
-        datePicker = (DatePicker) findViewById(R.id.birthday);
+        dateButton = (Button) findViewById(R.id.birthdayBtn);
+        dateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDatePicker();
+            }
+        });
 
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
@@ -67,8 +79,10 @@ public class EditPersonalProfile extends AppCompatActivity {
                     String date = document.getString("dob");
                     if(date.contains("/")) {
                         String[] tmp = date.split("/");
-                        datePicker.updateDate(Integer.parseInt(tmp[2]), Integer.parseInt(tmp[1]) - 1, Integer.parseInt(tmp[0]));
+                        initDatePicker(Integer.parseInt(tmp[2]), Integer.parseInt(tmp[1]) - 1, Integer.parseInt(tmp[0]));
                     }
+                    else initDatePicker(0,0,0);
+                    dateButton.setText(date);
 
                     if (gender.equals("male"))
                         male.setChecked(true);
@@ -111,10 +125,7 @@ public class EditPersonalProfile extends AppCompatActivity {
                 else if (female.getId() == id)
                     gender = "female";
                 edited.put("gender", gender);
-                int day = datePicker.getDayOfMonth();
-                int month = datePicker.getMonth() + 1;
-                int year = datePicker.getYear();
-                edited.put("dob", day + "/" + month + "/" + year);
+                edited.put("dob", dateButton.getText());
                 documentReference.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
@@ -125,5 +136,29 @@ public class EditPersonalProfile extends AppCompatActivity {
             }
         });
 
+    }
+    private void initDatePicker(int FirstYear, int FirstMonth, int FirstDay){
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                String date = makeDateString(day,month,year);
+                dateButton.setText(date);
+            }
+        };
+        if (FirstDay == 0 || FirstMonth == 0 || FirstYear == 0){
+            Calendar cal = Calendar.getInstance();
+            FirstDay = cal.get(Calendar.YEAR);
+            FirstMonth = cal.get(Calendar.MONTH);
+            FirstYear = cal.get(Calendar.DAY_OF_MONTH);
+        }
+        datePickerDialog = new DatePickerDialog(this,dateSetListener,FirstYear,FirstMonth,FirstDay);
+    }
+
+    private String makeDateString(int day, int month, int year){
+        return day + "/" + month + "/" + year;
+    }
+    public void openDatePicker(){
+        datePickerDialog.show();
     }
 }

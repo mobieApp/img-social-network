@@ -45,8 +45,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:hint="Password"
+            android:hint="Please input your password at least 6 character"
             android:inputType="textPassword" />
+
+        <CheckBox
+            android:id="@+id/showPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show password"/>
 
         <Button
             android:id="@+id/registerBtn"

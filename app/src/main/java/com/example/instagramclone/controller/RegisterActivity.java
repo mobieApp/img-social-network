@@ -3,9 +3,13 @@ package com.example.instagramclone.controller;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
     private TextView linkLogin;
     private EditText username,email,password;
     private Button regBtn;
+    private CheckBox showPassBtn;
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
 
@@ -45,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
         email = (EditText) findViewById(R.id.Email);
         password = (EditText) findViewById(R.id.Password);
         regBtn = (Button) findViewById(R.id.registerBtn);
+        showPassBtn = (CheckBox) findViewById(R.id.showPassword);
 
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
@@ -56,7 +62,17 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        showPassBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (showPassBtn.isChecked()){
+                    password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                }
+                else{
+                    password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+            }
+        });
         regBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
