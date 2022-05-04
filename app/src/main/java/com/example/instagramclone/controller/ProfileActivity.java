@@ -263,6 +263,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 //Log.d("POST", "size: " + queryDocumentSnapshots.getDocuments().size());
+                if (error != null) return;
                 Iterator<DocumentSnapshot> posts = value.getDocuments().listIterator();
                 int i = 0;
                 PostList.clear();
