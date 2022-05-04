@@ -292,6 +292,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     private boolean menuItemClicked(MenuItem item, int pos) {
+        Log.d("TAG", "menuItemClicked: " + item.toString());
         switch (item.getItemId()) {
             case R.id.hide_post:
                 CreateDialogHide(pos);
@@ -300,9 +301,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             case R.id.report_post:
                 CreateDialogReport(pos);
                 Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.delete_post:
                 CreateDialogDelete(pos);
                 Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show();
+                break;
             default:
                 Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
                 break;
@@ -318,7 +321,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         alertDialog.setCancelable(false);
 //        alertDialog.setMessage("Enter the content of the report ");
 
-        final EditText reportContents = (EditText) view.findViewById(R.id.etComments);
+        EditText reportContents = (EditText) view.findViewById(R.id.etComments);
 
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             @Override
