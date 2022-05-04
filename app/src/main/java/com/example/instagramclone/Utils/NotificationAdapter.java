@@ -59,7 +59,8 @@ public class NotificationAdapter extends  RecyclerView.Adapter<NotificationAdapt
         Log.d("AAA", "onBindViewHolder: " + notification.isIspost());
         if (notification.isIspost()){
             holder.post_image.setVisibility(View.VISIBLE);
-            getPostImage(holder.post_image,notification.getPostId());
+            Picasso.get().load(notification.getImgPost()).into(holder.post_image);
+            //getPostImage(holder.post_image,notification.getPostId());
         }
         else{
             holder.post_image.setVisibility(View.INVISIBLE);

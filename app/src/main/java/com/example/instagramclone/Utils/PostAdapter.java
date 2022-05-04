@@ -125,7 +125,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                                         Log.d("AAA", "onSuccess: liked");
                                         holder.icLike.setImageDrawable(context.getDrawable(R.drawable.ic_heart_red));
                                         holder.icLike.setTag("red");
-                                        addNotification(UserAuthentication.userId,modal.getUserId(),modal.getId(), "like your post");
+                                        addNotification(UserAuthentication.userId,modal.getUserId(),modal.getId(), "like your post", modal.getMedia_url());
                                         int point = react.getPoint() + 1;
                                         react.setPoint(point);
                                         break;
@@ -155,7 +155,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                                 holder.icLike.setImageDrawable(context.getDrawable(R.drawable.ic_heart_red));
                                 holder.icLike.setTag("red");
                                 // for testing
-                                addNotification(UserAuthentication.userId,UserAuthentication.userId ,modal.getId(), "like your post");
+                                addNotification(UserAuthentication.userId,UserAuthentication.userId ,modal.getId(), "like your post", modal.getMedia_url());
                                 break;
                             case "red":
                                 list.remove(UserAuthentication.userId);
@@ -280,7 +280,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             textView.setText(duration.DiffSecond() + " giây trước");
     }
 
-    public static void addNotification(String FromUserID,String ToUserId ,String postId, String message) {
+    public static void addNotification(String FromUserID,String ToUserId ,String postId, String message, String img) {
         Map<String, Object> data = new HashMap<>();
         data.put("FromUserId", FromUserID);
         data.put("ToUserId",ToUserId);
@@ -288,6 +288,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         data.put("message", message);
         data.put("isPost", true);
         data.put("timestamp", new Date());
+        data.put("imgPost", img);
         Task<DocumentReference> collectionReference = FirebaseFirestore.getInstance().collection("Notification").add(data);
     }
 

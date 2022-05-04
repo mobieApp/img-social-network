@@ -131,7 +131,7 @@ public class PostActivity extends AppCompatActivity {
                                         for (String word : words){
                                             if(word.startsWith("@")){
                                                 User tagUser = UserList.get(word.substring(1));
-                                                if(tagUser != null)  PostAdapter.addNotification(UserAuthentication.userId, tagUser.getUserid(), post.getId(), "Tagged you in a post");
+                                                if(tagUser != null)  PostAdapter.addNotification(UserAuthentication.userId, tagUser.getUserid(), post.getId(), "Tagged you in a post",post.getMedia_url());
                                             }
                                         }
                                         loadingLayout.setVisibility(View.GONE);

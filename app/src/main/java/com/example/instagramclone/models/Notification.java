@@ -10,14 +10,15 @@ public class Notification implements Comparable<Notification>{
     private String postId;
     private boolean isPost;
     private Date timestamp;
-
-    public Notification(String FromUserId,String toUserId ,String msg, String postId, boolean isPost, Date timestamp) {
+    private String imgPost;
+    public Notification(String FromUserId,String toUserId ,String msg, String postId, boolean isPost, Date timestamp, String imgPost) {
         this.FromUserId = FromUserId;
         this.ToUserId = toUserId;
         this.message = msg;
         this.postId = postId;
         this.isPost = isPost;
         this.timestamp = timestamp;
+        this.imgPost = imgPost;
     }
 
     public Notification(){
@@ -78,6 +79,14 @@ public class Notification implements Comparable<Notification>{
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getImgPost() {
+        return imgPost;
+    }
+
+    public void setImgPost(String imgPost) {
+        this.imgPost = imgPost;
     }
 
     @Override
