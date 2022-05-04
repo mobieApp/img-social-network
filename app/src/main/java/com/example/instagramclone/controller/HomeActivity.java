@@ -27,7 +27,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -106,40 +108,39 @@ public class HomeActivity extends AppCompatActivity{
                 Collections.sort(user.getReact());
 
                 ArrayList<String> userId = new ArrayList<>();
-                if (user.getReact().size() > 5){
-                    for(int i = 0; i < 5; i++){
+                if (user.getReact().size() > 5) {
+                    for (int i = 0; i < 5; i++) {
                         userId.add(user.getReact().get(i).getUserId());
                     }
-                }
-                else {
-                    for(int i = 0; i < user.getReact().size(); i++){
+                } else {
+                    for (int i = 0; i < user.getReact().size(); i++) {
                         userId.add(user.getReact().get(i).getUserId());
                     }
                 }
                 // userId.add(0,UserAuthentication.userId);
                 // Log.d("AAA", "onSuccess: Reacts => " + userIdSort.toString());
-
-                postCollection.whereIn("userId",userId).orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        progressBar.setVisibility(View.GONE);
-                        if (task.isComplete()){
-                            Map<Post,Integer> unsortPost = new HashMap<>();
-                            for (QueryDocumentSnapshot document: task.getResult()) {
+                if (!userId.isEmpty()) {
+                    postCollection.whereIn("userId", userId).orderBy("timestamp", Query.Direction.DESCENDING)/*.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                            progressBar.setVisibility(View.GONE);
+                            Map<Post, Integer> unsortPost = new HashMap<>();
+                            for (QueryDocumentSnapshot document : value) {
                                 Post post = document.toObject(Post.class);
-                                unsortPost.put(post,userId.indexOf(post.getUserId()));
+                                unsortPost.put(post, userId.indexOf(post.getUserId()));
                                 //postArrayList.add(post);
                             }
 
                             //Sort Map by priority
-                            Map<Post,Integer> sortedPost = sort(unsortPost);
-                            for(Post post: sortedPost.keySet()){
+                            Map<Post, Integer> sortedPost = sort(unsortPost);
+                            for (Post post : sortedPost.keySet()) {
 //                                Log.d("TAG", "Current user "+UserAuthentication.userId);
-                                if(post.getIsHide().contains(UserAuthentication.userId) || post.getReports().size() >5) continue;
+                                if (post.getIsHide().contains(UserAuthentication.userId) || post.getReports().size() > 5)
+                                    continue;
                                 postArrayList.add(post);
                             }
 
-                            PostAdapter adapter = new PostAdapter(postArrayList,HomeActivity.this);
+                            PostAdapter adapter = new PostAdapter(postArrayList, HomeActivity.this);
                             RecyclerView view = findViewById(R.id.RVInstaFeed);
 
                             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(HomeActivity.this, RecyclerView.VERTICAL, false);
@@ -147,11 +148,43 @@ public class HomeActivity extends AppCompatActivity{
                             view.setLayoutManager(linearLayoutManager);
 
                             view.setAdapter(adapter);
-                        } else {
-                            Log.d("AAA", "Error getting documents", task.getException());
                         }
-                    }
-                });
+                    });*/
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            progressBar.setVisibility(View.GONE);
+                            if (task.isComplete()) {
+                                Map<Post, Integer> unsortPost = new HashMap<>();
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Post post = document.toObject(Post.class);
+                                    unsortPost.put(post, userId.indexOf(post.getUserId()));
+                                    //postArrayList.add(post);
+                                }
+
+                                //Sort Map by priority
+                                Map<Post, Integer> sortedPost = sort(unsortPost);
+                                for (Post post : sortedPost.keySet()) {
+//                                Log.d("TAG", "Current user "+UserAuthentication.userId);
+                                    if (post.getIsHide().contains(UserAuthentication.userId) || post.getReports().size() > 5)
+                                        continue;
+                                    postArrayList.add(post);
+                                }
+
+                                PostAdapter adapter = new PostAdapter(postArrayList, HomeActivity.this);
+                                RecyclerView view = findViewById(R.id.RVInstaFeed);
+
+                                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(HomeActivity.this, RecyclerView.VERTICAL, false);
+
+                                view.setLayoutManager(linearLayoutManager);
+
+                                view.setAdapter(adapter);
+                            } else {
+                                Log.d("AAA", "Error getting documents", task.getException());
+                            }
+                        }
+                    });
+                }else progressBar.setVisibility(View.GONE);
             }
         });
     }

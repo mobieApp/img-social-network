@@ -1,5 +1,7 @@
 package com.example.instagramclone.Utils;
 
+import static android.content.Intent.getIntent;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -305,7 +307,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 break;
             case R.id.delete_post:
                 CreateDialogDelete(pos);
-                Toast.makeText(context, "Report", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Delete", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
@@ -400,7 +402,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     private void CreateDialogDelete(int pos) {
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-        alertDialog.setTitle("Are your sure delete this post?");
+        Log.d("AAA", "CreateDialogDelete: " + context);
+        alertDialog.setTitle("Are you sure delete this post?");
 //        alertDialog.setIcon("Icon id here");
         alertDialog.setCancelable(false);
 //        alertDialog.setMessage("Enter the content of the report ");
@@ -412,16 +415,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 FirebaseFirestore.getInstance().collection("Post").document(instaModalArrayList.get(pos).getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
+                        Log.d("AAA", "CreateDialogDelete: " + context);
                         AlertDialog successDialog = new AlertDialog.Builder(context).create();
                         successDialog.setTitle("Delete post successfully!");
                         successDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 successDialog.dismiss();
-                                Activity activity = (Activity) context;
-                                activity.recreate();
+                                int actualPosition = pos;
+                                instaModalArrayList.remove(pos);
+                                notifyItemRemoved(actualPosition);
+                                notifyItemRangeChanged(actualPosition, instaModalArrayList.size());
                             }
                         });
+                        successDialog.show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -434,6 +441,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                                 failureDialog.dismiss();
                             }
                         });
+                        failureDialog.show();
                     }
                 });
             }

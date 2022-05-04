@@ -35,6 +35,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
@@ -258,11 +259,11 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void BindImgPostViewPager(User user, TextView numpost1, TextView numpost2){
-        FirebaseFirestore.getInstance().collection("Post").whereEqualTo("userId",userId).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("Post").whereEqualTo("userId",userId).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 //Log.d("POST", "size: " + queryDocumentSnapshots.getDocuments().size());
-                Iterator<DocumentSnapshot> posts = queryDocumentSnapshots.getDocuments().listIterator();
+                Iterator<DocumentSnapshot> posts = value.getDocuments().listIterator();
                 int i = 0;
                 PostList.clear();
                 while (posts.hasNext()) {
