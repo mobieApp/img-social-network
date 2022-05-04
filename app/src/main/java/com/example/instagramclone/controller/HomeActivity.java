@@ -114,8 +114,8 @@ public class HomeActivity extends AppCompatActivity{
                         userId.add(user.getReact().get(i).getUserId());
                     }
                 }
-                userId.add(0,UserAuthentication.userId);
-                //Log.d("AAA", "onSuccess: Reacts => " + userIdSort.toString());
+                // userId.add(0,UserAuthentication.userId);
+                // Log.d("AAA", "onSuccess: Reacts => " + userIdSort.toString());
 
                 postCollection.whereIn("userId",userId).orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
